@@ -1,8 +1,8 @@
 Package: Bullock
 Type: Package
 Title: miscellaneous helper utilities
-Version: 1.01
-Date: 2011-06-02
+Version: 1.02
+Date: 2011-07-17
 Author: John G. Bullock
 Maintainer: John G. Bullock <john.bullock@aya.yale.edu>
 Suggests: gdata, stringr
