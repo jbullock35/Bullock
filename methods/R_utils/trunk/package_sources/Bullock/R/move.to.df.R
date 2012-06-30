@@ -25,7 +25,7 @@ move.to.df <- function(pattern=NULL, move=TRUE) {
   tmp <<- tmp                                           # creates tmp in parent frame
   tmplist <- eval.parent(expression(lapply(tmp,get)))   # returns list of actual objects -- not just their names  
   names(tmplist) <- tmp
-  n <- mode(sapply(tmplist,length))                     # length of most objects.  Should be the number of respondents in the dataset.
+  n <- modal_value(sapply(tmplist,length))               # length of most objects.  Should be the number of respondents in the dataset.
   objects.to.remove <- which(sapply(tmplist,length)!=n) # positions in tmplist of objects to remove
   if (length(objects.to.remove)>0) {
     tmplist  <- tmplist[-(objects.to.remove)]           # remove from tmplist objects that don't belong, like "pattern" and "last.warning"
