@@ -1,1 +1,9 @@
-Version 1.02.  Added \code{merge_fac}.
+Version 1.07.  Fixed bug in latable() handling of ivreg() output.  (The AER
+               package contains an ivreg() function for instrumental-variables
+               regression.)
+Version 1.06.  Added "rows.to.remove" argument to latable() so that 
+               latable() can return "incomplete" regression tables.
+Version 1.05.  Added NAMESPACE to make the Windows binary installable in R 2.14.
+Version 1.04.  Added reliability() to compute Cronbach's alpha for batteries of survey items or other measurements.
+Version 1.03.  Added modal_value() and fixed a related bug in move.to.df().
+Version 1.02.  Added merge_fac().

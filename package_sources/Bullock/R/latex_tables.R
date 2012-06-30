@@ -1,4 +1,4 @@
-latable <- function(tables, substrings.to.remove=NULL, npmakebox=TRUE) {
+latable <- function(tables, substrings.to.remove=NULL, rows.to.remove=NULL, npmakebox=TRUE) {
   # Take a list of tables.  Create a matrix of data to xtable into LaTeX.  
   # Be sure that the argument is a list.  If it isn't, this won't work.
   #
@@ -7,22 +7,38 @@ latable <- function(tables, substrings.to.remove=NULL, npmakebox=TRUE) {
   # substrings.to.remove should be a string or a vector of string.  It will be  
   # removed from the rownames of the output table.  [2011 02 17]
   #
-  # TODO: add an npmakebox=TRUE option for formatting of "Number of 
-  # observations" row.  Then SVN commit.  [2011 02 19]
-  
+  # TODO: As of now, latable() produces buggy output if the regressions are 
+  # done with ivreg(), 'Intercept' is omitted through row.names.remove, and 
+  # there is only one row of coefficients to report.  Fix this.  [2012 02 09]
+  #
+  # TODO: See whether I can improve the output using writeLines().  [2012 05 17]
+  #
+  # TODO: See if I can build more of a LaTeX wrapper into the output.  Among 
+  # other things, this would make it easier for me to use Sweave.  [2012 05 17] 
+  # 
   # TODO: Improve this function by combining code from the "SET UP THE OUTPUT 
   # MATRIX" and "ADD OTHER INFORMATION FROM THE FIRST REGRESSION" sections.  
-  # This entails adding the R2, RMSE, and N rows -- or the corresponding rows if
-  # I am working with GLMs -- before I populate "output" with any values.  
+  # This entails adding the R2, RMSE, and N rows -- or the corresponding rows 
+  # if I am working with GLMs -- before I populate "output" with any values.  
   # [2011 02 18]
   #
   # TODO: I have changed this function and I am sure that it doesn't now work 
   # with glms.  Fix this.  [2011 02 17]
     
-  require(stringr)
-  if (class(tables)!='list') { tables <- as.list(tables) }
+  # require(stringr)
+  if (class(tables)!='list' & length(tables)==1) { 
+    # If there is only one element in "tables", assume that the user just 
+    # forgot to make it a list.  [2012 02 08]
+    tables <- list(tables)
+  } 
+  else if (class(tables)!='list' & length(tables)>1) { 
+    stop('The "tables" argument must be a list.')
+  }
   if (class(substrings.to.remove)!='list') { 
     substrings.to.remove <- as.list(substrings.to.remove) 
+  }      
+  if (class(rows.to.remove)!='list') { 
+    rows.to.remove <- as.list(rows.to.remove) 
   }      
     
   # SET UP THE OUTPUT MATRIX  
@@ -60,6 +76,17 @@ latable <- function(tables, substrings.to.remove=NULL, npmakebox=TRUE) {
       output['N', col.in.output]    <- length(tables[[reg.num]]$fitted.values)
     }
   }
+  else if (class(tables[[1]])[1] == "ivreg") {
+      output <- rbind(output, NA)
+      rownames(output)[nrow(output)] <- 'N'
+      for (reg.num in 1:length(tables)) {
+          col.in.output <- (reg.num * 2) - 1
+          output["N", col.in.output] <- tables[[reg.num]]$n
+          if (tables[[reg.num]]$n != tables[[reg.num]]$nobs) {
+            print(paste('Warning: for regression ', reg.num, ', N is ', tables[[reg.num]]$n, 'but the number of observations with non-zero weights, "nobs", is only', tables[[reg.num]]$nobs, '.', sep=''))
+          }
+      }
+  }
   else if (class(tables[[1]])[1]%in%c('glm', 'polr', 'negbin')) {
     llh  <- c(tables[[1]]$deviance/-2, NA)
     if (class(tables[[1]])[1]%in%c('negbin', 'glm')) { 
@@ -89,7 +116,10 @@ latable <- function(tables, substrings.to.remove=NULL, npmakebox=TRUE) {
   }
 
   # ADD INFORMATION FROM SUBSEQUENT REGRESSIONS
-  if (length(tables)!=1 && class(tables[[1]])!='lm') {
+  # This code doesn't add coefficients or standard errors from subsequent 
+  # regressions.  That has already been added above.  Rather, this code adds
+  # information on log likelihood, etc.  [2012 02 08]
+  if (length(tables)!=1 && !class(tables[[1]]) %in% c('lm', 'ivreg')) {
     for (i in tables[2:length(tables)]) {
       #tmp <- summary(i)$coefficients[,1:2]
       if (class(i)[1]%in%c('glm', 'polr', 'negbin')) {
@@ -102,6 +132,13 @@ latable <- function(tables, substrings.to.remove=NULL, npmakebox=TRUE) {
     }
   }
   
+  # REMOVE UNWANTED ROWS
+  if (!is.null(rows.to.remove)) { 
+    for (pat in rows.to.remove) {
+      output <- output[!grepl(pat, rownames(output)), ]
+    }
+  }
+
   # ADJUST ROWNAMES  
   rownames(output) <- gsub('TRUE', '', rownames(output))
   rownames(output) <- gsub('\\(Intercept\\)', 'Intercept', rownames(output))
@@ -166,17 +203,30 @@ latable <- function(tables, substrings.to.remove=NULL, npmakebox=TRUE) {
   
   # Add white space between some rows.  [2011 02 17]
   rownames.output.latex <- rownames(output.latex)
-  output.latex <- rbind(output.latex[1, ], NA, 
-                        output.latex[2:(nrow(output.latex)-3), ], NA, 
-                        output.latex[(nrow(output.latex)-2):nrow(output.latex), ], 
-                        NA)
-  rownames.output.latex <- gsub('(Intercept)', 'Intercept', rownames.output.latex)
-  rownames(output.latex) <- c(rownames.output.latex[1], '\addlinespace[.15in]',
-                              rownames.output.latex[2:(length(rownames.output.latex)-3)],
-                              '\addlinespace[.15in]',
-                              rownames.output.latex[(length(rownames.output.latex)-2):length(rownames.output.latex)], 
-                              '\bottomrule')
-
+  if (class(tables[[1]]) != 'ivreg') {
+    output.latex <- rbind(output.latex[1, ], NA, 
+                          output.latex[2:(nrow(output.latex)-3), ], NA, 
+                          output.latex[(nrow(output.latex)-2):nrow(output.latex), ], 
+                          NA)
+    rownames.output.latex <- gsub('(Intercept)', 'Intercept', rownames.output.latex)
+    rownames(output.latex) <- c(rownames.output.latex[1], '\addlinespace[.15in]',
+                                rownames.output.latex[2:(length(rownames.output.latex)-3)],
+                                '\addlinespace[.15in]',
+                                rownames.output.latex[(length(rownames.output.latex)-2):length(rownames.output.latex)], 
+                                '\bottomrule')
+  }
+  else {
+    output.latex <- rbind(output.latex[1, ], NA, 
+                          output.latex[2:(nrow(output.latex)-1), ], NA, 
+                          output.latex[nrow(output.latex), ], 
+                          NA)
+    rownames.output.latex <- gsub('(Intercept)', 'Intercept', rownames.output.latex)
+    rownames(output.latex) <- c(rownames.output.latex[1], '\addlinespace[.15in]',
+                                rownames.output.latex[2:(length(rownames.output.latex)-1)],
+                                '\addlinespace[.15in]',
+                                rownames.output.latex[length(rownames.output.latex)], 
+                                '\bottomrule')    
+  }
                           
   # Add "\tabularnewline" to the ends of the rows.  [2011 02 19]
   output.latex[, ncol(output.latex)] <- gsub('$', '\tabularnewline', 
@@ -214,9 +264,9 @@ latable <- function(tables, substrings.to.remove=NULL, npmakebox=TRUE) {
   }
                           
   # PRINT THE TABLE  [2011 02 20]
-  # If using the npmakebox formatting for the "Number of observations" entry, we
-  # print output.latex as two separate tables.  This prevents the first data 
-  # column of the table from being very wide (because it would need to 
+  # If using the npmakebox formatting for the "Number of observations" entry, 
+  # we print output.latex as two separate tables.  This prevents the first  
+  # data column of the table from being very wide (because it would need to 
   # accomodate all of the npmakebox formatting).  [2011 02 20]
   colnames(output.latex) <- rep('', ncol(output.latex))
   if (npmakebox) {
@@ -235,7 +285,7 @@ table.sep <- function(table, separator='&', sig.digits=2) {
   # Use print.table() to print the output without quotation marks.  
   # [2011 05 09]
   stopifnot(class(table)%in%c('table', 'matrix', 'data.frame'))
-  require(gdata)
+  # require(gdata)
   sep.mat <- matrix(separator, nrow=nrow(table), ncol=ncol(table))
   
   # ROUND IF NECESSARY
@@ -265,7 +315,6 @@ table.sep <- function(table, separator='&', sig.digits=2) {
   # OBJECTS RETURNED BY THIS FUNCTION [2011 05 09]
   # This function doesn't work at present.  [2011 05 09]
   if (0==1 & class(table[,1])=='numeric') {
-    # browser()
     out <- data.frame(out)
     for (i in 1:ncol(out)) {
       if (i%%2==1) { # if column is odd-numbered 
