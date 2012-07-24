@@ -1,2 +1,6 @@
 import(gdata, stringr)
-export(latable, lNA, meanNA, merge_fac, modal_value, move.to.df, noNAmatrix, reliability, rescale, sdNA, split_fac, sumNA, table.sep, varNA)
+export(
+  latable, lNA, meanNA, merge_fac, modal_value, move.to.df, new_stack, 
+  noNAmatrix, pop, pop.stack, push, push.stack, reliability, rescale, 
+  sdNA, shift, shift.stack, split_fac, sumNA, table.sep, unshift, 
+  unshift.stack, varNA)
