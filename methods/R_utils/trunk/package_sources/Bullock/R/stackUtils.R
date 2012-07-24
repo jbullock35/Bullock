@@ -5,10 +5,16 @@
 # Jeffrey A. Ryan's code at 
 # http://www.lemnica.com/esotericR/Introducing-Closures/.
 
-new_stack <- function() { 
+new_stack <- function(value = NULL) { 
   stack <- new.env()
   stack$.Data <- vector()
-  stack$push <- function(x) .Data <<- c(.Data,x)
+
+  # make value the initial value of the stack
+  if (! is.null(value)) {
+    stack$.Data <- c(stack$.Data, value)     
+  }
+
+  stack$push <- function(x) .Data <<- c(.Data, x)
   stack$pop  <- function() {
     tmp <- .Data[length(.Data)]
     .Data <<- .Data[-length(.Data)]
