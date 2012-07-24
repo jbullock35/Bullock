@@ -6,21 +6,23 @@
 \alias{unshift}
 \title{Perl-like stack utilities for R}
 \description{
-  Perl-like stack utilities for R: \code{push(), pop(), shift(),} and \code{unshift().}  
+  Perl-like stack utilities for R: \code{new_stack, push(), pop(), shift(),} and \code{unshift().}  
 }
 \usage{
-  new_stack()
-  push(stack, val)
+  new_stack(value = NULL)
+  push(stack, value)
   pop(stack)
-  shift(stack, val)
+  shift(stack, value)
   unshift(stack)
 }
 \arguments{
   \item{stack}{
     Object of class \code{stack}, created with \code{new_stack}.       
   }
-  \item{val}{
-    Something to be added to or removed from a \code{stack} object.
+  \item{value}{
+    For \code{new_stack}, the initial value of a \code{stack} object.  For 
+    \code{push} and \code{shift}, something to be added to a \code{stack} 
+    object.  
   }
 }
 
@@ -28,6 +30,7 @@
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
+  \code{new_stack} returns an object of class \code{stack}. 
   \code{pop} and \code{unshift} return the last and first values of 
   \code{val}, respectively. 
 }
