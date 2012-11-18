@@ -47,7 +47,7 @@
   %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-  \code{nb <- new_betterstack()}
+  \code{nb <- new_stack()}
   \code{push(nb, 1:3)}
 
   \code{nb$.Data}
