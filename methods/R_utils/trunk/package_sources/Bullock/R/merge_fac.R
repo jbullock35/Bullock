@@ -14,7 +14,6 @@ merge_fac <- function(fac.names, ...) {
     return()
   }
   newfac <- get(fac.names[1], ...)
-  x <- 2
   for (i in 2:length(fac.names)) {
     nextfac <- get(fac.names[i], ...)
     levels(newfac) <- unique(c(levels(newfac), levels(nextfac)))  # merge factor levels

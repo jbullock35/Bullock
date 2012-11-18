@@ -7,12 +7,13 @@
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{fac.names}{character vector of factor names}
+  \item{...}{arguments passed to \code{get()}}
 }
 \details{
   All factors should be of the same length.  Missing values in the first 
   factor named in \code{fac.names} are filled in with corresponding values 
   from the second factor.  Missing values in this merged factor are filled in 
-  with corresponding values from the third factor.  And so on.    
+  with corresponding values from the third factor.  And so on.
 }
 \value{
 %%  ~Describe the value returned
