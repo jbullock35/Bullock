@@ -1,3 +1,5 @@
+Version 1.09.  Adjusted merge_fac() so that it can work with variables in 
+               environments other than the global environment. 
 Version 1.08.  Added stack utilities (push(), pop(), shift(), and unshift()) 
                that are based on Jeffrey A. Ryan's code at
                http://www.lemnica.com/esotericR/Introducing-Closures/.

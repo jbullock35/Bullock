@@ -1,7 +1,7 @@
 # merge_fac.R
 # created 2011 July 17
 
-merge_fac <- function(fac.names) {
+merge_fac <- function(fac.names, ...) {
   # This function takes a vector of factor names.  All factors must be of the 
   # same length.  Missing values in the first factor are filled in with 
   # corresponding values from the second factor.  Missing values in this 
@@ -13,9 +13,10 @@ merge_fac <- function(fac.names) {
     print('Exiting: fac.names doesn\'t have more than one element, so there is nothing to do.')
     return()
   }
-  newfac <- get(fac.names[1])  
+  newfac <- get(fac.names[1], ...)
+  x <- 2
   for (i in 2:length(fac.names)) {
-    nextfac <- get(fac.names[i])
+    nextfac <- get(fac.names[i], ...)
     levels(newfac) <- unique(c(levels(newfac), levels(nextfac)))  # merge factor levels
     newfac[is.na(newfac)] <- nextfac[is.na(newfac)]
   }
