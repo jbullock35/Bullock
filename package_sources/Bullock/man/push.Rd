@@ -47,22 +47,18 @@
   %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-  \code{nb <- new_stack()}
-  \code{push(nb, 1:3)}
+  nb <- new_stack()
+  push(nb, 1:3)
 
-  \code{nb$.Data}
-  \code{[1] 1 2 3}
+  nb$.Data  # [1] 1 2 3
 
-  \code{pop(nb)  # from the back}
-  \code{[1] 3}
+  pop(nb)  # from the back
 
-  \code{unshift(nb)  # from the front}
-  \code{[1] 1}
+  unshift(nb)  # from the front
 
-  \code{shift(nb, 3)}
-  \code{push(nb, 1)}
-  \code{nb$.Data}
-  \code{[1] 3 2 1}
+  shift(nb, 3)
+  push(nb, 1)
+  nb$.Data  # [1] 3 2 1
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
