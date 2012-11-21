@@ -1,3 +1,4 @@
+Version 1.10.  Added lsos() to the package.
 Version 1.09.  Adjusted merge_fac() so that it can work with variables in 
                environments other than the global environment. 
 Version 1.08.  Added stack utilities (push(), pop(), shift(), and unshift()) 
