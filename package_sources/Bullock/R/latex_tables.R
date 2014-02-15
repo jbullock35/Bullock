@@ -119,7 +119,7 @@ latable <- function(tables, substrings.to.remove=NULL, rows.to.remove=NULL, npma
   # This code doesn't add coefficients or standard errors from subsequent 
   # regressions.  That has already been added above.  Rather, this code adds
   # information on log likelihood, etc.  [2012 02 08]
-  if (length(tables)!=1 && !class(tables[[1]]) %in% c('lm', 'ivreg')) {
+  if (length(tables)!=1 && !class(tables[[1]])[1] %in% c('lm', 'ivreg')) {
     for (i in tables[2:length(tables)]) {
       #tmp <- summary(i)$coefficients[,1:2]
       if (class(i)[1]%in%c('glm', 'polr', 'negbin')) {
@@ -203,7 +203,7 @@ latable <- function(tables, substrings.to.remove=NULL, rows.to.remove=NULL, npma
   
   # Add white space between some rows.  [2011 02 17]
   rownames.output.latex <- rownames(output.latex)
-  if (class(tables[[1]]) != 'ivreg') {
+  if (class(tables[[1]])[1] != 'ivreg') {
     output.latex <- rbind(output.latex[1, ], NA, 
                           output.latex[2:(nrow(output.latex)-3), ], NA, 
                           output.latex[(nrow(output.latex)-2):nrow(output.latex), ], 
