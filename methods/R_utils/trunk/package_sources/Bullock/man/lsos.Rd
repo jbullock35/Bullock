@@ -1,4 +1,5 @@
 \name{lsos}
+\alias{lsos}
 \alias{.ls.objects}
 \title{Improved version of ls()}
 \description{
