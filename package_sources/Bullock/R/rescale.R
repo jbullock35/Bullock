@@ -1,5 +1,5 @@
 rescale <- function(x, newrange = c(0, 1)) {
- if(nargs() > 1 && is.numeric(x) && is.numeric(newrange)) {
+ if(is.numeric(x) && is.numeric(newrange)) {
 
    # if newrange has max first, reverse it
   if(newrange[1] > newrange[2]) {
