@@ -2,9 +2,7 @@
 \alias{meanNA}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Calculate mean of vector after omitting NA values}
-\description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
-}
+\description{Calculate mean of vector after omitting NA values.}
 \usage{
 meanNA(x)
 }
@@ -27,9 +25,7 @@ meanNA(x)
 \references{
 %% ~put references to the literature/web site here ~
 }
-\author{
-%%  ~~who you are~~
-}
+\author{John G. Bullock}
 \note{
 %%  ~~further notes~~
 }
