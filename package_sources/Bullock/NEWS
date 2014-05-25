@@ -1,3 +1,4 @@
+Version 1.13.  Added qw(), a Perl-like string-quoting function.
 Version 1.12.  Changed default argument to rescale().
 Version 1.11.  Improved lsos() documentation.
 Version 1.10.  Added lsos() to the package.

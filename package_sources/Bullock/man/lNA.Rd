@@ -3,7 +3,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Calculate length of vector after omitting NA values}
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+  Calculate length of vector after omitting NA values.
 }
 \usage{lNA(x)}
 %- maybe also 'usage' for other objects documented here.
@@ -25,9 +25,7 @@
 \references{
 %% ~put references to the literature/web site here ~
 }
-\author{
-%%  ~~who you are~~
-}
+\author{John G. Bullock}
 \note{
 %%  ~~further notes~~
 }
