@@ -1,3 +1,4 @@
+Version 1.14.  Added %IN%, a binary match operator that can return NA.
 Version 1.13.  Added qw(), a Perl-like string-quoting function.
 Version 1.12.  Changed default argument to rescale().
 Version 1.11.  Improved lsos() documentation.

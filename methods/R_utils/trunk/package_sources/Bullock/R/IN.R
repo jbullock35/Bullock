@@ -1,0 +1,1 @@
+`%IN%` <- function(x, table) match(x, table) > 0
