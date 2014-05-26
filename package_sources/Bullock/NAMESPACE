@@ -1,6 +1,6 @@
 import(gdata, stringr)
 export(
-  latable, lNA, lsos, meanNA, merge_fac, modal_value, move.to.df,  
+  "%IN%", latable, lNA, lsos, meanNA, merge_fac, modal_value, move.to.df,  
   new_stack, noNAmatrix, pop, push, qw, reliability, rescale, sdNA, shift, 
   split_fac, sumNA, table.sep, unshift, varNA)
 S3method(pop, stack)

@@ -12,9 +12,13 @@
 
 }
 \arguments{
-  \item{pos}{
-    position of environment on search path to search       
-  }
+  \item{pos}{position of environment on search path to search}
+  \item{pattern}{}
+  \item{order.by}{}
+  \item{decreasing}{}
+  \item{head}{}
+  \item{n}{}
+  \item{...}{}
 }
 
 \details{
@@ -33,7 +37,7 @@
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-  %% ~~objects to See Also as \code{\link{help}}, ~~~
+ \code{\link{ls}}
 }
 \examples{}
 
