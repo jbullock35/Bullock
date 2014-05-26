@@ -12,10 +12,6 @@ x \%IN\% table
   \item{table}{  vector or \code{NULL}: the values to be matched against.}
 }
 \details{
-  The definition of \code{\%IN\%} is 
-  
-      \code{"\%IN\%" <- function(x, table) match(x, table) > 0}
-  
   The ordinary binary match operator, \code{\%in\%}, can be misleading because  
   it seems more closely related to \code{==} than it is.  The problem is that 
   \code{==} will return \code{NA} in some (expected) cases, but \code{\%in\%} 
@@ -45,10 +41,10 @@ x \%IN\% table
   \code{\link{match}}
 }
 \examples{
-  tmp <- c(1, 2, NA)
-  tmp == 1      # TRUE FALSE NA
-  tmp \%in\% 1:2  # TRUE TRUE  FALSE
-  tmp \%IN\% 1:2  # TRUE TRUE  NA    
+  tmp <- c(1, 2, 3, NA)
+  tmp == 1      # TRUE FALSE FALSE NA
+  tmp \%in\% 1:2  # TRUE TRUE  FALSE FALSE
+  tmp \%IN\% 1:2  # TRUE TRUE  FALSE NA
 }
 
 \keyword{ ~kwd1 }
