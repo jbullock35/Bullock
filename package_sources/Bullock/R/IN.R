@@ -1,1 +1,5 @@
-`%IN%` <- function(x, table) match(x, table) > 0
+`%IN%` <- function (x, table) {
+  result <- x %in% table
+  result[is.na(x)] <- NA
+  result
+}
