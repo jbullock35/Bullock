@@ -2,20 +2,12 @@
 \alias{rescale}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Rescale a variable}
-\description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
-}
-\usage{
-rescale(x, newrange)
-}
-%- maybe also 'usage' for other objects documented here.
+\description{Linear rescaling of numeric vectors.  For example, a variable 
+  that ranges from 1 to 7 can be rescaled to range from 0 to 1.}
+\usage{rescale(x, newrange)}
 \arguments{
-  \item{x}{
-%%     ~~Describe \code{x} here~~
-}
-  \item{newrange}{
-%%     ~~Describe \code{newrange} here~~
-}
+  \item{x}{numeric object}
+  \item{newrange}{two-element numeric vector}
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~
@@ -40,8 +32,8 @@ rescale(x, newrange)
 \seealso{
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
-\examples{}
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\examples{
+  vec <- 1:10
+  vecRescaled <- rescale(vec, c(2:5))
+  range(vecRescaled)  # 2 5 
+}

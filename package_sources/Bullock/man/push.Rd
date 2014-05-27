@@ -35,7 +35,7 @@
   \code{val}, respectively. 
 }
 \references{
-  Adapted from Jeffrey A. Ryan's code at http://www.lemnica.com/esotericR/Introducing-Closures/.  
+  Adapted from Jeffrey A. Ryan's code at \url{http://www.lemnica.com/esotericR/Introducing-Closures/}.  
 }
 
 \author{Jeffrey A. Ryan, John G. Bullock}

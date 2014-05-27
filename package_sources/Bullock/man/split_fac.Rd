@@ -1,12 +1,13 @@
 \name{split_fac}
 \alias{split_fac}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{Create dummy variables for each level of a factor.}
-\description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
-}
+\description{Create dummy variables for each level of a factor.}
 \usage{
-split_fac(fac, prefix=paste(deparse(substitute(NES.year.fac)), '.', sep=''), env=.GlobalEnv, ...)
+  split_fac(
+    fac, 
+    prefix = paste(deparse(substitute(NES.year.fac)), '.', sep = ''), 
+    env    = .GlobalEnv, 
+    ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -19,11 +20,7 @@ split_fac(fac, prefix=paste(deparse(substitute(NES.year.fac)), '.', sep=''), env
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+  \code{split_fac} returns nothing.  Instead, it creates, as a side effect, a set of logical variables -- one for each level of \code{fac}.
 }
 \references{
 %% ~put references to the literature/web site here ~
@@ -38,7 +35,10 @@ split_fac(fac, prefix=paste(deparse(substitute(NES.year.fac)), '.', sep=''), env
 \seealso{
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
-\examples{}
+\examples{
+  fac <- factor(rep(1:3, each = 3))
+  split_fac(fac, prefix = 'fac')  # creates logical variables fac1, fac2, and fac3 in .GlobalEnv
+}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ ~kwd1 }

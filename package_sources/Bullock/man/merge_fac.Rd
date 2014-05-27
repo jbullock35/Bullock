@@ -3,7 +3,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Merge factors}
 \description{Fill in missing values in one factor with missing values from another.}
-\usage{merge_fac(fac.names)}
+\usage{merge_fac(fac.names, ...)}
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{fac.names}{character vector of factor names}
@@ -15,13 +15,7 @@
   from the second factor.  Missing values in this merged factor are filled in 
   with corresponding values from the third factor.  And so on.
 }
-\value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
+\value{Returned object is a factor.}
 \references{
 %% ~put references to the literature/web site here ~
 }

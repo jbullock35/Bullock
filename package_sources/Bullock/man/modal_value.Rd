@@ -20,7 +20,7 @@
 \references{
 %% ~put references to the literature/web site here ~
 }
-\author{unknown; copied from http://rwiki.sciviews.org/doku.php?id=tips:stats-basic:modalvalue}
+\author{Unknown.  Function copied from \url{http://rwiki.sciviews.org/doku.php?id=tips:stats-basic:modalvalue}.}
 \note{}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
