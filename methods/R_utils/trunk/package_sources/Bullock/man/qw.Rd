@@ -21,7 +21,7 @@ qw(x)
   Character vector.
 }
 \references{
-  Code taken from post by "flodel" (Florent Delmotte) at http://stackoverflow.com/questions/520810/.
+  Code taken from post by Florent Delmotte (``flodel'') at \url{http://stackoverflow.com/questions/520810/}.
 }
 \author{Florent Delmotte}
 \note{

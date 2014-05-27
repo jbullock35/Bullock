@@ -1,21 +1,15 @@
 \name{sdNA}
 \alias{sdNA}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{Calculate standard deviation of vector after omitting NA values}
-\description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+\description{Calculate standard deviation of vector after omitting NA values
 }
 \usage{
 sdNA(x, na.rm = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{
-%%     ~~Describe \code{x} here~~
-}
-  \item{na.rm}{
-%%     ~~Describe \code{na.rm} here~~
-}
+  \item{x}{a numeric vector or an R object which is coercible to one by \code{as.vector}.}
+  \item{na.rm}{logical.  Should missing values be removed?}
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~
@@ -39,11 +33,7 @@ sdNA(x, na.rm = TRUE)
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
+\seealso{\code{\link{sd}}}
 \examples{}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

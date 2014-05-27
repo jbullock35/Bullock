@@ -2,23 +2,12 @@
 \alias{table.sep}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{helper function for latable()}
-\description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
-}
-\usage{
-table.sep(table, separator = "&", sig.digits = 2)
-}
-%- maybe also 'usage' for other objects documented here.
+\description{Interleaves columns between the columns of a table.  Typically used to pretty-print tables.}
+\usage{table.sep(table, separator = "&", sig.digits = 2)}
 \arguments{
-  \item{table}{
-%%     ~~Describe \code{table} here~~
-}
-  \item{separator}{
-%%     ~~Describe \code{separator} here~~
-}
-  \item{sig.digits}{
-%%     ~~Describe \code{sig.digits} here~~
-}
+  \item{table}{object of class \code{table}}
+  \item{separator}{object of class \code{character}}
+  \item{sig.digits}{integer}
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~

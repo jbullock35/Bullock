@@ -1,32 +1,21 @@
 \name{move.to.df}
 \alias{move.to.df}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{Move a list of variables into a data frame.}
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
-}
+  Copy variables matching the pattern into a data frame,
+  and perhaps delete the free-standing original variables.}
 \usage{
-move.to.df(pattern = NULL, move = TRUE)
+  move.to.df(pattern = NULL, move = TRUE)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{pattern}{
-%%     ~~Describe \code{pattern} here~~
-}
-  \item{move}{
-%%     ~~Describe \code{move} here~~
-}
+  \item{pattern}{object of class \code{character}.  Can specify a regular expression.}
+  \item{move}{logical variable.}
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+  IF \code{move == TRUE}, the variables in the environment will be deleted after they are moved into the data frame.
 }
-\value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
+\value{Returned object is a data frame.}
+
 \references{
 %% ~put references to the literature/web site here ~
 }

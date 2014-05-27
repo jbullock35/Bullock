@@ -1,45 +1,23 @@
 \name{noNAmatrix}
 \alias{noNAmatrix}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{Remove rows with any NA from a matrix.}
-
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+  Performs listwise deletion on a matrix, removing all rows from which any data are missing.
 }
-\usage{
-noNAmatrix(x)
-}
-%- maybe also 'usage' for other objects documented here.
+\usage{noNAmatrix(x)}
 \arguments{
-  \item{x}{
-%%     ~~Describe \code{x} here~~
+  \item{x}{matrix}
 }
-}
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
-\value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
+\details{}
+\value{Returned value is a matrix.}
+\author{}
 \note{
-%%  ~~further notes~~
+  \code{noNAmatrix} is deprecrated.  It remains in this package exclusively for backward compatibility.  Those wishing to perform listwise deletion on a matrix should instead use \code{na.omit(x)}.  
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
+\seealso{\code{\link{na.omit}}}
 \examples{}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

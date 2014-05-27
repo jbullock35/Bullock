@@ -279,7 +279,7 @@ latable <- function(tables, substrings.to.remove=NULL, rows.to.remove=NULL, npma
 
 
 table.sep <- function(table, separator='&', sig.digits=2) {
-  # This function just interleaves separator columns between the columsn of 
+  # This function just interleaves separator columns between the columns of 
   # any table that is passed to it.  [2011 05 09]
   # 
   # Use print.table() to print the output without quotation marks.  

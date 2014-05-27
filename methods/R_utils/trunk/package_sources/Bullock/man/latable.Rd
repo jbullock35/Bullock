@@ -13,8 +13,8 @@ latable(tables, substrings.to.remove = NULL, rows.to.remove=NULL, npmakebox = TR
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{tables}{
-    List of regression models.  Supports models of class \code{glm, ivreg, lm, 
-    negbin, polr, vglm,} and \code{zeroinfl}.       
+    List of regression models.  Supports models of class \code{glm,} \code{ivreg,} \code{lm,} 
+    \code{negbin,} \code{polr,} \code{vglm,} and \code{zeroinfl.}       
 }
   \item{substrings.to.remove}{
     List of strings or regular expressions.  If it is not a list, 

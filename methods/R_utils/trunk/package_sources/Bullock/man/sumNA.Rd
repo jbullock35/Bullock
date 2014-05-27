@@ -1,29 +1,19 @@
 \name{sumNA}
 \alias{sumNA}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{Calculate sum of vector after omitting NA values}
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+  Calculate sum of vector after omitting NA values.
+  
+  Definition is \code{function(x) \{ return(sum(x, na.rm=TRUE)) \}}.  
 }
-\usage{
-sumNA(x)
-}
-%- maybe also 'usage' for other objects documented here.
+\usage{sumNA(x)}
 \arguments{
-  \item{x}{
-%%     ~~Describe \code{x} here~~
-}
+  \item{x}{logical, integer, numeric, or complex vector}
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~
 }
-\value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
+\value{The sum. If all elements of \code{x} are of type integer or logical, then the sum is an integer.  Otherwise it is a length-one numeric or complex vector.}
 \references{
 %% ~put references to the literature/web site here ~
 }
@@ -36,9 +26,7 @@ sumNA(x)
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
+\seealso{\code{\link{sum}}}
 \examples{}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

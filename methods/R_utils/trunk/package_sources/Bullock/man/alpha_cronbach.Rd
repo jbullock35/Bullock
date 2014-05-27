@@ -2,7 +2,7 @@
 \alias{alpha_cronbach}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Compute Cronbach's alpha for a battery of items.}
-\description{This function is called by reliability().  It generally should not be called by end users.}
+\description{This function is called by \code{reliability}.  It generally should not be called by end users.}
 \usage{alpha_cronbach(S)}
 %- maybe also 'usage' for other objects documented here.
 \arguments{

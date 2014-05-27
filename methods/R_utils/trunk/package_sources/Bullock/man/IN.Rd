@@ -41,7 +41,7 @@ x \%IN\% table
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-  \code{\link{match}}
+  \code{\link{\%in\%}}
 }
 \examples{
   tmp <- c(1, 2, 3, NA)
