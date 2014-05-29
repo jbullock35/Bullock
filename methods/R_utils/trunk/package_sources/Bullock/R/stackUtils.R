@@ -29,17 +29,16 @@ new_stack <- function(value = NULL) {
   environment(stack$push)    <- as.environment(stack)
   environment(stack$pop)     <- as.environment(stack)
   environment(stack$shift)   <- as.environment(stack)
-  environment(stack$unshift) <- as.environment(stack)
-  
+  environment(stack$unshift) <- as.environment(stack)  
   class(stack) <- "stack"
   stack
 }
     
-push    <- function(x, value, ...) UseMethod("push")     # add to end of vector
-pop     <- function(x, ...)        UseMethod("pop")      # return last value from vector and remove it from vector
-shift   <- function(x, value, ...) UseMethod("shift")
-unshift <- function(x, ...)        UseMethod("unshift")
-push.stack    <- function(x, value, ...) x$push(value)
-pop.stack     <- function(x)             x$pop()
-shift.stack   <- function(x, value, ...) x$shift(value)
-unshift.stack <- function(x)             x$unshift()
+push    <- function(stack, value) UseMethod("push")     # add to end of vector
+pop     <- function(stack)        UseMethod("pop")      # return last value from vector and remove it from vector
+shift   <- function(stack, value) UseMethod("shift")
+unshift <- function(stack)        UseMethod("unshift")
+push.stack    <- function(stack, value) stack$push(value)
+pop.stack     <- function(stack)        stack$pop()
+shift.stack   <- function(stack, value) stack$shift(value)
+unshift.stack <- function(stack)        stack$unshift()

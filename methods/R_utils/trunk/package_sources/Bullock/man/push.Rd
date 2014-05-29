@@ -40,25 +40,18 @@
 
 \author{Jeffrey A. Ryan, John G. Bullock}
 
+\seealso{See \url{http://stackoverflow.com/questions/14488206} for related discussion, including a simpler implementation of \code{push} and \code{pop} by Matthew Plourde.}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-  %% ~~objects to See Also as \code{\link{help}}, ~~~
-}
 \examples{
   nb <- new_stack()
   push(nb, 1:3)
+  nb$.Data     # [1] 1 2 3
 
-  nb$.Data  # [1] 1 2 3
-
-  pop(nb)  # from the back
-
+  pop(nb)      # from the back
   unshift(nb)  # from the front
-
   shift(nb, 3)
   push(nb, 1)
-  nb$.Data  # [1] 3 2 1
+  nb$.Data     # [1] 3 2 1
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
