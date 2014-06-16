@@ -31,8 +31,8 @@
 }
 \value{
   \code{new_stack} returns an object of class \code{stack}. 
-  \code{pop} and \code{unshift} return the last and first values of 
-  \code{val}, respectively. 
+  \code{unshift} and \code{pop} return the first and last values of 
+  \code{stack}, respectively. 
 }
 \references{
   Adapted from Jeffrey A. Ryan's code at \url{http://www.lemnica.com/esotericR/Introducing-Closures/}.  
@@ -57,4 +57,3 @@
 % R documentation directory.
 \keyword{stack}
 \keyword{Perl}
-
