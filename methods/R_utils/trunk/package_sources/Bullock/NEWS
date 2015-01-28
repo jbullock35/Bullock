@@ -1,3 +1,4 @@
+Version 1.16.  Minor update to qw().
 Version 1.15.  Substantial revisions to move.to.df().
 Version 1.14.  Added %IN%, a binary match operator that can return NA.
 Version 1.13.  Added qw(), a Perl-like string-quoting function.
