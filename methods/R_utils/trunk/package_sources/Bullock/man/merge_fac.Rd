@@ -25,6 +25,13 @@
   \code{fac1[is.na(fac1)] <- fac2[is.na(fac1)]} because fac1 and fac2 may have
   different factor levels.  This commands takes care of the problem by 
   merging the levels among different factors.
+  
+  If a file that uses \code{merge.fac} is sourced into an environment other
+  than the global environment (e.g., by \code{sys.source}), the 
+  \code{fac.names} variables may not be found unless the argument 
+  \code{envir = environment()} is also passed to \code{merge.fac}.  In other 
+  words, it may be necessary to run a command like 
+  \code{merge_fac(fac.names=x, envir=environment())}.
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
@@ -33,6 +40,8 @@
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{}
+
+
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ ~kwd1 }
