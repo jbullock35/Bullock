@@ -1,3 +1,5 @@
+Version 1.19.  Minor update to modal_value, which seems to make it faster.
+Version 1.18.  Minor update to rescale() so that it works with tibble columns.
 Version 1.17.  Added factorToDummyMatrix().
 Version 1.16.  Minor update to qw().
 Version 1.15.  Substantial revisions to move.to.df().

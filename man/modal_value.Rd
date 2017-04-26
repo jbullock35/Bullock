@@ -3,11 +3,11 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Find modal value of a vector}
 \description{Find modal value of a vector.}
-\usage{modal_value(x, na.rm=FALSE)}
+\usage{modal_value(x, na.rm = FALSE)}
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{a vector}
-  \item{na.rm}{should NAs be removed from the vector before modal value is determined?}
+  \item{na.rm}{Remove NAs before modal value is determined}
 }
 \details{}
 \value{
@@ -20,8 +20,9 @@
 \references{
 %% ~put references to the literature/web site here ~
 }
-\author{Unknown.  Function copied from \url{http://rwiki.sciviews.org/doku.php?id=tips:stats-basic:modalvalue}.}
-\note{}
+\author{Ken Williams.  Function copied from \url{http://stackoverflow.com/a/8189441/697473}.}
+
+\note{If there are multiple values, this function will return only the first.}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
