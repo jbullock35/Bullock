@@ -9,7 +9,6 @@ rescale <- function(x, newrange = c(0, 1)) {
   }
 
   xrange <- range(x, na.rm = TRUE)
-  browser()
   if(xrange[1] == xrange[2]) stop("can't rescale a constant vector!")
   mfac <- (newrange[2] - newrange[1]) / (xrange[2] - xrange[1])
   invisible(newrange[1] + (x-xrange[1])*mfac)
