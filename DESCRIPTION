@@ -1,10 +1,10 @@
 Package: Bullock
 Type: Package
 Title: miscellaneous helper utilities
-Version: 1.19
-Date: 2017-04-26
+Version: 1.19.1
+Date: 2019-12-03
 Author: John G. Bullock
-Maintainer: John G. Bullock <john.bullock@aya.yale.edu>
+Maintainer: John G. Bullock <john@johnbullock.org>
 Imports: gdata, stringr
 Description: functions that help me do miscellaneous tasks a little more
   more quickly.  These range in complexity from a function that just  
