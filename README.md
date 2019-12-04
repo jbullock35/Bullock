@@ -1,4 +1,5 @@
 This package contains utilities that I use in my R code. Most of them don't seem to exist in any other package. 
 
-Install the package with `devtools::install_github(jbullock35/Bullock)`. You will need to have the `devtools` package installed.    
-
+### Installation instructions
+1. Be sure that you have installed the `devtools` package.
+2. Run `devtools::install_github(jbullock35/Bullock)`. 
