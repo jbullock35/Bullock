@@ -1,3 +1,7 @@
+# Version 2.0
+* Added \code{regTable()}.
+
+# Pre-release versions.
 Version 1.19.1. Updated contact email address in DESCRIPTION.
 Version 1.19.  Minor update to modal_value, which seems to make it faster.
 Version 1.18.  Minor update to rescale() so that it works with tibble columns.

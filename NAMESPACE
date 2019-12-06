@@ -1,8 +1,9 @@
 import(gdata, stringr)
+importFrom("stats", "logLik", "model.matrix", "sd", "var")
 export(
   "%IN%", factorToDummyMatrix, latable, lNA, lsos, meanNA, merge_fac, 
-  modal_value, move.to.df, new_stack, noNAmatrix, pop, push, qw, reliability, 
-  rescale, sdNA, shift, split_fac, sumNA, table.sep, unshift, varNA)
+  modal_value, move.to.df, new_stack, noNAmatrix, pop, push, qw, regTable, 
+  reliability, rescale, sdNA, shift, split_fac, sumNA, table.sep, unshift, varNA)
 S3method(pop, stack)
 S3method(push, stack)
 S3method(shift, stack)
