@@ -1,15 +1,20 @@
 Package: Bullock
 Type: Package
-Title: miscellaneous helper utilities
-Version: 1.19.1
-Date: 2019-12-03
-Author: John G. Bullock
-Maintainer: John G. Bullock <john@johnbullock.org>
-Imports: gdata, stringr
-Description: functions that help me do miscellaneous tasks a little more
-  more quickly.  These range in complexity from a function that just  
-  removes NA values from a vector prior to summing it (sumNA) to a  
-  function that helps me to build LaTeX tables from regression output  
-  in the style that I like (latable).
-License: GPL (version 2 or later)
+Title: Miscellaneous helper utilities for use with John Bullock's code
+Version: 1.19.1.9000
+Date: 2019-12-04
+Authors@R: person("John", "Bullock", email = "john@johnbullock.org", 
+  role = c("aut", "cre")) 
+Imports: lmtest, dplyr, gdata, stringr
+Suggests: ivpack, multiwayvcov
+Description: These functions are used in John Bullock's code; they are 
+  typically needed for replication purposes. They range in complexity from a 
+  function that just removes NA values from a vector prior to summing it 
+  (sumNA) to a function that transforms regression output into LaTeX tables 
+  of the style that Bullock likes (latable).
+License: GPL (>= 2)
 LazyLoad: yes
+URL: https://github.com/jbullock35/Bullock
+BugReports: https://github.com/jbullock35/Bullock/issues
+RoxygenNote: 7.0.2
+Encoding: UTF-8
