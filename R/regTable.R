@@ -42,7 +42,7 @@
 #' regTable(list(lm1, lm2), rowsToKeep = 'Length')
 #' regTable(list(lm1, lm2), rowsToKeep = c('Intercept', 'Length'))
 
-
+#' @export
 regTable <- function (
   objList, 
   colNames     = NULL, 
