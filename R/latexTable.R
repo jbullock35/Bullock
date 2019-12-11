@@ -2,7 +2,7 @@
 #' 
 #' \code{latexTable} takes a single matrix, \code{mat}. By default, it returns 
 #' a LaTeX macro that creates a well-formatted LaTeX table. It can take many 
-#' arguments to adjust the table's formatting.\ifelse{html}{\cr\cr\cr\cr}{xxx} 
+#' arguments to adjust the table's formatting.\cr\cr\cr\cr 
 #' 
 
 #' The point of \code{latexTable} is to maximize flexibility in the formatting 
@@ -533,7 +533,10 @@ latexTable <- function(
     outputStrings <- c(outputStrings, '      }')  # ends "\begin{tabular}{"    
     if (! is.null(colNames)) {      
       
-      # ADD \MULTICOLUMN COMMANDS FOR colNames  [2012 07 23]
+      
+      ########################################################################
+      # ADD \MULTICOLUMN COMMANDS FOR colNames  [2012 07 23] 
+      ########################################################################
       # Recall that colNames is a list with multiple entries, to allow for 
       # column headings that span multiple lines.  So mcRow is a "row" in the
       # column headings.  [2014 04 27]
@@ -636,8 +639,10 @@ latexTable <- function(
       }
       
 	  
+      ########################################################################
       # ADD \CMIDRULE COMMANDS  [2012 07 23]
-      #   If expandColName == TRUE, the column positions indicated in 
+      ########################################################################
+      # If expandColName == TRUE, the column positions indicated in 
       # spacerColumns are ignored.  Instead, the assumption is that spacer 
       # columns are to appear between each column (or, if SE_table == TRUE,   
       # between each column pair).  [2014 04 27]
@@ -679,7 +684,12 @@ latexTable <- function(
     }    
   }
   
-  # PRINT TABLE ROWS
+  
+  
+  
+  ############################################################################
+  # PRINT TABLE ROWS (AFTER THE HEADER)
+  ############################################################################
   subRegex <- paste0('\\1', columnTierSeparator)
   spacerColumnsTmp <- spacerColumns + !is.null(rowNames)  # adjust for extra ampersand if rowNames have been added
   if (! is.null(rowNames)) {
