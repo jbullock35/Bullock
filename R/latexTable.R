@@ -79,15 +79,15 @@
 #'   columns. As a result, rules (horizontal lines) drawn by \code{booktabs} 
 #'   commands extend into the intercolumn region if \code{\\tabcolsep} and 
 #'   \code{\\extracolsep} are used to provide intercolumn space. A similar 
-#'   problem occurs if \code{\\hspace} is used to provide intercolumn space.
-#'       Thus, to fine-tune the spacing of the LaTeX tables produced by 
+#'   problem occurs if \code{\\hspace} is used to provide intercolumn space.\cr
+#'   \indent Thus, to fine-tune the spacing of the LaTeX tables produced by 
 #'   \code{latexTable}, blank columns can be inserted at arbitrary positions 
 #'   via the \code{spacerColumns} argument. This is a clunky way to adjust 
 #'   intercolumn space, but it solves the problem of positioning horizontal 
 #'   rules. In addition, no other approach affords the flexibility to insert 
 #'   horizontal space at arbitrary positions (useful for distinguishing tiers 
 #'   of columns from each other), and no other approach allows variation in
-#'   the widths of the spaces between columns. 
+#'   the widths of the spaces between columns. xxx
 #'  
 #' \emph{Changes from pre-release versions.} The names of some arguments have 
 #' changed slightly since the pre-release versions of this function. They have  

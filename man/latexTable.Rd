@@ -123,7 +123,12 @@ appear in the next row of the column label, and so~on.}
 column should have no column heading. But if \code{colNameExpand} is 
 \code{TRUE} and a text entry in a \code{colNames} list element is 
 followed by one or more '' entries, the column name specified by the text
-entry will bridge the columns that have '' entries.\cr\cr\cr\cr}
+entry will bridge the columns that have '' entries.
+    \code{colNameExpand} and \code{spacerColumns} do not play well 
+together. If you run \code{latexTable} with \code{colNameExpand == TRUE}
+and a non-NULL \code{spacerColumns} argument, you will get LaTeX output,
+but you will probably need to edit the "\\multicolumn" and "\\cmidrule"
+commands in the output so that LaTeX can render the output.\cr\cr\cr\cr}
 
 \item{extraRowHeight}{A string that specifies a length that LaTeX 
 recognizes, e.g., '2pt' or '.25in'. The \code{extrarowheight} length in 
@@ -137,6 +142,11 @@ after which to insert columns that contain no entries. These "spacer
 columns" are used to insert horizontal space into the typeset table. 
     To add a spacerColumn between the rownames and the first data column, 
 make 0 one of the values in spacerColumns.
+    \code{colNameExpand} and \code{spacerColumns} do not play well 
+together. If you run \code{latexTable} with \code{colNameExpand == TRUE}
+and a non-NULL \code{spacerColumns} argument, you will get LaTeX output,
+but you will probably need to edit the "\\multicolumn" and "\\cmidrule"
+commands in the output so that LaTeX can render the output.
     See below for a technical note on \code{spacerColumns} and column  
 spacing in LaTeX.}
 
@@ -215,7 +225,7 @@ in a LaTeX table.\cr\cr\cr\cr
 \description{
 \code{latexTable} takes a single matrix, \code{mat}. By default, it returns 
 a LaTeX macro that creates a well-formatted LaTeX table. It can take many 
-arguments to adjust the table's formatting.\ifelse{html}{\cr\cr\cr\cr}{xxx}
+arguments to adjust the table's formatting.\cr\cr\cr\cr
 }
 \details{
 The point of \code{latexTable} is to maximize flexibility in the formatting 
@@ -286,15 +296,15 @@ produced by \code{latexTable}.
   columns. As a result, rules (horizontal lines) drawn by \code{booktabs} 
   commands extend into the intercolumn region if \code{\\tabcolsep} and 
   \code{\\extracolsep} are used to provide intercolumn space. A similar 
-  problem occurs if \code{\\hspace} is used to provide intercolumn space.
-      Thus, to fine-tune the spacing of the LaTeX tables produced by 
+  problem occurs if \code{\\hspace} is used to provide intercolumn space.\cr
+  \indent Thus, to fine-tune the spacing of the LaTeX tables produced by 
   \code{latexTable}, blank columns can be inserted at arbitrary positions 
   via the \code{spacerColumns} argument. This is a clunky way to adjust 
   intercolumn space, but it solves the problem of positioning horizontal 
   rules. In addition, no other approach affords the flexibility to insert 
   horizontal space at arbitrary positions (useful for distinguishing tiers 
   of columns from each other), and no other approach allows variation in
-  the widths of the spaces between columns. 
+  the widths of the spaces between columns. xxx
  
 \emph{Changes from pre-release versions.} The names of some arguments have 
 changed slightly since the pre-release versions of this function. They have  
