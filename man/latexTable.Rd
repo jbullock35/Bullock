@@ -52,8 +52,8 @@ the \code{SE_fontSizeString} argument.}
 \item{headerFooter}{Logical variable. If \code{TRUE}, which is the default,
 the output will be (or at least include) a LaTeX macro that generates a 
 table. For example, you will be able to produce a table simply by calling
-\code{\\myTable{p}} or \code{\\myTable{h}} in your LaTeX code. 
-    If \code{headerFooter} is \code{FALSE}, the only output of the 
+\code{\\myTable{p}} or \code{\\myTable{h}} in your LaTeX code.\cr
+\indent If \code{headerFooter} is \code{FALSE}, the only output of the 
 function will be rows from a LaTeX table (possibly including column   
 headers). The function may not produce valid LaTeX output if both   
 \code{SE_table} and \code{headerFooter} are \code{FALSE}.}
@@ -109,11 +109,11 @@ footer row (e.g., '$N$', '$R^2$').}
 \item{colNames}{List, or object that can be coerced to a list, of column
 headings. Typically, each element in the list is a character vector, and 
 the elements of the character vector specify the names of the table's
-columns. 
-    If \code{SE_table} is \code{TRUE} (the default), each column name will
+columns.\cr 
+  \indent If \code{SE_table} is \code{TRUE} (the default), each column name will
 appear over a pair of columns. In this case, each element in the
-\code{colNames} list should contain \code{ncol(mat)/2} entries.
-    To specify multi-line column labels, use a list with multiple 
+\code{colNames} list should contain \code{ncol(mat)/2} entries.\cr
+  \indent To specify multi-line column labels, use a list with multiple 
 elements. The entries in the first list element will then appear in the 
 top row of the column label, the entries in the second list element will 
 appear in the next row of the column label, and so~on.}
@@ -123,8 +123,8 @@ appear in the next row of the column label, and so~on.}
 column should have no column heading. But if \code{colNameExpand} is 
 \code{TRUE} and a text entry in a \code{colNames} list element is 
 followed by one or more '' entries, the column name specified by the text
-entry will bridge the columns that have '' entries.
-    \code{colNameExpand} and \code{spacerColumns} do not play well 
+entry will bridge the columns that have '' entries.\cr
+  \indent \code{colNameExpand} and \code{spacerColumns} do not play well 
 together. If you run \code{latexTable} with \code{colNameExpand == TRUE}
 and a non-NULL \code{spacerColumns} argument, you will get LaTeX output,
 but you will probably need to edit the "\\multicolumn" and "\\cmidrule"
@@ -139,15 +139,15 @@ is \code{FALSE}.}
 
 \item{spacerColumns}{A vector of integers. Specifies columns in \code{mat} 
 after which to insert columns that contain no entries. These "spacer 
-columns" are used to insert horizontal space into the typeset table. 
-    To add a spacerColumn between the rownames and the first data column, 
-make 0 one of the values in spacerColumns.
-    \code{colNameExpand} and \code{spacerColumns} do not play well 
+columns" are used to insert horizontal space into the typeset table.\cr 
+  \indent To add a spacerColumn between the rownames and the first data column, 
+make 0 one of the values in spacerColumns.\cr
+  \indent \code{colNameExpand} and \code{spacerColumns} do not play well 
 together. If you run \code{latexTable} with \code{colNameExpand == TRUE}
 and a non-NULL \code{spacerColumns} argument, you will get LaTeX output,
 but you will probably need to edit the "\\multicolumn" and "\\cmidrule"
-commands in the output so that LaTeX can render the output.
-    See below for a technical note on \code{spacerColumns} and column  
+commands in the output so that LaTeX can render the output.\cr
+  \indent See below for a technical note on \code{spacerColumns} and column  
 spacing in LaTeX.}
 
 \item{spacerColumnsWidth}{Either a single string of a recognizable LaTeX 
@@ -200,8 +200,8 @@ e.g., by adjusting the number of digits after the decimal place.}
 
 \item{decimalPlaces}{Integer. If \code{formatNumbers} is \code{TRUE}, table 
 entries will be shown to this decimal place. For example, if 
-\code{decimalPlaces==2}, both "3.0035" and "3" will become "3.00."
-  If \code{formatNumbers} is \code{FALSE}, entries will not be adjusted,
+\code{decimalPlaces==2}, both "3.0035" and "3" will become "3.00."\cr
+  \indent If \code{formatNumbers} is \code{FALSE}, entries will not be adjusted,
 but \code{decimalPlaces} will still be used to determine the widths of 
 columns and some aspects of column spacing.}
 
@@ -304,7 +304,7 @@ produced by \code{latexTable}.
   rules. In addition, no other approach affords the flexibility to insert 
   horizontal space at arbitrary positions (useful for distinguishing tiers 
   of columns from each other), and no other approach allows variation in
-  the widths of the spaces between columns. xxx
+  the widths of the spaces between columns. 
  
 \emph{Changes from pre-release versions.} The names of some arguments have 
 changed slightly since the pre-release versions of this function. They have  
