@@ -66,20 +66,6 @@
 #' 
 #' 
 
-#data(iris)
-#lm1 <- lm(Sepal.Length ~ Petal.Length,               data = iris)
-#lm2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data = iris)
-#rT1 <- regTable(list(lm1, lm2))
-#latexTable(rT1)
-#latexTable(rT1, headerFooter = FALSE, spacerColumns = c(0, 1))
-#latexTable(rT1, colNames = qw("(1) (2)"))
-#latexTable(
-#  mat           = rT1, 
-#  colNames      = c('One big heading', ''),
-#  colNameExpand = TRUE)
-
-
-
 #' @note \emph{Required LaTeX packages.} The LaTeX code produced by the  
 #'  \code{latexTable} makes use of capabilities provided by the \code{array}, 
 #'  \code{booktabs}, and \code{numprint} LaTeX packages. If you haven't 
