@@ -177,7 +177,12 @@
 #'   column should have no column heading. But if \code{colNameExpand} is 
 #'   \code{TRUE} and a text entry in a \code{colNames} list element is 
 #'   followed by one or more '' entries, the column name specified by the text
-#'   entry will bridge the columns that have '' entries.\cr\cr\cr\cr
+#'   entry will bridge the columns that have '' entries.
+#'       \code{colNameExpand} and \code{spacerColumns} do not play well 
+#'   together. If you run \code{latexTable} with \code{colNameExpand == TRUE}
+#'   and a non-NULL \code{spacerColumns} argument, you will get LaTeX output,
+#'   but you will probably need to edit the "\\multicolumn" and "\\cmidrule"
+#'   commands in the output so that LaTeX can render the output.\cr\cr\cr\cr
 #' 
 #'
 #' @param extraRowHeight A string that specifies a length that LaTeX 
@@ -191,6 +196,11 @@
 #'   columns" are used to insert horizontal space into the typeset table. 
 #'       To add a spacerColumn between the rownames and the first data column, 
 #'   make 0 one of the values in spacerColumns.
+#'       \code{colNameExpand} and \code{spacerColumns} do not play well 
+#'   together. If you run \code{latexTable} with \code{colNameExpand == TRUE}
+#'   and a non-NULL \code{spacerColumns} argument, you will get LaTeX output,
+#'   but you will probably need to edit the "\\multicolumn" and "\\cmidrule"
+#'   commands in the output so that LaTeX can render the output.
 #'       See below for a technical note on \code{spacerColumns} and column  
 #'   spacing in LaTeX.
 #' @param spacerColumnsWidth Either a single string of a recognizable LaTeX 
