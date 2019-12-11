@@ -1,5 +1,5 @@
 # Version 2.0
-* Added `regTable()`.
+* Added `regTable()`, `latexTable()`, and `latexTablePDF()`.
 
 
 # Pre-release versions.

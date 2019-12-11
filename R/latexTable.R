@@ -346,6 +346,7 @@ latexTable <- function(
   if (formatNumbers) {
     mat <- round(mat, decimalPlaces)
   }
+
   
   # CHECK ARGUMENTS
   if (SE_table && !is.null(colNames) && length(colNames[[1]]) != ncol/2) {
@@ -373,7 +374,7 @@ latexTable <- function(
   }
   
   
-  # ADJUST DIGIT SETTINGS  [2014 4 021]
+  # ADJUST DIGIT SETTINGS  [2014]
   oldDigitsOption <- as.integer(options("digits"))
   options(digits = decimalPlaces + 1)
   on.exit(options(digits = oldDigitsOption))
@@ -515,17 +516,9 @@ latexTable <- function(
     if (! is.null(rowNames)) { 
       outputStrings <- c(outputStrings, '        r%')
     }
-#    if (is.null(spacerColumns)) {
-#      outputStrings <- c(outputStrings, paste0('        *{', ncol/2, '}{'))
-#      outputStrings <- c(outputStrings, '          N{1}{2}%')
-#      outputStrings <- c(outputStrings, '          >{{\\fontsize{10.3bp}{10.3bp}\\selectfont}}N{1}{2}%')
-#      outputStrings <- c(outputStrings, '          @{\\hspace{1.5em}}')
-#      outputStrings <- c(outputStrings, '        }')
-#    }
     for (i in colDest) {
       if (i == 'est' && SE_table) {
         outputStrings <- c(outputStrings, paste0('        >{{\\hspace*{0em}}}N{', unshift(leadingDigits), '}{', decimalPlaces, '}%'))        
-        # outputStrings <- c(outputStrings, paste0('        >{{\\hspace*{0em}}}N{', unshift(leadingDigits), '}{2}%'))
       } 
       else if (i == 'est' && !SE_table) {
         outputStrings <- c(outputStrings, paste0('        >{{\\hspace*{0em}}}N{', unshift(leadingDigits), '}{', decimalPlaces, '}%'))        
@@ -540,17 +533,22 @@ latexTable <- function(
     outputStrings <- c(outputStrings, '      }')  # ends "\begin{tabular}{"    
     if (! is.null(colNames)) {      
       
-      # Add \multicolumn commands for colNames.  [2012 07 23]
-      #   Recall that colNames is a list with multiple entries, to allow for 
+      # ADD \MULTICOLUMN COMMANDS FOR colNames  [2012 07 23]
+      # Recall that colNames is a list with multiple entries, to allow for 
       # column headings that span multiple lines.  So mcRow is a "row" in the
       # column headings.  [2014 04 27]
-      for (i in 1:length(colNames)) {
-        mcRow <- colNames[[i]]
-        if (colNameExpand && '' %in% mcRow) {
-          colNameStartPos   <- which(mcRow != '')
+  	  #   colNameColsToSpan is a unique value for each colName. It indicates 
+  	  # how many columns the colName should span. The numbering is as LaTeX
+  	  # would see it, and spacer columns thus count as columns to span. 
+  	  # colNameColsToSpan is used to generate the \cmidrule rule below the 
+  	  # column name.  [2019 12 10]
+      for (i in 1:length(colNames)) {              # for each element in the colNames list...
+        mcRow <- colNames[[i]]                     # ...get the list element...
+        if (colNameExpand && '' %in% mcRow) {      # ...if the list element - a character vector -- contains ''
+          colNameStartPos   <- which(mcRow != '')  # ...colNameStartPos is the indices of all non-empty elements in the list element (mcRow)
           colNameColsToSpan <- c(colNameStartPos[-1], length(mcRow) + 1) - colNameStartPos
           if (is.null(spacerColumns) && SE_table) {
-            colNameColsToSpan <- colNameColsToSpan * 2            
+            colNameColsToSpan <- colNameColsToSpan * 2       # e.g., c(2, 1, 1) becomes c(4, 2, 2)            
           }
           else if (!is.null(spacerColumns) &&  SE_table) {
             colNameColsToSpan <- colNameColsToSpan * 3 - 1
@@ -558,9 +556,14 @@ latexTable <- function(
           else if (!is.null(spacerColumns) && !SE_table) {
             colNameColsToSpan <- colNameColsToSpan * 2 - 1
           }        
-          colNameColsToSpan[colNameColsToSpan == 0] <- 1
-          mcRow <- mcRow[colNameStartPos]
-          mcRow <- paste0('        \\multicolumn{', colNameColsToSpan, '}{c}{', mcRow, '}')
+          colNameColsToSpan[colNameColsToSpan == 0] <- 1  
+          mcRow <- mcRow[colNameStartPos]                    # eliminate empty entries from mcRow
+          mcRow <- paste0(                                   # print a \multicolumn command for each entry in mcRow
+            '        \\multicolumn{', 
+      			colNameColsToSpan, 
+      			'}{c}{', 
+      			mcRow, 
+      			'}')  
         }
         else {  # if !colNameExpand
           if (SE_table) {
@@ -632,7 +635,8 @@ latexTable <- function(
         }
       }
       
-      # Add \cmidrule commands.  [2012 07 23]
+	  
+      # ADD \CMIDRULE COMMANDS  [2012 07 23]
       #   If expandColName == TRUE, the column positions indicated in 
       # spacerColumns are ignored.  Instead, the assumption is that spacer 
       # columns are to appear between each column (or, if SE_table == TRUE,   
@@ -647,13 +651,19 @@ latexTable <- function(
       }
       else if (colNameExpand) {
         colNameColsToSpanCume <- Reduce('+', colNameColsToSpan, accumulate = TRUE)  # e.g., c(1, 3, 5) becomes c(1, 4, 9)
-        for (i in 1:length(colNameColsToSpanCume)) {
-          colNameColsToSpanCume[i] <- colNameColsToSpanCume[i] + i - 1  # account for spacer columns 
-        }
-        start <- c(colNameStartPos[1], colNameStartPos[1] + colNameColsToSpanCume[-length(colNameColsToSpanCume)] + 1)
-        end   <- c(
-          start[-1] - 2,                                                   # all end values except the last 
-          start[length(start)] + colNameColsToSpan[length(start) - 1] - 1  # last end value
+        if (! is.null(spacerColumns)) {
+		      for (i in 1:length(colNameColsToSpanCume)) {
+            colNameColsToSpanCume[i] <- colNameColsToSpanCume[i] + i - 1  
+          }
+	      }
+        start <- c(
+          colNameStartPos[1],                                                       # index of first non-empty column name
+		      colNameStartPos[1] + colNameColsToSpanCume[-length(colNameColsToSpanCume)] # + 1
+        )
+        end <- c(
+          start + colNameColsToSpan - 1
+          # start[-1] - 2,                                                   # all end values except the last 
+          # start[length(start)] + colNameColsToSpan[length(start) - 1] - 1  # last end value
         )     
         
         # Adjust start and end to account for row names and a spacer column
@@ -810,6 +820,8 @@ latexTable <- function(
   }
   outputStrings
 }  
+
+
 
 print.latexTable <- function (tab) { 
   for (i in 1:length(tab)) {
