@@ -2,7 +2,7 @@
 #' 
 #' \code{latexTable} takes a single matrix, \code{mat}. By default, it returns 
 #' a LaTeX macro that creates a well-formatted LaTeX table. It can take many 
-#' arguments to adjust the table's formatting. 
+#' arguments to adjust the table's formatting.\ifelse{html}{\cr\cr\cr\cr}{xxx} 
 #' 
 
 #' The point of \code{latexTable} is to maximize flexibility in the formatting 
@@ -39,6 +39,11 @@
 #' can be far less cluttered than it would be if you had to define the entire 
 #' table in the middle of your document.
 #' 
+#' A fourth benefit of \code{latexTable} is that it produces well-formatted 
+#' LaTeX code. In other words, you won't just get tables that look good when  
+#' they are rendered (for example, as PDF). You'll also get LaTeX code that is
+#' easy to read and to modify in the LaTeX editor of your choice.
+#' 
 #' Some tweaking of the output by hand may still be necessary to get the desired 
 #' appearance. In particular, the formatting of each column is specified in 
 #' the LaTeX code by rules given by the \code{numprint} LaTeX package, and 
@@ -52,15 +57,29 @@
 #' column specifications like \code{N{2}{2}}.
 #' 
 #' \code{latexTable} tables can be transformed to PDF with 
-#' \code{latexTablePDF}.
+#' \code{latexTablePDF}.\cr\cr\cr\cr
 #' 
 #' 
 #' @return An object of class \code{latexTable} and \code{character}. The 
 #' returned object is a vector of strings of LaTeX code; each string is a row
-#' in a LaTeX table. Assigning the \code{latexTable} class ensures that, by 
-#' default, \code{print.latexTable} will be used to print the object to screen.
+#' in a LaTeX table.\cr\cr\cr\cr
 #' 
 #' 
+
+#data(iris)
+#lm1 <- lm(Sepal.Length ~ Petal.Length,               data = iris)
+#lm2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data = iris)
+#rT1 <- regTable(list(lm1, lm2))
+#latexTable(rT1)
+#latexTable(rT1, headerFooter = FALSE, spacerColumns = c(0, 1))
+#latexTable(rT1, colNames = qw("(1) (2)"))
+#latexTable(
+#  mat           = rT1, 
+#  colNames      = c('One big heading', ''),
+#  colNameExpand = TRUE)
+
+
+
 #' @note \emph{Required LaTeX packages.} The LaTeX code produced by the  
 #'  \code{latexTable} makes use of capabilities provided by the \code{array}, 
 #'  \code{booktabs}, and \code{numprint} LaTeX packages. If you haven't 
@@ -130,7 +149,7 @@
 #'   anywhere in the table or the caption, but references to the figure in 
 #'   your LaTeX document (for example, references created by \code{\\ref} or 
 #'   \code{\\autoref} must be include the label name. For simplicity, the 
-#'   default \code{label} is \code{commandName}.
+#'   default \code{label} is \code{commandName}.\cr\cr\cr\cr
 
 
 #' @param landscape Logical variable. Determines whether the table is printed 
@@ -144,7 +163,7 @@
 #' @param horizOffset A string that specifies a LaTeX length, e.g., ".25in".
 #'   When the LaTeX code produced by \code{latexTable} is rendered, the table
 #'   will be moved to the right by this length (or to the left if the length 
-#'   is negative, e.g., "-.25in").
+#'   is negative, e.g., "-.25in").\cr\cr\cr\cr
 #' 
 #' 
 #' @param rowNames Character vector of labels for the rows in \code{mat}. The
@@ -172,7 +191,7 @@
 #'   column should have no column heading. But if \code{colNameExpand} is 
 #'   \code{TRUE} and a text entry in a \code{colNames} list element is 
 #'   followed by one or more '' entries, the column name specified by the text
-#'   entry will bridge the columns that have '' entries.
+#'   entry will bridge the columns that have '' entries.\cr\cr\cr\cr
 #' 
 #'
 #' @param extraRowHeight A string that specifies a length that LaTeX 
@@ -190,7 +209,7 @@
 #'   spacing in LaTeX.
 #' @param spacerColumnsWidth Either a single string of a recognizable LaTeX 
 #'   length (e.g., '.5em') or a character vector indicating the width of each 
-#'   spacer column.
+#'   spacer column. Has no effect unless \code{headerFooter} is \code{TRUE}.
 #' @param spacerRows A vector of integers. After each row in \code{mat} whose  
 #'   number is in \code{spacerRows}, a vertical space of \code{spacerRowsHeight}
 #'   will be printed. For example, if \code{spacerRows == c(2, 4)}, a vertical 
@@ -217,15 +236,15 @@
 #'   \code{columnTierSeparator}, which defaults to two spaces ('  '). This 
 #'   option affects only the LaTeX code produced by \code{latexTable}; it 
 #'   exists to make the LaTeX code more readable. It does not affect the 
-#'   typeset (e.g., PDF) version of the table.
+#'   typeset (e.g., PDF) version of the table.\cr\cr\cr\cr
 #'
 #'   
 #' @param printCaption Logical variable.
 #' @param caption A string. It can include LaTeX commands, e.g., 
 #'   "\\\\textit{Results from a minimal specification.}"
-#' @param captionMargins A pair of strings that specify the margins of the 
-#'   caption. The strings should be LaTeX lengths, e.g., ".25in" or ".67em".
-#'   By default, \code{captionMargins} is \code{NULL}.
+#' @param captionMargins A vector of two strings that specify the margins of  
+#'   the caption. The strings should be LaTeX lengths, e.g., ".25in" or ".67em".
+#'   By default, \code{captionMargins} is \code{NULL}.\cr\cr\cr\cr
  
 
 #' @param formatNumbers Logical variable. Pretty-print the entries in mat, 
@@ -241,12 +260,12 @@
 #'   \code{\\\\fontsize{10.3bp}{10.3bp}\\\\selectfont}, which renders standard
 #'   errors in slightly smaller type than the corresponding estimates.  
 #' @param NA_text A string. \code{NA} entries in \code{mat} will be replaced 
-#'   by the string. 
+#'   by the string.\cr\cr\cr\cr
 #' 
 #' 
 #' @param writeToClipboard Logical variable. Copy entire output to clipboard. 
 #'   Useful if you want to paste the output directly into a \code{.tex} file.
-#'   Works only on Windows.
+#'   Works only on Windows.\cr\cr\cr\cr
 
 
 
@@ -254,7 +273,8 @@
 
 
 # TODO: 
-# --Generate example code.  [2019 12 07]
+# --Check that NA_text really works as I say it does in the documentation.
+#   [2019 12 10]
 # --Check that LaTeX can't handle macro names that include digits. And if I 
 #   am right about that, add a function that checks to ensure that there are 
 #   no digits in commandName.  [2019 12 07]
@@ -281,32 +301,38 @@
 latexTable <- function(
   mat, 
   SE_table            = TRUE,
+  headerFooter        = TRUE,
+  commandName         = 'myTable',
+  callCommand         = TRUE,
+  label               = commandName,
+  
+  landscape           = if (SE_table) ncol(mat) / 2 >= 6 else ncol(mat) >= 6,
   starredFloat        = FALSE,
+  horizOffset         = '-0in',
+  
   rowNames            = rownames(mat), 
+  footerRows          = if (is.null(rowNames)) NULL else c('Number of observations', rep('000', ncol(mat)/2)),
   colNames            = colnames(mat)[seq(1, ncol(mat), by = 2)],  # odd colnames(mat)
   colNameExpand       = FALSE,
-  formatNumbers       = TRUE,  
-  decimalPlaces       = 2,  
-  NA_text              = '',
-  columnTierSeparator = '  ',
+
   extraRowHeight      = if (SE_table) '2pt' else '4pt',
-  tabColSep           = '2.75pt',
-  horizOffset         = '-0in',
-  headerFooter        = TRUE,
-  spaceBetweenColNameRows = TRUE, 
-  landscape           = if (SE_table) ncol(mat) / 2 >= 6 else ncol(mat) >= 6,
-  SE_fontSizeString   = '\\fontsize{10.3bp}{10.3bp}\\selectfont',
   spacerColumns       = NULL,
   spacerColumnsWidth  = '.5em',
   spacerRows          = NULL,
   spacerRowsHeight    = '.15in',
-  footerRows          = if (is.null(rowNames)) NULL else c('Number of observations', rep('000', ncol(mat)/2)),
+  tabColSep           = '2.75pt',
+  spaceBetweenColNameRows = TRUE, 
+  columnTierSeparator = '  ',
+
   printCaption        = TRUE,
   caption             = paste0('\\', label, 'Caption'),
   captionMargins      = NULL, 
-  commandName         = 'myTable',
-  label               = commandName,
-  callCommand         = TRUE,
+
+  formatNumbers       = TRUE,  
+  decimalPlaces       = 2,  
+  SE_fontSizeString   = '\\fontsize{10.3bp}{10.3bp}\\selectfont',
+  NA_text              = '',
+
   writeToClipboard    = Sys.info()['sysname'] == 'Windows') {
   
   
