@@ -299,9 +299,6 @@
 
 
 # TODO: 
-# --Run the tests in tmp/tmp.R. Ensure that they work.  [2019 12 11]
-# --Ensure that the function works with either spacerColumns or colNameExpand,
-#   even if not with both.
 # --Fix the trailing-zeroes problem in the simple examples of tmp/tmp.R.
 # --Add, to the function, a warning about using both spacerColumns and 
 #   colNameExpand.  
@@ -435,29 +432,34 @@ latexTable <- function(
   if (formatNumbers) {
     for (i in 1:nrow(mat)) {
   
+      # browser()
+      
       # NEW ATTEMPT TO PAD OUT ENTRIES WITH TRAILING ZEROES.  This "first 
       # strike" attempt uses str_pad().  [2014 06 21]  
-      matChar <- as.character(mat[i,])
-      matChar <- gsub('^0$', paste0('0.', z), matChar)                  # take care of entries that are simply "0"
-      matCharAfterDecimal <- gsub('-?\\d+\\.', '', matChar)             # get characters after the decimal place, e.g., "12"
+      matChar <- as.character(mat[i,])                       # get row "i" of "mat"
+      matChar <- gsub('^0$', paste0('0.', z), matChar)       # take care of entries that are simply "0"
+      matChar <- gsub('^(\\d+)$', '\\1.', matChar)           # add decimal place to entries that contain only digits
+      matCharAfterDecimal <- gsub('-?\\d+\\.', '', matChar)  # get characters after the decimal place, e.g., "12" in "-3.12"
+      
       decimalPlacesToAdd <- decimalPlaces - nchar(matCharAfterDecimal)  # e.g., add two zeroes to one entry, zero zeroes to another
-      for (ind in 1:length(matChar)) {
-        if (is.na(matChar[ind])) { next }
-        matChar[ind] <- stringr::str_pad(
+      for (ind in 1:length(matChar)) {     # for each entry in row "i" of "mat"
+        if (is.na(matChar[ind])) { next }  # skip if NA
+        
+        matChar[ind] <- stringr::str_pad(  # otherwise, pad the entries with trailing zeroes
           string = matChar[ind],
           width  = nchar(matChar[ind]) + decimalPlacesToAdd[ind],
           side   = 'right',
           pad    = '0')
       }
       matLine <- paste(matChar, collapse = ' & ')
-      
+      # browser()
       
       # ADJUST FORMATTING OF NUMBERS
       # This is a much older attempt to pad out entries with trailing zeroes and
       # to process the entries in other ways.  It replaces '0' with '0.00', '123' 
       # with '123.00', etc.  [2011 02 17]     
       if (SE_table) {
-        matLine <- sub('^(-?\\d+)\\s',    paste0('\\1.', z, ' '),  matLine)  # If the first entry in a row is X, this changes it to, e.g., X.00
+        matLine <- sub('^(-?\\d+)\\s',    paste0('\\1.',  z, ' '), matLine)  # If the first entry in a row is X, this changes it to, e.g., X.00
         matLine <- gsub('\\s(-?\\d+)\\s', paste0(' \\1.', z, ' '), matLine)  # For subsequent entries, replace ' 1 ' with ' 1.00 ', ' -1 ' with ' -1.00 ', etc.
         matLine <- gsub('\\s(\\d+)$',     paste0(' \\1.', z),      matLine)
       }
@@ -469,7 +471,7 @@ latexTable <- function(
       
       # Replace, e.g., '.1' with '.10' [2011 02 17]
       matLine <- gsub('(\\.\\d)\\s', '\\10 ', matLine)
-      matLine <- gsub('(\\.\\d)$',   '\\10', matLine)
+      matLine <- gsub('(\\.\\d)$',   '\\10',  matLine)
       
       # Replace NA values [2012 07 22]
       if (! is.null(NA_text)) {
