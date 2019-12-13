@@ -116,7 +116,7 @@ appear over a pair of columns. In this case, each element in the
   \indent To specify multi-line column labels, use a list with multiple 
 elements. The entries in the first list element will then appear in the 
 top row of the column label, the entries in the second list element will 
-appear in the next row of the column label, and so~on.}
+appear in the next row of the column label, and so{\NB}on.}
 
 \item{colNameExpand}{Logical variable. By default, an entry of '' in a
 \code{colNames} list element---that is, an empty entry---indicates that a 
@@ -311,7 +311,38 @@ changed slightly since the pre-release versions of this function. They have
 been changed to enforce consistency: camelCase is used for all arguments,  
 and every acronym is followed by an underscore (_) character. We thus have  
 \code{SE_table} instead of \code{SEtable}, \code{tabColSep} instead of 
-\code{tabcolsep}, and so{\NB}on.
+\code{tabcolsep}, and so{\NB}on.\cr\cr\cr\cr
+}
+\examples{
+data(iris)
+lm1 <- lm(Sepal.Length ~ Petal.Length,               data = iris)
+lm2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data = iris)
+rT1 <- regTable(list(lm1, lm2))
+latexTable(rT1)
+latexTable(rT1, headerFooter = FALSE, spacerColumns = c(0, 2))
+latexTable(rT1, colNames = qw("(1) (2)"))
+latexTable(mat = matrix(1:16, nrow=4), colNames = 1:2)
+latexTable(
+  mat = matrix(1:16, nrow=2), 
+  colNames = c('1', '', '', 4))
+latexTable(
+  mat = matrix(1:16, nrow=2), 
+  colNames = c('1', '', '3', '4'),
+  colNameExpand = TRUE)
+latexTable(                                      
+  mat           = matrix(1:16, nrow=4), 
+  colNames      = c('One big heading', ''),
+  colNameExpand = TRUE)
+latexTable(
+  mat           = matrix(1:16, nrow=4),
+  rowNames      = 1:4,
+  colNames      = c('One big heading', ''),
+  colNameExpand = TRUE)
+latexTable(
+  mat           = matrix(1:16, nrow=4), 
+  colNames      = 1:2,
+  rowNames      = qw("a b c d"),
+  spacerColumns = c(0, 2))
 }
 \concept{Tufte}
 \concept{table}

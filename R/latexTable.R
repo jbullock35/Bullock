@@ -94,7 +94,7 @@
 #' been changed to enforce consistency: camelCase is used for all arguments,  
 #' and every acronym is followed by an underscore (_) character. We thus have  
 #' \code{SE_table} instead of \code{SEtable}, \code{tabColSep} instead of 
-#' \code{tabcolsep}, and so{\NB}on.
+#' \code{tabcolsep}, and so{\NB}on.\cr\cr\cr\cr
 
 #' @concept Tufte
 #' @concept table
@@ -264,6 +264,36 @@
 #'   Works only on Windows.\cr\cr\cr\cr
 
 
+#' @examples
+#' data(iris)
+#' lm1 <- lm(Sepal.Length ~ Petal.Length,               data = iris)
+#' lm2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data = iris)
+#' rT1 <- regTable(list(lm1, lm2))
+#' latexTable(rT1)
+#' latexTable(rT1, headerFooter = FALSE, spacerColumns = c(0, 2))
+#' latexTable(rT1, colNames = qw("(1) (2)"))
+#' latexTable(mat = matrix(1:16, nrow=4), colNames = 1:2)
+#' latexTable(
+#'   mat = matrix(1:16, nrow=2), 
+#'   colNames = c('1', '', '', 4))
+#' latexTable(
+#'   mat = matrix(1:16, nrow=2), 
+#'   colNames = c('1', '', '3', '4'),
+#'   colNameExpand = TRUE)
+#' latexTable(                                      
+#'   mat           = matrix(1:16, nrow=4), 
+#'   colNames      = c('One big heading', ''),
+#'   colNameExpand = TRUE)
+#' latexTable(
+#'   mat           = matrix(1:16, nrow=4),
+#'   rowNames      = 1:4,
+#'   colNames      = c('One big heading', ''),
+#'   colNameExpand = TRUE)
+#' latexTable(
+#'   mat           = matrix(1:16, nrow=4), 
+#'   colNames      = 1:2,
+#'   rowNames      = qw("a b c d"),
+#'   spacerColumns = c(0, 2))
 
 
 
