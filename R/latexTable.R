@@ -299,11 +299,7 @@
 
 
 # TODO: 
-# --Fix the trailing-zeroes problem in the simple examples of tmp/tmp.R.
-# --Add, to the function, a warning about using both spacerColumns and 
-#   colNameExpand.  
-# --Convert the tests into -real- tests.  [2019 12 11]
-
+# --Convert the tests into -real- tests.  [2019 12 13]
 # --Check that NA_text really works as I say it does in the documentation.
 #   [2019 12 10]
 # --Check that LaTeX can't handle macro names that include digits. And if I 
@@ -311,9 +307,6 @@
 #   no digits in commandName.  [2019 12 07]
 # --See if I can use clipr::write_clip to copy to clipboard for non-Windows
 #     systems.  [2019 12 08]
-# --The colNameExpand argument isn't working well, and it breaks old code.
-#   I should test it more with old code and work out the bugs.  And perhaps
-#   the argument should default to FALSE.  [2014 06 06]
 # --Add a numprint option to specify the number of digits in each 
 #   numprint-specification-column, both before and after the decimal 
 #   place.  [2015 02 22]
@@ -408,6 +401,10 @@ latexTable <- function(
   if (grepl('&', columnTierSeparator)) {
     warning(stringr::str_wrap("columnTierSeparator includes an ampersand.  This is likely to screw up the layout of your table.", 72, exdent = 2))
   }
+  if (!is.null(spacerColumns) && !is.null(colNameExpand)) {
+    warning("You have specified spacerColumns and colNameExpand is not NULL. The output of the function probably won't be valid; you will probably need to adjust the header to get the column specifications right.")
+  }
+  
   if(!is.null(spacerColumns) && max(spacerColumns) >= ncol) {
     stop("max(spacerColumns) must be less than ncol(mat).")
   }
@@ -432,13 +429,11 @@ latexTable <- function(
   if (formatNumbers) {
     for (i in 1:nrow(mat)) {
   
-      # browser()
-      
       # NEW ATTEMPT TO PAD OUT ENTRIES WITH TRAILING ZEROES.  This "first 
       # strike" attempt uses str_pad().  [2014 06 21]  
       matChar <- as.character(mat[i,])                       # get row "i" of "mat"
       matChar <- gsub('^0$', paste0('0.', z), matChar)       # take care of entries that are simply "0"
-      matChar <- gsub('^(\\d+)$', '\\1.', matChar)           # add decimal place to entries that contain only digits
+      matChar <- gsub('^(-?\\d+)$', '\\1.', matChar)         # add decimal place to entries that contain only digits
       matCharAfterDecimal <- gsub('-?\\d+\\.', '', matChar)  # get characters after the decimal place, e.g., "12" in "-3.12"
       
       decimalPlacesToAdd <- decimalPlaces - nchar(matCharAfterDecimal)  # e.g., add two zeroes to one entry, zero zeroes to another
@@ -452,7 +447,6 @@ latexTable <- function(
           pad    = '0')
       }
       matLine <- paste(matChar, collapse = ' & ')
-      # browser()
       
       # ADJUST FORMATTING OF NUMBERS
       # This is a much older attempt to pad out entries with trailing zeroes and
