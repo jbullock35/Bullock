@@ -336,7 +336,7 @@ latexTable <- function(
   
   rowNames            = rownames(mat), 
   footerRows          = if (is.null(rowNames)) NULL else c('Number of observations', rep('000', ncol(mat)/2)),
-  colNames            = colnames(mat)[seq(1, ncol(mat), by = 2)],  # odd colnames(mat)
+  colNames            = if (SE_table) colnames(mat)[seq(1, ncol(mat), by = 2)] else colnames(mat),
   colNameExpand       = FALSE,
 
   extraRowHeight      = if (SE_table) '2pt' else '4pt',
