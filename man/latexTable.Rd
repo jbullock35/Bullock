@@ -34,7 +34,7 @@ latexTable(
   decimalPlaces = 2,
   SE_fontSizeString = "\\\\fontsize{10.3bp}{10.3bp}\\\\selectfont",
   NA_text = "",
-  writeToClipboard = Sys.info()["sysname"] == "Windows"
+  writeToClipboard = FALSE
 )
 }
 \arguments{

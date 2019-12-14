@@ -6,12 +6,15 @@ Date: 2019-12-04
 Authors@R: person("John", "Bullock", email = "john@johnbullock.org", 
   role = c("aut", "cre")) 
 Imports: lmtest, dplyr, gdata, stringr
-Suggests: ivpack, multiwayvcov
+Suggests: 
+    ivpack,
+    multiwayvcov,
+    testthat
 Description: These functions are used in John Bullock's code; they are 
   typically needed for replication purposes. They range in complexity from a 
-  function that just removes NA values from a vector prior to summing it 
-  (sumNA) to a function that transforms regression output into LaTeX tables 
-  of the style that Bullock likes (latable).
+  function that removes NA values from a vector prior to summing it 
+  (sumNA) to a trio of functions that produce well-formatted regression-table
+  output (regTable, latexTable, and latexTablePDF).
 License: GPL (>= 2)
 LazyLoad: yes
 URL: https://github.com/jbullock35/Bullock

@@ -300,6 +300,10 @@
 
 # TODO: 
 # --Convert the tests into -real- tests.  [2019 12 13]
+# --Add an example that includes a caption, perhaps with LaTeX label or 
+#   autoreferences.  [2019 12 14]
+# --Add a vignette that shows the R code and the LaTeX code, illustrating how 
+#   to call the LaTeX table in R.  [2019 12 14]
 # --Check that NA_text really works as I say it does in the documentation.
 #   [2019 12 10]
 # --Check that LaTeX can't handle macro names that include digits. And if I 
