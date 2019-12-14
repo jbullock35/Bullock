@@ -357,7 +357,7 @@ latexTable <- function(
   SE_fontSizeString   = '\\fontsize{10.3bp}{10.3bp}\\selectfont',
   NA_text              = '',
 
-  writeToClipboard    = Sys.info()['sysname'] == 'Windows') {
+  writeToClipboard    = FALSE) {
   
   
   
