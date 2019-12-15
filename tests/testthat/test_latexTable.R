@@ -47,19 +47,75 @@ test_that("numbers are formatted correctly when decimalPlaces == 3", {
     all = FALSE)
 })
 
+
+
+lt2 <- latexTable(
+  mat = matrix(1:16, nrow=2), 
+  colNames = c('1', '', '', 4))
+lt2_colNameExpand <- latexTable(
+  mat = matrix(1:16, nrow=2), 
+  colNames = c('1', '', '', 4),
+  colNameExpand = TRUE)
+lt2_spacerColumns <- latexTable(
+  mat = matrix(1:16, nrow=2), 
+  colNames = c('1', '', '', 4),
+  spacerColumns = c(0,1,2))
+
+
 test_that("\\multicolumn specifications are correct", {
-  # TODO: Pick up here, both with SE_table == TRUE and SE_table == FALSE. Work
-  #  with the examples below.  [2019 12 14]
+  expect_match(                                       # first column
+    lt2,
+    '^\\s+\\\\multicolumn\\{2\\}\\{c\\}\\{1\\}\\s+&\\s*',
+    all = FALSE)
+  expect_match(                                       # second and third columns
+    lt2,
+    '\\\\multicolumn\\{2\\}\\{c\\}\\{\\}\\s+&\\s*',
+    all = FALSE)
+  expect_match(                                       # fourth column
+    lt2,
+    '\\\\multicolumn\\{2\\}\\{c\\}\\{4\\}\\\\tabularnewline',
+    all = FALSE)
+
+  expect_match(                                       # first column heading
+    lt2_colNameExpand,
+    '^\\s+\\\\multicolumn\\{6\\}\\{c\\}\\{1\\}\\s+&\\s*',
+    all = FALSE)
+  expect_match(                                       # second column heading
+    lt2_colNameExpand,
+    '\\\\multicolumn\\{2\\}\\{c\\}\\{4\\}\\\\tabularnewline',
+    all = FALSE)
+  
+  expect_match(                                       # first column
+    lt2_spacerColumns,
+    '^\\s+&\\s*\\\\multicolumn\\{2\\}\\{c\\}\\{1\\}\\s+&\\s*&\\s*',
+    all = FALSE)
+  expect_match(                                       # second and third columns
+    lt2_spacerColumns,
+    '\\\\multicolumn\\{2\\}\\{c\\}\\{\\}\\s+&\\s*',
+    all = FALSE)
+  expect_match(                                       # fourth column
+    lt2_spacerColumns,
+    '\\\\multicolumn\\{2\\}\\{c\\}\\{4\\}\\\\tabularnewline',
+    all = FALSE)
 })
 
 
 
-latexTable(
-  mat = matrix(1:16, nrow=2), 
-  colNames = c('1', '', '', 4))
-latexTable(
-  mat = matrix(1:16, nrow=2), 
-  colNames = c('1', '', '3', '4'),
-  colNameExpand = TRUE)
+test_that("\\cmidrule specifications are correct", {
+  expect_match(
+    lt2,
+    '\\\\cmidrule\\(lr\\)\\{1-2\\}\\s*\\\\cmidrule\\(lr\\)\\{3-4\\}\\s*\\\\cmidrule\\(lr\\)\\{5-6\\}\\s*\\\\cmidrule\\(lr\\)\\{7-8\\}\\s*',
+    all = FALSE)
+
+  expect_match(
+    lt2_colNameExpand,
+    '\\\\cmidrule\\(lr\\)\\{1-6\\}\\s*\\\\cmidrule\\(lr\\)\\{7-8\\}\\s*',
+    all = FALSE)
+  
+  expect_match(
+    lt2_spacerColumns,
+    '\\\\cmidrule\\{2-4\\}\\s*\\\\cmidrule\\{6-7\\}\\s*\\\\cmidrule\\{8-9\\}\\s*\\\\cmidrule\\{10-11\\}\\s*',
+    all = FALSE)
+})
 
 

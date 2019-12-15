@@ -405,8 +405,8 @@ latexTable <- function(
   if (grepl('&', columnTierSeparator)) {
     warning(stringr::str_wrap("columnTierSeparator includes an ampersand.  This is likely to screw up the layout of your table.", 72, exdent = 2))
   }
-  if (!is.null(spacerColumns) && !is.null(colNameExpand)) {
-    warning("You have specified spacerColumns and colNameExpand is not NULL. The output of the function probably won't be valid; you will probably need to adjust the header to get the column specifications right.")
+  if (!is.null(spacerColumns) && colNameExpand) {
+    warning("You have specified spacerColumns and colNameExpand is TRUE. The output of the function probably won't be valid; you will probably need to adjust the header to get the column specifications right.")
   }
   
   if(!is.null(spacerColumns) && max(spacerColumns) >= ncol) {
