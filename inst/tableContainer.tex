@@ -4,7 +4,6 @@
 % To automate the creation of PDF tables from R.
 
 \documentclass[letterpaper, 12pt, oneside]{article}
-\usepackage{ifxetex}
 
 
 % PAGE LAYOUT
@@ -12,10 +11,9 @@
 \widowpenalty=10000
 \displaywidowpenalty=10000 % avoid orphans and widows.
 \predisplaypenalty=5000    % permit a page to begin with a displayed (not in-text) equation
-\usepackage[verbose, pdftex, letterpaper, includehead, top=.5in, head=.05in, headsep=.25in, left=1in, right=1in, bottom=1.25in]{geometry} % margin=1in
+\usepackage[verbose, pdftex, letterpaper, includehead, top=.5in, head=.05in, headsep=.25in, left=1in, right=1in, bottom=1.25in]{geometry}
 \usepackage{afterpage}                 % delays arguments until after their page is typeset.  Useful for landscaped floats.
 \usepackage{pdflscape}                 % allows typesetting individual pages as landscape
-\usepackage{float}                     % allows for the [H] -- here, period -- float specification
 \setcounter{totalnumber}{1}            % no more than one float per page
 \renewcommand{\floatpagefraction}{.05} % permit lots of white space on a float page -- and thus no more than one per page
 \newlength\oldheadheight
@@ -41,13 +39,13 @@
 
 % MATH COMMANDS
 \IfFileExists{mathcommands.sty}{
-  \usepackage{mathcommands}  % my own package
+  \usepackage{mathcommands}  
 }
 
 
 % FONT SETUP
 \IfFileExists{fontcommands.sty}{
-  \usepackage{fontcommands}  % my own package
+  \usepackage{fontcommands}  
 }
 
 
@@ -61,23 +59,15 @@
   \setlength\RaggedRightParindent{.5in}
   \setlength\JustifyingParindent{0in}
 \hyphenpenalty=10000
-  %\usepackage[none]{hyphenat}  % doesn't allow line breaks even when a word has a hyphen
-\usepackage{setspace}   % for working with spacing.  See setspace.sty for instructions
-\usepackage{relsize} % for relative font sizing
+\usepackage{setspace}  % for working with spacing.  See setspace.sty for instructions
+% \usepackage{relsize}   % for relative font sizing
 
 
 % HEADERS
-%\usepackage{pstcol}
-\usepackage{datetime} % For formatting time of day on the title page.
-  \usdate % print in format "March 2, 2002"
-  \newdateformat{mydateformat}{\THEYEAR~\monthname[\THEMONTH]~\THEDAY}
-  \settimeformat{ampmtime}
-\usepackage{color}
-  \definecolor{gray}{gray}{.50}
 \usepackage{fancyhdr} % allows me to customize headers and footers
   \pagestyle{fancy}
   \lhead{
-    \color{gray}%
+    ~%
   }
   \rhead{%
     \thepage\\ \ %
@@ -87,8 +77,6 @@
 
 
 % TABLES AND ARRAYS
-%\usepackage{longtable}
-%  \setlength\LTpost{2.5\baselineskip} % skip after longtable
 \usepackage{booktabs}
   \setlength{\heavyrulewidth}{.08em} % for \toprule and \bottomrule.  .08em is the default.
   \setlength{\belowrulesep}{2.0ex}   % for \cmidrule.  .08ex is the default.
@@ -98,19 +86,8 @@
                                        % in tables, numprint allows for decimal alignment of numbers in text mode
                                        % note: warning switches -off- warnings.  (I don't want warnings about negative signs.)
   \npfourdigitnosep % print "6002.54" instead of "6,002.45"
-\newcommand{\ph}[1][1]{\phantom{#1}}   % for quick alignment of cell entries without using the dcolumn package
-\newcommand{\tabcent}[1] {\multicolumn{2}{c}{#1}}
 \newlength{\standardExtraColSep}
 \setlength{\standardExtraColSep}{\extracolsep}
-
-
-% MISCELLANEOUS
-% \def\PDFauthor{John G. Bullock}
-\usepackage{hyperref}  % for \autoref
-\usepackage{url}
-  \urlstyle{same}
-%\usepackage{bpchem} % For superscripts and subscripts in ordinary text.
-\usepackage{moredefs, lips} % for ellipses.  lips requires moredefs
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
