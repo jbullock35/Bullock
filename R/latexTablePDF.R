@@ -100,7 +100,7 @@
 latexTablePDF <- function(
   latexTable,
   container          = TRUE,  # if FALSE, .tex file can't be PDF'd
-  containerFilename  = 'c://school//methods//utilities//latexPreamble//tablePreamble.tex',
+  containerFilename  = NULL,
   outputFilenameStem = 'latexTable',
   writePDF           = TRUE,
   writeTex           = FALSE,
@@ -200,7 +200,13 @@ latexTablePDF <- function(
   
   # CREATE THE ENTIRE LATEX DOCUMENT
   if (container) {
-    latexContainer <- readLines(containerFilename)
+    if (containerFilename) {
+      latexContainer <- readLines(containerFilename)
+    } else {
+      latexContainer <- readLines(
+        system.file("tableContainer.tex", package = "Bullock", mustWork = TRUE)
+      )
+    }
     lineToReplace  <- which(grepl('TABLE GOES HERE!', latexContainer))  
     newTable <- latexContainer[1:(lineToReplace)-1]
     for (i in 1:length(latexTable)) {
