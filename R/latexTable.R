@@ -272,6 +272,11 @@
 #' latexTable(rT1)
 #' latexTable(rT1, headerFooter = FALSE, spacerColumns = c(0, 2))
 #' latexTable(rT1, colNames = qw("(1) (2)"))
+#' latexTable(
+#'   mat         = rT1,
+#'   commandName = 'mainEstimates',
+#'   caption     = "Each entry is an estimate or a standard error from a separate OLS regression. This table corresponds exactly to \\autoref{SomeFigure}; the difference is that it presents the estimates and standard errors in tabular form rather than graphically."
+#' ) 
 #' latexTable(mat = matrix(1:16, nrow=4), colNames = 1:2)
 #' latexTable(
 #'   mat = matrix(1:16, nrow=2), 
@@ -299,9 +304,6 @@
 
 
 # TODO: 
-# --Convert the tests into -real- tests.  [2019 12 13]
-# --Add an example that includes a caption, perhaps with LaTeX label or 
-#   autoreferences.  [2019 12 14]
 # --Add a vignette that shows the R code and the LaTeX code, illustrating how 
 #   to call the LaTeX table in R.  [2019 12 14]
 # --Check that NA_text really works as I say it does in the documentation.
@@ -886,3 +888,6 @@ print.latexTable <- function (tab) {
     writeLines(tab[i])
   }
 }
+
+
+

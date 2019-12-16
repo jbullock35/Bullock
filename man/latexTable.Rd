@@ -321,6 +321,11 @@ rT1 <- regTable(list(lm1, lm2))
 latexTable(rT1)
 latexTable(rT1, headerFooter = FALSE, spacerColumns = c(0, 2))
 latexTable(rT1, colNames = qw("(1) (2)"))
+latexTable(
+  mat         = rT1,
+  commandName = 'mainEstimates',
+  caption     = "Each entry is an estimate or a standard error from a separate OLS regression. This table corresponds exactly to \\\\autoref{SomeFigure}; the difference is that it presents the estimates and standard errors in tabular form rather than graphically."
+) 
 latexTable(mat = matrix(1:16, nrow=4), colNames = 1:2)
 latexTable(
   mat = matrix(1:16, nrow=2), 
