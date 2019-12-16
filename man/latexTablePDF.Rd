@@ -93,6 +93,14 @@ only if \code{writePDF} is \code{TRUE}.}
 \code{latexTablePDF} takes an object produced by \code{latexTable} and 
 writes a PDF file. It can also write the corresponding .tex file.
 }
+\note{
+\emph{Required LaTeX tools.} If \code{writePDF} is \code{TRUE}, 
+  \code{pdflatex} must be installed on your system. (It is part of most any
+  LaTeX installation.) In addition, if \code{writePDF} is \code{TRUE} and 
+  \code{containerFilename} is \code{NULL} (the default), the following 
+  LaTeX packages must be installed: \code{afterpage, caption, fancyhdr, 
+  geometry, pdflscape, } and \code{ragged2e}.\cr\cr\cr\cr
+}
 \examples{
 \dontrun{
   data(iris)
