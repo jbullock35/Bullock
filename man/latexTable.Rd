@@ -28,7 +28,7 @@ latexTable(
   spaceBetweenColNameRows = TRUE,
   columnTierSeparator = "  ",
   printCaption = TRUE,
-  caption = paste0("\\\\", label, "Caption"),
+  caption = paste0(label, "Caption"),
   captionMargins = NULL,
   formatNumbers = TRUE,
   decimalPlaces = 2,
@@ -285,9 +285,9 @@ column specifications like \code{N{2}{2}}.
 \note{
 \emph{Required LaTeX packages.} The LaTeX code produced by the  
  \code{latexTable} makes use of capabilities provided by the \code{array}, 
- \code{booktabs}, and \code{numprint} LaTeX packages. If you haven't 
-installed those LaTeX packages, you won't be able to render the tables 
-produced by \code{latexTable}. 
+ \code{booktabs}, \code{caption}, and \code{numprint} LaTeX packages. If 
+you haven't installed those LaTeX packages, you won't be able to render 
+the tables produced by \code{latexTable}. 
 
 \emph{Column spacing in LaTeX.} Ordinary methods for inserting space 
   between columns involve the \code{\\tabcolsep} and \code{\\extracolsep} 
@@ -349,6 +349,12 @@ latexTable(
   rowNames      = qw("a b c d"),
   spacerColumns = c(0, 2))
 }
+\seealso{
+Other functions for making tables: 
+\code{\link{latexTablePDF}()},
+\code{\link{regTable}()}
+}
 \concept{Tufte}
+\concept{functions for making tables}
 \concept{table}
 \concept{tables}

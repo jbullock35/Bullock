@@ -68,9 +68,9 @@
 
 #' @note \emph{Required LaTeX packages.} The LaTeX code produced by the  
 #'  \code{latexTable} makes use of capabilities provided by the \code{array}, 
-#'  \code{booktabs}, and \code{numprint} LaTeX packages. If you haven't 
-#' installed those LaTeX packages, you won't be able to render the tables 
-#' produced by \code{latexTable}. 
+#'  \code{booktabs}, \code{caption}, and \code{numprint} LaTeX packages. If 
+#' you haven't installed those LaTeX packages, you won't be able to render 
+#' the tables produced by \code{latexTable}. 
 #' 
 #' \emph{Column spacing in LaTeX.} Ordinary methods for inserting space 
 #'   between columns involve the \code{\\tabcolsep} and \code{\\extracolsep} 
@@ -99,6 +99,7 @@
 #' @concept Tufte
 #' @concept table
 #' @concept tables
+#' @family functions for making tables
 
 #' @param mat Matrix of information to be displayed in a LaTeX table.
 #' @param SE_table Logical variable that indicates whether the table contains
@@ -306,8 +307,6 @@
 # TODO: 
 # --Add a vignette that shows the R code and the LaTeX code, illustrating how 
 #   to call the LaTeX table in R.  [2019 12 14]
-# --Check that NA_text really works as I say it does in the documentation.
-#   [2019 12 10]
 # --Check that LaTeX can't handle macro names that include digits. And if I 
 #   am right about that, add a function that checks to ensure that there are 
 #   no digits in commandName.  [2019 12 07]
@@ -355,7 +354,7 @@ latexTable <- function(
   columnTierSeparator = '  ',
 
   printCaption        = TRUE,
-  caption             = paste0('\\', label, 'Caption'),
+  caption             = paste0(label, 'Caption'),
   captionMargins      = NULL, 
 
   formatNumbers       = TRUE,  

@@ -2,9 +2,9 @@ import(gdata, stringr)
 importFrom("stats", "logLik", "model.matrix", "sd", "var")
 importFrom("utils", "writeClipboard")
 export(
-  "%IN%", factorToDummyMatrix, latexTable, lNA, lNAv, lsos, meanNA,  
-  merge_fac, modal_value, move.to.df, new_stack, noNAmatrix, pop, push, qw,  
-  regTable, reliability, rescale, sdNA, shift, split_fac, sumNA,  
+  "%IN%", factorToDummyMatrix, latexTable, latexTablePDF, lNA, lNAv, lsos,   
+  meanNA, merge_fac, modal_value, move.to.df, new_stack, noNAmatrix, pop, push,   
+  qw, regTable, reliability, rescale, sdNA, shift, split_fac, sumNA,  
   unshift, varNA)
 S3method(pop, stack)
 S3method(push, stack)

@@ -56,3 +56,9 @@ regTable(list(lm1, lm2), colNames = c("Sepal length", "Sepal width"))
 regTable(list(lm1, lm2), rowsToKeep = 'Length')
 regTable(list(lm1, lm2), rowsToKeep = c('Intercept', 'Length'))
 }
+\seealso{
+Other functions for making tables: 
+\code{\link{latexTablePDF}()},
+\code{\link{latexTable}()}
+}
+\concept{functions for making tables}

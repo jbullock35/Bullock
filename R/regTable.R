@@ -4,6 +4,8 @@
 #' returns a matrix in which the columns are estimates and standard errors -- 
 #' two columns for each model. 
 
+#' @family functions for making tables
+
 #' @param objList list of regression objects. They may be of class \code{lm},
 #' \code{plm}, or \code{ivreg}. This is the only required argument.
 #' 
