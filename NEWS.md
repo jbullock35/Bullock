@@ -1,5 +1,7 @@
 # Version 2.0
 * Added `regTable()`, `latexTable()`, and `latexTablePDF()`.
+* Modified behavior of `lNA()` so that it no longer prints any output by 
+  default. The new `lNAv()` behaves like the previous version of `lNA()`. 
 
 
 # Pre-release versions.

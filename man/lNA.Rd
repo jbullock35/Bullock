@@ -1,19 +1,24 @@
 \name{lNA}
 \alias{lNA}
+\alias{lNAv}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Calculate length of vector after omitting NA values}
 \description{
   Calculate length of vector after omitting NA values.
 }
-\usage{lNA(x)}
-%- maybe also 'usage' for other objects documented here.
-\arguments{
-  \item{x}{
-%%     ~~Describe \code{x} here~~
+\usage{
+  lNA(x, verbose = FALSE)
+  lNAv(x)
 }
+\arguments{
+  \item{x}{A vector.}
+  \item{verbose}{Logical variable. If \code{TRUE}, \code{lNA} will print the 
+  lengths of \code{x} before and after \code{NA} values have been removed.}
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+  \code{lNA(x)} returns its value silently. \code{lNAv} is shorthand for 
+  \code{lNA(x, verbose = TRUE)}; it returns the same value as \code{lNA(x)}  
+  but also prints the lengths of the vector before and after NAs are removed.
 }
 \value{
 %%  ~Describe the value returned
@@ -35,7 +40,11 @@
 \seealso{
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
-\examples{}
+\examples{
+  x <- c(1:3, NA, 5)
+  lNA(x)
+  lNAv(x)
+}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ ~kwd1 }

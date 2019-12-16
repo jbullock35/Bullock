@@ -1,8 +1,10 @@
-lNA <- function(x) {   # returns length of object without NAs
+lNA <- function(x, verbose = FALSE) {   # returns length of object without NAs
   y <- length(x[!is.na(x)])
-  print(noquote(paste(y," (length with NA=",length(x),")",sep="")))
-  invisible(y)
+  if (verbose) print(noquote(paste0(y, " (length with NA=",length(x), ")")))
+  y
 }
+
+lNAv <- function (x) lNA(x, verbose = TRUE)
 
 meanNA <- function(x) { return(mean(x,na.rm=TRUE)) }
 
