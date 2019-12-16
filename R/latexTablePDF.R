@@ -52,7 +52,10 @@
 #' @param writePDF Logical variable. Should a PDF file be saved to disk?
 #' @param writeTex Logical variable. Should a .tex file be saved to disk?
 #' @param overwriteExisting Logical variable. Should files to be saved overwrite
-#'   existing files that have the same names?\cr\cr\cr\cr
+#'   existing files that have the same names?
+#' @param verbose Logical variable. \code{latexTablePDF} calls  
+#'   \code{pdflatex} to render PDF files, and if \code{verbose} is \code{TRUE}, 
+#'   all of the output from \code{pdflatex} will be printed to screen.\cr\cr\cr\cr 
 
 #' @param continuedFloat Logical variable. Should be \code{TRUE} if the table 
 #'   or tables to be rendered are part of a series and should all share the 
@@ -105,6 +108,7 @@ latexTablePDF <- function(
   writePDF           = TRUE,
   writeTex           = FALSE,
   overwriteExisting  = FALSE,
+  verbose            = FALSE,
   
   continuedFloat     = FALSE,
   continuedFloatStar = FALSE,  
@@ -200,7 +204,7 @@ latexTablePDF <- function(
   
   # CREATE THE ENTIRE LATEX DOCUMENT
   if (container) {
-    if (containerFilename) {
+    if (!is.null(containerFilename)) {
       latexContainer <- readLines(containerFilename)
     } else {
       latexContainer <- readLines(
@@ -231,14 +235,14 @@ latexTablePDF <- function(
   
   # CREATE FILES IN THE NEW TEMPORARY DIRECTORY
   tmpFilename <- tempfile(fileext = '.tex')  # includes path to tempdir()
-  # tmpFilename <- ifelse(Sys.info()['sysname'] == 'Windows', shortPathName(tmpFilename), tmpFilename)
-  # print(tmpFilename)
   writeLines(newTable, tmpFilename)
   setwd(tempdir())
-  if (container) {
-    # shell(paste('pdflatex', tmpFilename), mustWork = TRUE)
-    shell(paste('pdflatex', shQuote(tmpFilename)), mustWork = TRUE)
-  }
+  if (container && verbose) {
+    system2('pdflatex', shQuote(tmpFilename))
+  } 
+  else if (container && !verbose) {
+    system2('pdflatex', shQuote(tmpFilename), stdout = FALSE, stderr = FALSE)
+  }  
 
   
   

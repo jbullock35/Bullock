@@ -7,11 +7,12 @@
 latexTablePDF(
   latexTable,
   container = TRUE,
-  containerFilename = "c://school//methods//utilities//latexPreamble//tablePreamble.tex",
+  containerFilename = NULL,
   outputFilenameStem = "latexTable",
   writePDF = TRUE,
   writeTex = FALSE,
   overwriteExisting = FALSE,
+  verbose = FALSE,
   continuedFloat = FALSE,
   continuedFloatStar = FALSE,
   firstPageEmpty = TRUE,
@@ -44,7 +45,11 @@ save "myTable.pdf" to disk, set \code{outputFilenameStem = "mytable"}.}
 \item{writeTex}{Logical variable. Should a .tex file be saved to disk?}
 
 \item{overwriteExisting}{Logical variable. Should files to be saved overwrite
-existing files that have the same names?\cr\cr\cr\cr}
+existing files that have the same names?}
+
+\item{verbose}{Logical variable. \code{latexTablePDF} calls
+\code{pdflatex} to render PDF files, and if \code{verbose} is \code{TRUE}, 
+all of the output from \code{pdflatex} will be printed to screen.\cr\cr\cr\cr}
 
 \item{continuedFloat}{Logical variable. Should be \code{TRUE} if the table 
 or tables to be rendered are part of a series and should all share the 
