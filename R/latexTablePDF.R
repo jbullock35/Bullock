@@ -237,12 +237,14 @@ latexTablePDF <- function(
   tmpFilename <- tempfile(fileext = '.tex')  # includes path to tempdir()
   writeLines(newTable, tmpFilename)
   setwd(tempdir())
-  if (container && verbose) {
-    system2('pdflatex', shQuote(tmpFilename))
-  } 
-  else if (container && !verbose) {
-    system2('pdflatex', shQuote(tmpFilename), stdout = FALSE, stderr = FALSE)
-  }  
+  if (writePDF) {  
+    if (container && verbose) {
+      system2('pdflatex', shQuote(tmpFilename))
+    } 
+    else if (container && !verbose) {
+      system2('pdflatex', shQuote(tmpFilename), stdout = FALSE, stderr = FALSE)
+    }  
+  }
 
   
   
