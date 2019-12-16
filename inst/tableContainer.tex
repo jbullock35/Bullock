@@ -1,0 +1,126 @@
+% tablePreamble.tex
+% created on 2014 March 14
+
+% To automate the creation of PDF tables from R.
+
+\documentclass[letterpaper, 12pt, oneside]{article}
+\usepackage{ifxetex}
+
+
+% PAGE LAYOUT
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000 % avoid orphans and widows.
+\predisplaypenalty=5000    % permit a page to begin with a displayed (not in-text) equation
+\usepackage[verbose, pdftex, letterpaper, includehead, top=.5in, head=.05in, headsep=.25in, left=1in, right=1in, bottom=1.25in]{geometry} % margin=1in
+\usepackage{afterpage}                 % delays arguments until after their page is typeset.  Useful for landscaped floats.
+\usepackage{pdflscape}                 % allows typesetting individual pages as landscape
+\usepackage{float}                     % allows for the [H] -- here, period -- float specification
+\setcounter{totalnumber}{1}            % no more than one float per page
+\renewcommand{\floatpagefraction}{.05} % permit lots of white space on a float page -- and thus no more than one per page
+\newlength\oldheadheight
+  \setlength\oldheadheight{\headheight}
+\newlength\oldheadsep
+  \setlength\oldheadsep{\headsep}
+\newlength\oldtextheight
+  \setlength\oldtextheight{\textheight}
+
+
+% GRAPHICS AND PDF SETUP
+\newlength\captionIndent
+  \setlength\captionIndent{.45in}
+\usepackage[font=rm, labelfont={it}, justification=RaggedRight, margin={0in}, parskip=0pt]{caption}
+  \setlength{\textfloatsep}{30pt plus 2pt minus 2pt}
+  \DeclareCaptionFont{11pt}  {\fontsize{11.0pt}{13.2pt}\selectfont}
+  \DeclareCaptionFont{11.5bp}{\fontsize{11.5bp}{13.8bp}\selectfont}
+  \DeclareCaptionLabelFormat{noindent}{\fontsize{12bp}{14.4bp}\selectfont\bothIfFirst{\noindent\hspace*{-\RaggedRightParindent}#1\ }{#2}}
+  \DeclareCaptionJustification{justifyBoth}{\justifying}
+  \DeclareCaptionJustification{RR}{\setlength\RaggedRightParindent{\captionIndent}\RaggedRight}
+  \captionsetup{labelformat=noindent, aboveskip=15bp, justification=RaggedRight}
+
+
+% MATH COMMANDS
+\IfFileExists{mathcommands.sty}{
+  \usepackage{mathcommands}  % my own package
+}
+
+
+% FONT SETUP
+\IfFileExists{fontcommands.sty}{
+  \usepackage{fontcommands}  % my own package
+}
+
+
+
+
+% TEXT SPACING AND JUSTIFICATION
+% To keep text from breaking at an inconvenient place, just put it in an \mbox{}.
+\usepackage[document]{ragged2e}
+  % Load this package after fonts and font sizes have been established.  (Companion 2e, 106.)
+  \setlength\RaggedRightRightskip{0pt plus .6in} %  for hyphenation % .6
+  \setlength\RaggedRightParindent{.5in}
+  \setlength\JustifyingParindent{0in}
+\hyphenpenalty=10000
+  %\usepackage[none]{hyphenat}  % doesn't allow line breaks even when a word has a hyphen
+\usepackage{setspace}   % for working with spacing.  See setspace.sty for instructions
+\usepackage{relsize} % for relative font sizing
+
+
+% HEADERS
+%\usepackage{pstcol}
+\usepackage{datetime} % For formatting time of day on the title page.
+  \usdate % print in format "March 2, 2002"
+  \newdateformat{mydateformat}{\THEYEAR~\monthname[\THEMONTH]~\THEDAY}
+  \settimeformat{ampmtime}
+\usepackage{color}
+  \definecolor{gray}{gray}{.50}
+\usepackage{fancyhdr} % allows me to customize headers and footers
+  \pagestyle{fancy}
+  \lhead{
+    \color{gray}%
+  }
+  \rhead{%
+    \thepage\\ \ %
+  }
+  \cfoot{\ }
+  \renewcommand{\headrulewidth}{0pt} % gets rid of the header rule
+
+
+% TABLES AND ARRAYS
+%\usepackage{longtable}
+%  \setlength\LTpost{2.5\baselineskip} % skip after longtable
+\usepackage{booktabs}
+  \setlength{\heavyrulewidth}{.08em} % for \toprule and \bottomrule.  .08em is the default.
+  \setlength{\belowrulesep}{2.0ex}   % for \cmidrule.  .08ex is the default.
+\usepackage{array} % improves the tabular environment
+  \setlength{\extrarowheight}{7pt}   % adding 1pt of space to every row in every table
+\usepackage[autolanguage, noaddmissingzero, warning]{numprint}
+                                       % in tables, numprint allows for decimal alignment of numbers in text mode
+                                       % note: warning switches -off- warnings.  (I don't want warnings about negative signs.)
+  \npfourdigitnosep % print "6002.54" instead of "6,002.45"
+\newcommand{\ph}[1][1]{\phantom{#1}}   % for quick alignment of cell entries without using the dcolumn package
+\newcommand{\tabcent}[1] {\multicolumn{2}{c}{#1}}
+\newlength{\standardExtraColSep}
+\setlength{\standardExtraColSep}{\extracolsep}
+
+
+% MISCELLANEOUS
+% \def\PDFauthor{John G. Bullock}
+\usepackage{hyperref}  % for \autoref
+\usepackage{url}
+  \urlstyle{same}
+%\usepackage{bpchem} % For superscripts and subscripts in ordinary text.
+\usepackage{moredefs, lips} % for ellipses.  lips requires moredefs
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+  \begin{spacing}{1.66} % Double-spaces the document.  2.0 would be too much: see TLC2, 107-08.
+
+  % TABLE GOES HERE!
+
+  \end{spacing}
+\end{document}
+
