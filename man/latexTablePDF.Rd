@@ -93,6 +93,19 @@ only if \code{writePDF} is \code{TRUE}.}
 \code{latexTablePDF} takes an object produced by \code{latexTable} and 
 writes a PDF file. It can also write the corresponding .tex file.
 }
+\details{
+Although \code{latexTablePDF} produces PDF files by default, it is also 
+useful for creating .tex files. For example, you may have a complex LaTeX 
+document that contains many different sections and tables. When 
+\code{latexTablePDF} is used with \code{writeTex = TRUE}, it will produce a 
+LaTeX file that you can insert into your LaTeX document by adding 
+single \code{\\input} or \code{\\include} command to your LaTeX document.
+Inserting the new LaTeX file into your LaTeX document will either insert
+the tables directly (if you ran \code{latexTable()} with 
+\code{callCommand = FALSE} or make available to you a set of LaTeX macros 
+that you can use to insert the tables into arbitrary places in your LaTeX 
+document.  [PUT THIS INTO THE VIGNETTE!]
+}
 \note{
 \emph{Required LaTeX tools.} If \code{writePDF} is \code{TRUE}, 
   \code{pdflatex} must be installed on your system. (It is part of most any

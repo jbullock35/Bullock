@@ -305,6 +305,9 @@
 
 
 # TODO: 
+# --Consider changing the default spacerColumns argument, even though it'll 
+#   mean that I need to change the tests. But first, compare the latexTablePDF
+#   example table with and without spacerColumns.  [2019 12 16]
 # --Add a vignette that shows the R code and the LaTeX code, illustrating how 
 #   to call the LaTeX table in R.  [2019 12 14]
 # --Check that LaTeX can't handle macro names that include digits. And if I 

@@ -3,7 +3,17 @@
 #' \code{latexTablePDF} takes an object produced by \code{latexTable} and 
 #' writes a PDF file. It can also write the corresponding .tex file.
 #' 
-#' 
+#' Although \code{latexTablePDF} produces PDF files by default, it is also 
+#' useful for creating .tex files. For example, you may have a complex LaTeX 
+#' document that contains many different sections and tables. When 
+#' \code{latexTablePDF} is used with \code{writeTex = TRUE}, it will produce a 
+#' LaTeX file that you can insert into your LaTeX document by adding 
+#' single \code{\\input} or \code{\\include} command to your LaTeX document.
+#' Inserting the new LaTeX file into your LaTeX document will either insert
+#' the tables directly (if you ran \code{latexTable()} with 
+#' \code{callCommand = FALSE} or make available to you a set of LaTeX macros 
+#' that you can use to insert the tables into arbitrary places in your LaTeX 
+#' document.  [PUT THIS INTO THE VIGNETTE!] 
 
 #' @note \emph{Required LaTeX tools.} If \code{writePDF} is \code{TRUE}, 
 #'   \code{pdflatex} must be installed on your system. (It is part of most any
@@ -105,11 +115,13 @@
 
 
 # TODO:
-# --Create a minimal container file that is saved in the package. Get the package
-#   to use that file by default. And let users substitute their own file, and 
-#   explain how they can make that substitution.
 # --Explain how the function can be useful even when not producing PDF. See 
 #   IV_tables_firstStage.R for an example.
+# --Check for existence of pdflatex in the path.  [2019 12 16]
+# --Write a unit test: write a temporary PDF file and then test to see whether
+#   it has actually been written.  [2019 12 16]
+# --Test this function (a) on systems that don't have fontcommands.sty or 
+#   mathcommands.sty installed, and (b) on non-Windows systems.  [2019 12 16]
 latexTablePDF <- function(
   latexTable,
   container          = TRUE,  # if FALSE, .tex file can't be PDF'd
