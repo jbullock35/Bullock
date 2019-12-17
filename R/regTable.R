@@ -1,10 +1,8 @@
 #' Create a matrix of regression output from a list of regression models.
 #' 
-#' \code{regTable} takes a list of regression models, \code{objList}. It
-#' returns a matrix in which the columns are estimates and standard errors -- 
-#' two columns for each model. 
-
-#' @family functions for making tables
+#' \code{regTable} takes a list of regression objects, such as those created 
+#' by \code{lm}. It returns a matrix in which the columns are estimates and 
+#' standard errors -- two columns for each model. \improveCSS
 
 #' @param objList list of regression objects. They may be of class \code{lm},
 #' \code{plm}, or \code{ivreg}. This is the only required argument.
@@ -19,11 +17,7 @@
 #' @param rowsToKeep A vector of strings, which may specify regular 
 #' expressions. Variables in the regressions whose names match the strings will 
 #' be kept in the \code{regTable} output. All other variables will be omitted.
-#'     Before \code{regTable} was incorporated into this package,
-#' it used the \code{rowsToKeep} argument differently: variables were kept 
-#' only if the beginnings of their names matched the strings in 
-#' \code{rowsToKeep}. 
-#'  
+#' If \code{rowsToRemove} is specified, this argument has no effect.
 #' 
 #' @param clusterSEs A logical scalar. If \code{TRUE}, the reported standard 
 #' errors will be clustered at the level specified by \code{clusterVar}.
@@ -35,6 +29,16 @@
 #'  regressions in \code{objList} are instead of class \code{ivreg},
 #' \code{clustervar} is passed to \code{ivpack::cluster.robust.se}.
 
+
+#' @note Before \code{regTable} was incorporated into this package,
+#' it used the \code{rowsToKeep} argument differently: variables were kept 
+#' only if the \emph{beginnings} of their names matched the strings in 
+#' \code{rowsToKeep}.
+
+
+#' @family functions for making tables 
+
+
 #' @examples
 #' data(iris)
 #' lm1 <- lm(Sepal.Length ~ Petal.Length,               data = iris)
@@ -43,6 +47,10 @@
 #' regTable(list(lm1, lm2), colNames = c("Sepal length", "Sepal width"))
 #' regTable(list(lm1, lm2), rowsToKeep = 'Length')
 #' regTable(list(lm1, lm2), rowsToKeep = c('Intercept', 'Length'))
+
+
+# TODO: add an example that involves clusterVar.  [2019 12 17]
+
 
 #' @export
 regTable <- function (

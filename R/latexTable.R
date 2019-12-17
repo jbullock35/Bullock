@@ -2,22 +2,18 @@
 #' 
 #' \code{latexTable} takes a single matrix, \code{mat}. By default, it returns 
 #' a LaTeX macro that creates a well-formatted LaTeX table. It can take many 
-#' arguments to adjust the table's formatting.\cr\cr\cr\cr 
-#' 
+#' arguments to adjust the table's formatting.\improveCSS 
+#'
+ 
 
-#' The point of \code{latexTable} is to maximize flexibility in the formatting 
-#' of LaTeX tables. The function's arguments permit much flexibility, and 
-#' because the returned object is of the \code{character} class (in addition 
-#' to the \code{latexTable} class), it can easily be tweaked "by hand" after  
-#' it is generated.
-#' 
+#' @section Benefits: 
 #' One benefit of \code{latexTable} is that, by default, it will 
 #' produce regression tables in which standard errors are positioned to the 
 #' right of their corresponding estimates, and in smaller type. This design of
 #' regression tables is in contrast to conventional design, whereby standard 
-#' errors appear in parentheses beneath the corresponding estimates. This is 
-#' a "Tufte" design: to my knowledge, it was first used in his Edward Tufte's 
-#' essay on "The Cognitive Style of PowerPoint."
+#' errors appear in parentheses beneath the corresponding estimates. The design  
+#' used here is a "Tufte" design: to my knowledge, it was first used in Edward 
+#' Tufte's essay on \href{https://www.edwardtufte.com/tufte/powerpoint}{The Cognitive Style of PowerPoint}.
 #' 
 #' A second benefit of \code{latexTable} is that it uses sane defaults for 
 #' table formatting. That is, it produces tables with (a){\NB}no vertical rules, 
@@ -34,67 +30,51 @@
 #' where you want it in your LaTeX document, you need only use a single line 
 #' of LaTeX code. For example, if \code{latexTable} produces a macro called
 #' "myTable", you can place the table in your LaTeX document by inserting 
-#' the line \code{\\myTable{p}} anywhere in your document. And because the 
-#' macro that defines the table can be placed elsewhere, your LaTeX document
-#' can be far less cluttered than it would be if you had to define the entire 
-#' table in the middle of your document.
+#' the line \code{\\myTable{p}} anywhere in your document. See the vignette
+#' for further information.
 #' 
 #' A fourth benefit of \code{latexTable} is that it produces well-formatted 
 #' LaTeX code. In other words, you won't just get tables that look good when  
 #' they are rendered (for example, as PDF). You'll also get LaTeX code that is
 #' easy to read and to modify in the LaTeX editor of your choice.
 #' 
-#' Some tweaking of the output by hand may still be necessary to get the desired 
-#' appearance. In particular, the formatting of each column is specified in 
-#' the LaTeX code by rules given by the \code{numprint} LaTeX package, and 
-#' these rules may need to be tweaked. For example, if \code{SE_table == TRUE}
-#' and a column-pair has a long column names (that is, a long \code{colNames} 
-#' entry), you may need to modify the \code{latexTable} object that this 
-#' function produces. Specifically, you may want to change \code{N{2}{2}} in 
-#' the estimate-column specification to \code{N{3}{2}} or \code{N{4}{2}} to 
-#' get the column pair centered beneath its heading. See the documentation for  
-#' the \code{numprint} LaTeX package for more information on \code{numprint} 
-#' column specifications like \code{N{2}{2}}.
-#' 
-#' \code{latexTable} tables can be transformed to PDF with 
-#' \code{latexTablePDF}.\cr\cr\cr\cr
-#' 
-#' 
 #' @return An object of class \code{latexTable} and \code{character}. The 
-#' returned object is a vector of strings of LaTeX code; each string is a row
-#' in a LaTeX table.\cr\cr\cr\cr
-#' 
-#' 
+#' returned object is a vector of strings of LaTeX code; each string is a line
+#' in a LaTeX macro that can create a table. (There is one small exception. If
+#' \code{callCommand} is \code{TRUE}, the last line is not part of the macro; 
+#' instead, it calls the macro, thereby telling LaTeX to display the table).
 
-#' @note \emph{Required LaTeX packages.} The LaTeX code produced by the  
+
+#' @note
+#' \emph{Creating PDF tables.} \code{latexTable} tables can be transformed to  
+#' PDF with \code{\link{latexTablePDF}}.\cr\cr
+
+#' \emph{Adjusting LaTeX code "by hand."} Because the returned object is of 
+#' the \code{character} class (in addition to the \code{latexTable} class), it 
+#' can easily be tweaked "by hand" in R after it is generated. And in some 
+#' cases, tweaking may be necessary to get the desired appearance.\cr
+#'   \indent In particular, the formatting of each column is specified with 
+#' \code{numprint} codes, and these rules may need to be tweaked. For example, 
+#' if your column names are long (and not split across multiple lines), you 
+#' may want to modify the object that \code{latexTable} returns. 
+#' Specifically, you may want to change \code{N{2}{2}} in 
+#' the estimate-column specification to \code{N{3}{2}} or \code{N{4}{2}} to 
+#' get the column pair centered beneath its heading. See the \href{http://mirrors.ctan.org/macros/latex/contrib/numprint/numprint.pdf}{documentation for  
+#' the \code{numprint} LaTeX package} for more information on \code{numprint} 
+#' column specifications like \code{N{2}{2}}.\cr\cr
+
+#' \emph{Required LaTeX packages.} The LaTeX code produced by the  
 #'  \code{latexTable} makes use of capabilities provided by the \code{array}, 
 #'  \code{booktabs}, \code{caption}, and \code{numprint} LaTeX packages. If 
 #' you haven't installed those LaTeX packages, you won't be able to render 
-#' the tables produced by \code{latexTable}. 
-#' 
-#' \emph{Column spacing in LaTeX.} Ordinary methods for inserting space 
-#'   between columns involve the \code{\\tabcolsep} and \code{\\extracolsep} 
-#'   LaTeX lengths.  Unfortunately, \code{\\cmidrule} and other \code{booktabs} 
-#'   commands don't recognize that these LaTeX lengths are spaces \emph{between} 
-#'   columns. As a result, rules (horizontal lines) drawn by \code{booktabs} 
-#'   commands extend into the intercolumn region if \code{\\tabcolsep} and 
-#'   \code{\\extracolsep} are used to provide intercolumn space. A similar 
-#'   problem occurs if \code{\\hspace} is used to provide intercolumn space.\cr
-#'   \indent Thus, to fine-tune the spacing of the LaTeX tables produced by 
-#'   \code{latexTable}, blank columns can be inserted at arbitrary positions 
-#'   via the \code{spacerColumns} argument. This is a clunky way to adjust 
-#'   intercolumn space, but it solves the problem of positioning horizontal 
-#'   rules. In addition, no other approach affords the flexibility to insert 
-#'   horizontal space at arbitrary positions (useful for distinguishing tiers 
-#'   of columns from each other), and no other approach allows variation in
-#'   the widths of the spaces between columns. 
-#'  
+#' the tables produced by \code{latexTable}.\cr\cr
+ 
 #' \emph{Changes from pre-release versions.} The names of some arguments have 
 #' changed slightly since the pre-release versions of this function. They have  
 #' been changed to enforce consistency: camelCase is used for all arguments,  
 #' and every acronym is followed by an underscore (_) character. We thus have  
 #' \code{SE_table} instead of \code{SEtable}, \code{tabColSep} instead of 
-#' \code{tabcolsep}, and so{\NB}on.\cr\cr\cr\cr
+#' \code{tabcolsep}, and so{\NB}on.
 
 #' @concept Tufte
 #' @concept table
@@ -102,10 +82,11 @@
 #' @family functions for making tables
 
 #' @param mat Matrix of information to be displayed in a LaTeX table.
-#' @param SE_table Logical variable that indicates whether the table contains
+#' @param SE_table Logical variable that indicates whether \code{mat} contains
 #'   pairs of columns, with the first column in each pair containing estimates,
-#'   and the second column containing the corresponding standard errors.
-#'   Defaults to TRUE. If \code{TRUE}, the even-numbered columns of \code{mat}
+#'   and the second column containing the corresponding standard errors. 
+#'   (Matrices returned by \code{\link{regTable}} have this form.)
+#'   Defaults to \code{TRUE}. If \code{TRUE}, the even-numbered columns of \code{mat}
 #'   will be rendered in smaller type than the odd-numbered columns: that is,
 #'   the standard errors will be rendered in smaller type than their 
 #'   corresponding estimates. This default behavior can be overridden by 
@@ -262,7 +243,7 @@
 #' 
 #' @param writeToClipboard Logical variable. Copy entire output to clipboard. 
 #'   Useful if you want to paste the output directly into a \code{.tex} file.
-#'   Works only on Windows.\cr\cr\cr\cr
+#'   Works only on Windows.
 
 
 #' @examples

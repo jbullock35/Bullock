@@ -4,23 +4,25 @@
 #' writes a PDF file. It can also write the corresponding .tex file.
 #' 
 #' Although \code{latexTablePDF} produces PDF files by default, it is also 
-#' useful for creating .tex files. For example, you may have a complex LaTeX 
+#' useful for creating .tex files. For example, you may have a list of tables
+#' produced by \code{latexTable()} and a complex LaTeX 
 #' document that contains many different sections and tables. When 
 #' \code{latexTablePDF} is used with \code{writeTex = TRUE}, it will produce a 
-#' LaTeX file that you can insert into your LaTeX document by adding 
+#' single file that contains LaTeX code for all of the tables in your list. 
+#' You can insert those tables into your LaTeX document by adding a 
 #' single \code{\\input} or \code{\\include} command to your LaTeX document.
-#' Inserting the new LaTeX file into your LaTeX document will either insert
-#' the tables directly (if you ran \code{latexTable()} with 
-#' \code{callCommand = FALSE} or make available to you a set of LaTeX macros 
-#' that you can use to insert the tables into arbitrary places in your LaTeX 
-#' document.  [PUT THIS INTO THE VIGNETTE!] 
+#' Doing so will either insert the tables directly (if you ran  
+#' \code{latexTable()} with \code{callCommand = FALSE} or make available to  
+#' you a set of LaTeX macros that you can use to insert the tables into  
+#' arbitrary places in your LaTeX document.  [PUT THIS INTO THE VIGNETTE!] 
 
 #' @note \emph{Required LaTeX tools.} If \code{writePDF} is \code{TRUE}, 
-#'   \code{pdflatex} must be installed on your system. (It is part of most any
-#'   LaTeX installation.) In addition, if \code{writePDF} is \code{TRUE} and 
-#'   \code{containerFilename} is \code{NULL} (the default), the following 
-#'   LaTeX packages must be installed: \code{afterpage, caption, fancyhdr, 
-#'   geometry, pdflscape, } and \code{ragged2e}.\cr\cr\cr\cr
+#'   \code{pdflatex} must be installed on your system. (It is part of almost 
+#'   every LaTeX installation.) In addition, if \code{writePDF} is \code{TRUE}  
+#'   and \code{containerFilename} is \code{NULL} (the default), the following 
+#'   LaTeX packages must be installed: \code{array, booktabs, caption, 
+#'   fancyhdr, geometry, pdflscape, } and \code{ragged2e}. Most of these, and 
+#'   perhaps all of them, are already part of your LaTeX installation.\cr\cr\cr\cr
 
 
 
@@ -122,6 +124,9 @@
 #   it has actually been written.  [2019 12 16]
 # --Test this function (a) on systems that don't have fontcommands.sty or 
 #   mathcommands.sty installed, and (b) on non-Windows systems.  [2019 12 16]
+
+
+#' @export
 latexTablePDF <- function(
   latexTable,
   container          = TRUE,  # if FALSE, .tex file can't be PDF'd

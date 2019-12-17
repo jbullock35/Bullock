@@ -27,10 +27,7 @@ be omitted from the \code{regTable} output. This argument overrides
 \item{rowsToKeep}{A vector of strings, which may specify regular 
 expressions. Variables in the regressions whose names match the strings will 
 be kept in the \code{regTable} output. All other variables will be omitted.
-    Before \code{regTable} was incorporated into this package,
-it used the \code{rowsToKeep} argument differently: variables were kept 
-only if the beginnings of their names matched the strings in 
-\code{rowsToKeep}.}
+If \code{rowsToRemove} is specified, this argument has no effect.}
 
 \item{clusterSEs}{A logical scalar. If \code{TRUE}, the reported standard 
 errors will be clustered at the level specified by \code{clusterVar}.}
@@ -43,9 +40,15 @@ the list indicates the clusters for the corresponding regression object in
 \code{clustervar} is passed to \code{ivpack::cluster.robust.se}.}
 }
 \description{
-\code{regTable} takes a list of regression models, \code{objList}. It
-returns a matrix in which the columns are estimates and standard errors -- 
-two columns for each model.
+\code{regTable} takes a list of regression objects, such as those created 
+by \code{lm}. It returns a matrix in which the columns are estimates and 
+standard errors -- two columns for each model. \improveCSS
+}
+\note{
+Before \code{regTable} was incorporated into this package,
+it used the \code{rowsToKeep} argument differently: variables were kept 
+only if the \emph{beginnings} of their names matched the strings in 
+\code{rowsToKeep}.
 }
 \examples{
 data(iris)
