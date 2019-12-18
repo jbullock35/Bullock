@@ -4,40 +4,7 @@
 #' a LaTeX macro that creates a well-formatted LaTeX table. It can take many 
 #' arguments to adjust the table's formatting.\improveCSS 
 #'
- 
-
-#' @section Benefits: 
-#' One benefit of \code{latexTable} is that, by default, it will 
-#' produce regression tables in which standard errors are positioned to the 
-#' right of their corresponding estimates, and in smaller type. This design of
-#' regression tables is in contrast to conventional design, whereby standard 
-#' errors appear in parentheses beneath the corresponding estimates. The design  
-#' used here is a "Tufte" design: to my knowledge, it was first used in Edward 
-#' Tufte's essay on \href{https://www.edwardtufte.com/tufte/powerpoint}{The Cognitive Style of PowerPoint}.
-#' 
-#' A second benefit of \code{latexTable} is that it uses sane defaults for 
-#' table formatting. That is, it produces tables with (a){\NB}no vertical rules, 
-#' (b){\NB}few horizontal rules, and (c){\NB}sensible spacing between rows and 
-#' columns. The result is tables that are easier to read than normal tables:
-#' when looking at a table created with \code{latexTable}, you will not need
-#' to squint, or indeed to work at all, to figure out whether a given number 
-#' corresponds to this variable or to that{\NB}one.
-#' 
-#' A third benefit of \code{latexTable} is that, by default, it returns not 
-#' just the LaTeX code for a table but a LaTeX macro that produces the table.
-#' The macro can be placed at any point in your LaTeX document; it does not 
-#' need to be placed where you want the table to appear. To put the table 
-#' where you want it in your LaTeX document, you need only use a single line 
-#' of LaTeX code. For example, if \code{latexTable} produces a macro called
-#' "myTable", you can place the table in your LaTeX document by inserting 
-#' the line \code{\\myTable{p}} anywhere in your document. See the vignette
-#' for further information.
-#' 
-#' A fourth benefit of \code{latexTable} is that it produces well-formatted 
-#' LaTeX code. In other words, you won't just get tables that look good when  
-#' they are rendered (for example, as PDF). You'll also get LaTeX code that is
-#' easy to read and to modify in the LaTeX editor of your choice.
-#' 
+  
 #' @return An object of class \code{latexTable} and \code{character}. The 
 #' returned object is a vector of strings of LaTeX code; each string is a line
 #' in a LaTeX macro that can create a table. (There is one small exception. If
@@ -46,6 +13,8 @@
 
 
 #' @note
+#' [SEE THE VIGNETTE FOR BENEFITS.]
+
 #' \emph{Creating PDF tables.} \code{latexTable} tables can be transformed to  
 #' PDF with \code{\link{latexTablePDF}}.\cr\cr
 
@@ -286,6 +255,8 @@
 
 
 # TODO: 
+# --Fix the spacing issue in the "cutting and pasting" vignette example. (See
+#   the last row.)  [2019 12 18]
 # --Consider changing the default spacerColumns argument, even though it'll 
 #   mean that I need to change the tests. But first, compare the latexTablePDF
 #   example table with and without spacerColumns.  [2019 12 16]
@@ -866,11 +837,17 @@ latexTable <- function(
 
 
 
-print.latexTable <- function (tab) { 
-  for (i in 1:length(tab)) {
-    writeLines(tab[i])
-  }
+print.latexTable <- function (x, ...) {
+  writeLines(x, ...)
 }
+  # print.latexTable <- function (tab) { 
+  #   for (i in 1:length(tab)) {
+  #     writeLines(tab[i])
+  #   }
+  # }
 
 
-
+# If we didn't specify this method, any subset latexTable (for example, 
+# "myLatexTable[1:5]") would print messily. Because this method is specified,
+# head() and tail() are adjustd as well.  [2019 12 18]
+`[.latexTable` <- `[.noquote`
