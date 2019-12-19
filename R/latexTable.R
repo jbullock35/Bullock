@@ -255,8 +255,11 @@
 
 
 # TODO: 
-# --Fix the spacing issue in the "cutting and pasting" vignette example. (See
-#   the last row.)  [2019 12 18]
+# --See whether I can add an "update" method to latexTable. It seems that it 
+#   shouldn't be difficult. I can probably borrow from update.lm(). The first
+#   step will be to save the latexTable() call as an attribute in the 
+#   latexTable object. (If I need help doing that, just post on 
+#   Stack Overflow.)  [2019 12 18]
 # --Consider changing the default spacerColumns argument, even though it'll 
 #   mean that I need to change the tests. But first, compare the latexTablePDF
 #   example table with and without spacerColumns.  [2019 12 16]
@@ -837,9 +840,17 @@ latexTable <- function(
 
 
 
-print.latexTable <- function (x, ...) {
-  writeLines(x, ...)
+print.latexTable <- function (x, ...) { 
+  lineNumbers <- paste0("[", 1:length(x), "] "  )
+  lineNumbers <- stringr::str_pad(lineNumbers, max(nchar(lineNumbers)))
+  for (i in 1:length(x)) {
+    cat(lineNumbers[i], "\"", x[i], "\"", "\n", sep = "", ...)
+  }
 }
+
+#print.latexTable <- function (x, ...) {
+#  writeLines(x, ...)
+#}
   # print.latexTable <- function (tab) { 
   #   for (i in 1:length(tab)) {
   #     writeLines(tab[i])
@@ -847,7 +858,13 @@ print.latexTable <- function (x, ...) {
   # }
 
 
-# If we didn't specify this method, any subset latexTable (for example, 
-# "myLatexTable[1:5]") would print messily. Because this method is specified,
-# head() and tail() are adjustd as well.  [2019 12 18]
-`[.latexTable` <- `[.noquote`
+# The subsetting method here is lightly adapted from `[.noquote`. If we didn't 
+# specify this method, any subset latexTable (for example, "myLatexTable[1:5]") 
+# would print messily. Because this method is specified, head() and tail() are 
+# adjusted as well.  [2019 12 19]
+`[.latexTable` <- function (x, ...) {
+  classX <- class(x)
+  x <- unclass(x)[...]
+  class(x) <- classX
+  x
+}
