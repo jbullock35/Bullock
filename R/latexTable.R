@@ -256,10 +256,18 @@
 
 # TODO: 
 # --See whether I can add an "update" method to latexTable. It seems that it 
-#   shouldn't be difficult. I can probably borrow from update.lm(). The first
-#   step will be to save the latexTable() call as an attribute in the 
+#   shouldn't be difficult. I can probably borrow from update.default(). The 
+#   first step will be to save the latexTable() call as an attribute in the 
 #   latexTable object. (If I need help doing that, just post on 
 #   Stack Overflow.)  [2019 12 18]
+#   --I have added a "call" attribute. But update.default relies on getCall(),
+#     which expects the call to be stored as a list element. So I should write
+#     my own update.latexTable method. I can still borrow a lot from 
+#     update.default(). (Don't change the output format to a list. That will
+#     make tweaking more difficult. Though only a bit more difficult: instead
+#     of running grep(lt), users would now run (grep(lt$body).)  [2019 12 19]
+#   --When done, write a test to ensure that update() works as expected.
+#     [2019 12 19]
 # --Consider changing the default spacerColumns argument, even though it'll 
 #   mean that I need to change the tests. But first, compare the latexTablePDF
 #   example table with and without spacerColumns.  [2019 12 16]
@@ -268,8 +276,9 @@
 # --Check that LaTeX can't handle macro names that include digits. And if I 
 #   am right about that, add a function that checks to ensure that there are 
 #   no digits in commandName.  [2019 12 07]
+# --Consider all defaults. Could I make them better? Should I?  [2019 12 19]
 # --See if I can use clipr::write_clip to copy to clipboard for non-Windows
-#     systems.  [2019 12 08]
+#     systems. Try with Ubuntu (in Windows).  [2019 12 08]
 # --Add a numprint option to specify the number of digits in each 
 #   numprint-specification-column, both before and after the decimal 
 #   place.  [2015 02 22]
@@ -323,7 +332,11 @@ latexTable <- function(
   writeToClipboard    = FALSE) {
   
   
-  
+  # STORE CALL FOR LATER USE
+  # In case user wants to update the latexTable object with update.latexTable.
+  # [2019 12 19]
+  latexTableCall <- match.call()   
+
   
   # GET PRELIMINARY INFORMATION  
   # These seemingly redundant lines are important.  Without them, changes to 
@@ -334,6 +347,7 @@ latexTable <- function(
   # In other words, there is some very lazy evaluation at work.  [2012 07 22]
   rowNames   <- rowNames
   colNames   <- colNames 
+  
   if (! is.null(colNames)) {
     colNames <- if (is.list(colNames)) colNames else list(colNames)
   }
@@ -831,7 +845,10 @@ latexTable <- function(
     }
   }
   
-  class(outputStrings) <- c('latexTable', class(outputStrings)) 
+  
+  # RETURN THE latexTable OBJECT
+  class(outputStrings) <- c('latexTable', class(outputStrings))
+  attr(outputStrings, "call") <- latexTableCall
   if (writeToClipboard && Sys.info()['sysname'] == 'Windows') {
     utils::writeClipboard(paste0(outputStrings, collapse = "\n"))
   }
@@ -847,15 +864,10 @@ print.latexTable <- function (x, ...) {
     cat(lineNumbers[i], "\"", x[i], "\"", "\n", sep = "", ...)
   }
 }
+  #print.latexTable <- function (x, ...) {
+  #  writeLines(x, ...)
+  #}
 
-#print.latexTable <- function (x, ...) {
-#  writeLines(x, ...)
-#}
-  # print.latexTable <- function (tab) { 
-  #   for (i in 1:length(tab)) {
-  #     writeLines(tab[i])
-  #   }
-  # }
 
 
 # The subsetting method here is lightly adapted from `[.noquote`. If we didn't 
