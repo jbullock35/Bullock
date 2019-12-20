@@ -21,7 +21,7 @@ latexTable(
   colNameExpand = FALSE,
   extraRowHeight = if (SE_table) "2pt" else "4pt",
   spacerColumns = NULL,
-  spacerColumnsWidth = ".5em",
+  spacerColumnsWidth = ".67em",
   spacerRows = NULL,
   spacerRowsHeight = ".15in",
   tabColSep = "2.75pt",
@@ -231,6 +231,7 @@ a LaTeX macro that creates a well-formatted LaTeX table. It can take many
 arguments to adjust the table's formatting.\improveCSS
 }
 \note{
+[SEE THE VIGNETTE FOR BENEFITS.]
 \emph{Creating PDF tables.} \code{latexTable} tables can be transformed to  
 PDF with \code{\link{latexTablePDF}}.\cr\cr
 \emph{Adjusting LaTeX code "by hand."} Because the returned object is of 
@@ -258,40 +259,6 @@ and every acronym is followed by an underscore (_) character. We thus have
 \code{SE_table} instead of \code{SEtable}, \code{tabColSep} instead of 
 \code{tabcolsep}, and so{\NB}on.
 }
-\section{Benefits}{
- 
-One benefit of \code{latexTable} is that, by default, it will 
-produce regression tables in which standard errors are positioned to the 
-right of their corresponding estimates, and in smaller type. This design of
-regression tables is in contrast to conventional design, whereby standard 
-errors appear in parentheses beneath the corresponding estimates. The design  
-used here is a "Tufte" design: to my knowledge, it was first used in Edward 
-Tufte's essay on \href{https://www.edwardtufte.com/tufte/powerpoint}{The Cognitive Style of PowerPoint}.
-
-A second benefit of \code{latexTable} is that it uses sane defaults for 
-table formatting. That is, it produces tables with (a){\NB}no vertical rules, 
-(b){\NB}few horizontal rules, and (c){\NB}sensible spacing between rows and 
-columns. The result is tables that are easier to read than normal tables:
-when looking at a table created with \code{latexTable}, you will not need
-to squint, or indeed to work at all, to figure out whether a given number 
-corresponds to this variable or to that{\NB}one.
-
-A third benefit of \code{latexTable} is that, by default, it returns not 
-just the LaTeX code for a table but a LaTeX macro that produces the table.
-The macro can be placed at any point in your LaTeX document; it does not 
-need to be placed where you want the table to appear. To put the table 
-where you want it in your LaTeX document, you need only use a single line 
-of LaTeX code. For example, if \code{latexTable} produces a macro called
-"myTable", you can place the table in your LaTeX document by inserting 
-the line \code{\\myTable{p}} anywhere in your document. See the vignette
-for further information.
-
-A fourth benefit of \code{latexTable} is that it produces well-formatted 
-LaTeX code. In other words, you won't just get tables that look good when  
-they are rendered (for example, as PDF). You'll also get LaTeX code that is
-easy to read and to modify in the LaTeX editor of your choice.
-}
-
 \examples{
 data(iris)
 lm1 <- lm(Sepal.Length ~ Petal.Length,               data = iris)

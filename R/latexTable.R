@@ -308,7 +308,7 @@ latexTable <- function(
 
   extraRowHeight      = if (SE_table) '2pt' else '4pt',
   spacerColumns       = NULL,
-  spacerColumnsWidth  = '.5em',
+  spacerColumnsWidth  = '.67em',
   spacerRows          = NULL,
   spacerRowsHeight    = '.15in',
   tabColSep           = '2.75pt',
