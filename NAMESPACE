@@ -8,6 +8,7 @@ export(
   unshift, varNA)
 S3method(`[`, latexTable)
 S3method(print, latexTable)
+S3method(update, latexTable)
 S3method(pop, stack)
 S3method(push, stack)
 S3method(shift, stack)

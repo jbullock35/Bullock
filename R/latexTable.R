@@ -255,22 +255,17 @@
 
 
 # TODO: 
-# --See whether I can add an "update" method to latexTable. It seems that it 
-#   shouldn't be difficult. I can probably borrow from update.default(). The 
-#   first step will be to save the latexTable() call as an attribute in the 
-#   latexTable object. (If I need help doing that, just post on 
-#   Stack Overflow.)  [2019 12 18]
-#   --I have added a "call" attribute. But update.default relies on getCall(),
-#     which expects the call to be stored as a list element. So I should write
-#     my own update.latexTable method. I can still borrow a lot from 
-#     update.default(). (Don't change the output format to a list. That will
-#     make tweaking more difficult. Though only a bit more difficult: instead
-#     of running grep(lt), users would now run (grep(lt$body).)  [2019 12 19]
-#   --When done, write a test to ensure that update() works as expected.
-#     [2019 12 19]
-# --Consider changing the default spacerColumns argument, even though it'll 
-#   mean that I need to change the tests. But first, compare the latexTablePDF
-#   example table with and without spacerColumns.  [2019 12 16]
+# --Consider changing the default arguments. I want simpler examples, and I 
+#   don't want people to need to specify any arguments to get a well-formatted
+#   table by default.  [2019 12 19]
+#   --colNames = numbers. Or should it be "numbers"? This would just add "(1)"
+#     "(2)" etc. But it shouldn't be the default; the default argument should 
+#     instead remain the colnames of "mat."  [2019 12 19]
+#   --footerRows: automatic nobs and R^2 options.  [2019 12 19]
+#   --Consider changing the default spacerColumns argument, even though it'll 
+#     mean that I need to change the tests. But first, compare the latexTablePDF
+#     example table with and without spacerColumns.  [2019 12 16]
+#
 # --Add a vignette that shows the R code and the LaTeX code, illustrating how 
 #   to call the LaTeX table in R.  [2019 12 14]
 # --Check that LaTeX can't handle macro names that include digits. And if I 
@@ -345,6 +340,9 @@ latexTable <- function(
   # colNames arguments.  The principle seems to be "default arguments that are
   # functions of other arguments can be modified until they are first called."
   # In other words, there is some very lazy evaluation at work.  [2012 07 22]
+  #
+  # TODO: can I get around this by using "force(rowNames)" and "force(colNames)"?
+  # See http://adv-r.had.co.nz/Functions.html#all-calls.  [2019 12 20]
   rowNames   <- rowNames
   colNames   <- colNames 
   
@@ -880,3 +878,34 @@ print.latexTable <- function (x, ...) {
   class(x) <- classX
   x
 }
+
+
+
+# Adapted from update.default()  [2019 12 20]
+update.latexTable <- function (object, ...) {
+  oldCall <- attr(object, "call")  
+  if (is.null(oldCall)) 
+    stop("You passed an object without a call component. update.latexTable() won't work on subsetted latexTable objects -- did you pass a subsetted latexTable object?")
+
+  extras <- match.call(expand.dots = FALSE)$...  # returns pairlist of all arguments in ...
+  extras <- as.list(extras)                      # convert to a regular list
+
+  existingArgs <- !is.na(match(names(extras), names(oldCall)))  # boolean
+  newCall      <- oldCall 
+  for (a in names(extras)[existingArgs]) {
+    newCall[[a]] <- extras[[a]]                                 # overwrite existing arguments
+  }
+  if (any(!existingArgs)) {                                  # if there are any new args...
+      newCall <- c(as.list(newCall), extras[!existingArgs])  # ..append them to the call
+      newCall <- as.call(newCall)
+  }  
+  
+  # do.call(latexTable, extras)  
+    # do.call(what, args), where args is a named list of arguments
+    # Working code: do.call(latexTable, list(mat = matrix(2:17, nrow=4)))
+  
+  eval(newCall, parent.frame())
+}
+  
+
+
