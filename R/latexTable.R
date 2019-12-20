@@ -3,7 +3,6 @@
 #' \code{latexTable} takes a single matrix, \code{mat}. By default, it returns 
 #' a LaTeX macro that creates a well-formatted LaTeX table. It can take many 
 #' arguments to adjust the table's formatting.\improveCSS 
-#'
   
 #' @return An object of class \code{latexTable} and \code{character}. The 
 #' returned object is a vector of strings of LaTeX code; each string is a line
@@ -144,7 +143,15 @@
 #'   is \code{FALSE}.   
 #' @param spacerColumns A vector of integers. Specifies columns in \code{mat} 
 #'   after which to insert columns that contain no entries. These "spacer 
-#'   columns" are used to insert horizontal space into the typeset table.\cr 
+#'   columns" are used to insert horizontal space into the typeset table. By 
+#'   default, spacerColumns are specified by a helper function, 
+#'   `spacerColumns_default()`:
+#'  * If \code{SE_table} is \code{FALSE}, there is a spacer column between 
+#'    every column in \code{mat}.
+#'  * If \code{SE_table} is \code{TRUE}, there is a spacer column after  
+#'    every even-numbered column in \code{mat}, except for the last column.  
+#'  * If \code{rowNames} is not \code{NULL}, a spacer column is inserted 
+#'    between the table's row names and the first column of data.\improveCSS\cr
 #'     \indent To add a spacerColumn between the rownames and the first data column, 
 #'   make 0 one of the values in spacerColumns.\cr
 #'     \indent \code{colNameExpand} and \code{spacerColumns} do not play well 
@@ -154,6 +161,8 @@
 #'   commands in the output so that LaTeX can render the output.\cr
 #'     \indent See below for a technical note on \code{spacerColumns} and column  
 #'   spacing in LaTeX.
+#' @md
+
 #' @param spacerColumnsWidth Either a single string of a recognizable LaTeX 
 #'   length (e.g., '.5em') or a character vector indicating the width of each 
 #'   spacer column. Has no effect unless \code{headerFooter} is \code{TRUE}.
@@ -255,6 +264,12 @@
 
 
 # TODO: 
+# --Finish the spacerColumns_default() argument. Shouldn't be hard:
+#   --Update the @params spacerColumns documentation with info on the default
+#     that is taken from the function spec.
+#   --Remove this to-do note and commit to Git. (Amend the previous commit.)
+#     [2019 12 20]
+#
 # --Consider changing the default arguments. I want simpler examples, and I 
 #   don't want people to need to specify any arguments to get a well-formatted
 #   table by default.  [2019 12 19]
@@ -307,7 +322,7 @@ latexTable <- function(
   colNameExpand       = FALSE,
 
   extraRowHeight      = if (SE_table) '2pt' else '4pt',
-  spacerColumns       = NULL,
+  spacerColumns       = spacerColumns_default(),
   spacerColumnsWidth  = '.67em',
   spacerRows          = NULL,
   spacerRowsHeight    = '.15in',
@@ -322,7 +337,7 @@ latexTable <- function(
   formatNumbers       = TRUE,  
   decimalPlaces       = 2,  
   SE_fontSizeString   = '\\fontsize{10.3bp}{10.3bp}\\selectfont',
-  NA_text              = '',
+  NA_text             = '',
 
   writeToClipboard    = FALSE) {
   
@@ -855,6 +870,53 @@ latexTable <- function(
 
 
 
+
+
+
+
+#' Compute default positions of spacer columns in calls to latexTable().
+#' 
+#' \code{spacerColumns_default} specifies the default \code{spacerColumns}
+#' argument in calls to \code{latexTable}. It takes the values of \code{mat}, 
+#' \code{SE_table}, and \code{rowNames} that are passed to \code{latexTable}.
+#' From these values, it computes the default positions of spacer columns:
+#' * If \code{SE_table} is \code{FALSE}, there is a spacer column between every
+#' column in \code{mat}.
+#' * If \code{SE_table} is \code{TRUE}, there is a spacer column after every 
+#' even-numbered column in \code{mat}, except for the last column.  
+#' * If \code{rowNames} is not \code{NULL}, a spacer column is inserted between
+#' the table's row names and the first column of data.\improveCSS
+#' @md
+
+#' @details 
+#' The function is not exported and is intended to be called only by 
+#' \code{latexTable()}.
+
+#' @return A vector of integers.
+
+#' @param mat Matrix.
+#' @param SE_table Logical variable.
+#' @param rowNames Vector.
+spacerColumns_default <- function (
+  
+  # If arguments are not supplied, this function will look to the parent frame
+  # for the arguments. Typically, the parent frame will be a latexTable()
+  # call.  [2019 12 21]
+  mat      = parent.frame()$mat, 
+  SE_table = parent.frame()$SE_table, 
+  rowNames = parent.frame()$rowNames) { 
+
+  sC <- if (SE_table) seq(2, ncol(mat)-2, by = 2) else 1:(ncol(mat)-1)
+  if (!is.null(rowNames)) sC <- c(0, sC)
+  sC
+}
+
+
+
+
+##############################################################################
+# METHODS FOR THE latexTable CLASS
+##############################################################################
 print.latexTable <- function (x, ...) { 
   lineNumbers <- paste0("[", 1:length(x), "] "  )
   lineNumbers <- stringr::str_pad(lineNumbers, max(nchar(lineNumbers)))
@@ -907,5 +969,3 @@ update.latexTable <- function (object, ...) {
   eval(newCall, parent.frame())
 }
   
-
-
