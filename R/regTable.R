@@ -181,7 +181,10 @@ regTable <- function (
   
   # ADD CLASS AND ATTRIBUTES TO THE TO-BE-RETURNED OBJECT
   class(out) <- c('regTable', class(out))  
-  attr(out, "N") <- sapply(objList, nobs)
+  attr(out, "N")    <- sapply(objList, nobs)
+  if ( all('lm' %in% sapply(objList, class)) ) {  # if every model is an lm() model 
+    attr(out, "r.squared") <- sapply(objList, function (x) summary(x)$r.squared)
+  }
   out
 }
 

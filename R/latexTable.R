@@ -284,6 +284,8 @@
 #   --Add a very simple example.
 #   --Add example of overriding default colNames with lt_colNumbers().
 #     [2019 12 21]
+#   --Add footerRows examples: (a) one row, (b) multiple rows, (c) using 
+#     lt_rSquaredRow() and lt_nobsRow().  [2019 12 21]
 # --Add tests with many columns. Is the default layout still OK, or does it 
 #   need to change?
 
@@ -292,7 +294,6 @@
 # --Check that LaTeX can't handle macro names that include digits. And if I 
 #   am right about that, add a function that checks to ensure that there are 
 #   no digits in commandName.  [2019 12 07]
-# --Consider all defaults. Could I make them better? Should I?  [2019 12 19]
 # --See if I can use clipr::write_clip to copy to clipboard for non-Windows
 #     systems. Try with Ubuntu (in Windows).  [2019 12 08]
 # --Add a numprint option to specify the number of digits in each 
@@ -959,6 +960,40 @@ lt_nobsRow <- function (mat = sys.frame(-1)$mat) {
      
   c('Number of observations', attr(mat, "N"))
 }
+
+
+
+#' Specify a footer row that indicates \ifelse{html}{\out{R<sup>2</sup>}}{\eqn{R^2}} for each regression.
+#' 
+#' Given a \code{mat} produced by \code{\link{regTable}()} in which all
+#' regressions are of class \code{lm}, this function returns a footer row that 
+#' indicates \ifelse{html}{\out{R<sup>2</sup>}}{\eqn{R^2}} for each model in \code{mat}.
+#' 
+#' The function is not exported and is intended to be called only by 
+#' \code{latexTable()}.
+
+#' @return A vector of strings. The first element in the vector is "R$^2$". 
+#' The remaining elements are strings that indicate 
+#' \ifelse{html}{\out{R<sup>2</sup>}}{\eqn{R^2}} for each model in \code{mat}.
+#' The strings are rounded to the number of digits specified by the 
+#' \code{decimalPlaces} argument.
+lt_rSquaredRow <- function (
+  
+  # We specify the default arguments this way so that end users can write a 
+  # latexTable() command with footerRows = lt_rSquaredRow(), and not need to 
+  # specify any additional arguments.  [2019 12 21]
+  mat = sys.frame(-1)$mat,
+  decimalPlaces = sys.frame(-1)$decimalPlaces) {
+
+  if (! 'regTable' %in% class(mat)) 
+    stop("The lt_rsquaredRow() function requires that mat be produced by regTable().")
+  
+  if (is.null(attr(mat, "r.squared")))
+    stop("mat doesn't have an 'r.squared' attribute, perhaps because some of the regressions in mat were not created by lm().")
+     
+  c("R$^2$", round(attr(mat, "r.squared"), decimalPlaces))
+}
+
 
 
 
