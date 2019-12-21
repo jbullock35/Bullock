@@ -37,12 +37,18 @@
 #' you haven't installed those LaTeX packages, you won't be able to render 
 #' the tables produced by \code{latexTable}.\cr\cr
  
-#' \emph{Changes from pre-release versions.} The names of some arguments have 
+#' \emph{Changes from pre-release versions:}
+#' * The names of some arguments have 
 #' changed slightly since the pre-release versions of this function. They have  
 #' been changed to enforce consistency: camelCase is used for all arguments,  
 #' and every acronym is followed by an underscore (_) character. We thus have  
 #' \code{SE_table} instead of \code{SEtable}, \code{tabColSep} instead of 
 #' \code{tabcolsep}, and so{\NB}on.
+#' * Some default arguments have changed. In particular, the default 
+#' \code{spacerColumns} argument is no longer \code{NULL}. Instead, the 
+#' default is to insert spacer columns in appropriate places. See documentation
+#' of the \code{spacerColumns} argument for details.
+#' @md
 
 #' @concept Tufte
 #' @concept table
@@ -115,13 +121,16 @@
 #'   headings. Typically, each element in the list is a character vector, and 
 #'   the elements of the character vector specify the names of the table's
 #'   columns.\cr 
-#'     \indent If \code{SE_table} is \code{TRUE} (the default), each column name will
-#'   appear over a pair of columns. In this case, each element in the
-#'   \code{colNames} list should contain \code{ncol(mat)/2} entries.\cr
+#'     \indent If \code{SE_table} is \code{TRUE} (the default), each column 
+#'   name will appear over a pair of columns. In this case, each element in 
+#'   the \code{colNames} list should contain \code{ncol(mat)/2} entries.\cr
 #'     \indent To specify multi-line column labels, use a list with multiple 
 #'   elements. The entries in the first list element will then appear in the 
 #'   top row of the column label, the entries in the second list element will 
-#'   appear in the next row of the column label, and so{\NB}on.
+#'   appear in the next row of the column label, and so{\NB}on.\cr
+#'     \indent By default, column names will be taken from \code{colnames(mat)}.
+#'   If \code{colnames(mat)} is \code{NULL}, columns will be numbered "(1)", 
+#'   "(2)", etc. See \code{\link{colNames_default}()} for more information. 
 #' @param colNameExpand Logical variable. By default, an entry of '' in a
 #'   \code{colNames} list element---that is, an empty entry---indicates that a 
 #'   column should have no column heading. But if \code{colNameExpand} is 
@@ -281,6 +290,9 @@
 #     mean that I need to change the tests. But first, compare the latexTablePDF
 #     example table with and without spacerColumns.  [2019 12 16]
 #
+# --Add tests with many columns. Is the default layout still OK, or does it 
+#   need to change?
+
 # --Add a vignette that shows the R code and the LaTeX code, illustrating how 
 #   to call the LaTeX table in R.  [2019 12 14]
 # --Check that LaTeX can't handle macro names that include digits. And if I 
@@ -318,7 +330,7 @@ latexTable <- function(
   
   rowNames            = rownames(mat), 
   footerRows          = if (is.null(rowNames)) NULL else c('Number of observations', rep('000', ncol(mat)/2)),
-  colNames            = if (SE_table) colnames(mat)[seq(1, ncol(mat), by = 2)] else colnames(mat),
+  colNames            = colNames_default(),
   colNameExpand       = FALSE,
 
   extraRowHeight      = if (SE_table) '2pt' else '4pt',
@@ -870,7 +882,66 @@ latexTable <- function(
 
 
 
+##############################################################################
+# HELPER UTILITIES (NOT NEW METHODS FOR GENERICS) 
+##############################################################################
 
+
+
+#' Compute default column names in calls to latexTable().
+#' 
+#' If \code{colnames(mat)} is not \code{NULL}, this function will use 
+#' \code{colnames(mat)} as the \code{colNames} argument in \code{latexTable()}.
+#' If \code{colnames(mat)} is \code{NULL}, column names will be determined by
+#' \code{lt_colNumbers()}.
+#' 
+#' The function is not exported and is intended to be called only by 
+#' \code{latexTable()}.
+
+#' @return A vector of strings. Each string is a column{\NB}name.
+colNames_default <- function (  
+  # If arguments are not supplied, this function will look to the parent frame
+  # for the arguments. Typically, the parent frame will be a latexTable()
+  # call.  [2019 12 21]
+  mat      = parent.frame()$mat, 
+  SE_table = parent.frame()$SE_table) { 
+
+  if (is.null(colnames(mat))) {
+    cN <- lt_colNumbers(mat, SE_table)
+  }
+  else {
+    if (SE_table) cN <- colnames(mat)[seq(1, ncol(mat), by = 2)] 
+    else          cN <- colnames(mat)    
+  }
+  
+  cN
+}
+
+
+
+
+#' Automatically determine column names of the form (1), (2), etc.
+#' 
+#' Given \code{mat} and \code{SE_table}, this function determines appropriate
+#' column-number names of the form "(1)", "(2)", etc.
+#' 
+#' @return A vector of strings. If \code{SE_table} is \code{TRUE}, the vector 
+#' elements are "(1)", "(2)", etc., where the last column number is 
+#' \code{ncol(mat)/2}. If \code{SE_table} is \code{FALSE}, the vector 
+#' elements are "(1)", "(2)", etc., where the last column number is simply 
+#' \code{ncol(mat)}.  
+lt_colNumbers <- function (
+  mat      = sys.frame(-1)$mat, 
+  SE_table = sys.frame(-1)$SE_table) {
+
+  if (SE_table) {
+    colNames <- paste0("(", 1:(ncol(mat)/2), ")")
+  } else {
+    colNames <- paste0("(", 1:ncol(mat), ")")
+  }
+  
+  colNames
+}
 
 
 

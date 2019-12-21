@@ -17,7 +17,7 @@ latexTable(
   rowNames = rownames(mat),
   footerRows = if (is.null(rowNames)) NULL else c("Number of observations", rep("000",
     ncol(mat)/2)),
-  colNames = if (SE_table) colnames(mat)[seq(1, ncol(mat), by = 2)] else colnames(mat),
+  colNames = colNames_default(),
   colNameExpand = FALSE,
   extraRowHeight = if (SE_table) "2pt" else "4pt",
   spacerColumns = spacerColumns_default(),
@@ -111,13 +111,16 @@ footer row (e.g., '$N$', '$R^2$').}
 headings. Typically, each element in the list is a character vector, and
 the elements of the character vector specify the names of the table's
 columns.\cr
-\indent If \code{SE_table} is \code{TRUE} (the default), each column name will
-appear over a pair of columns. In this case, each element in the
-\code{colNames} list should contain \code{ncol(mat)/2} entries.\cr
+\indent If \code{SE_table} is \code{TRUE} (the default), each column
+name will appear over a pair of columns. In this case, each element in
+the \code{colNames} list should contain \code{ncol(mat)/2} entries.\cr
 \indent To specify multi-line column labels, use a list with multiple
 elements. The entries in the first list element will then appear in the
 top row of the column label, the entries in the second list element will
-appear in the next row of the column label, and so{\NB}on.}
+appear in the next row of the column label, and so{\NB}on.\cr
+\indent By default, column names will be taken from \code{colnames(mat)}.
+If \code{colnames(mat)} is \code{NULL}, columns will be numbered "(1)",
+"(2)", etc. See \code{\link{colNames_default}()} for more information.}
 
 \item{colNameExpand}{Logical variable. By default, an entry of '' in a
 \code{colNames} list element---that is, an empty entry---indicates that a
@@ -262,12 +265,19 @@ column specifications like \code{N{2}{2}}.\cr\cr
 \code{booktabs}, \code{caption}, and \code{numprint} LaTeX packages. If
 you haven't installed those LaTeX packages, you won't be able to render
 the tables produced by \code{latexTable}.\cr\cr
-\emph{Changes from pre-release versions.} The names of some arguments have
+\emph{Changes from pre-release versions:}
+\itemize{
+\item The names of some arguments have
 changed slightly since the pre-release versions of this function. They have
 been changed to enforce consistency: camelCase is used for all arguments,
 and every acronym is followed by an underscore (_) character. We thus have
 \code{SE_table} instead of \code{SEtable}, \code{tabColSep} instead of
 \code{tabcolsep}, and so{\NB}on.
+\item Some default arguments have changed. In particular, the default
+\code{spacerColumns} argument is no longer \code{NULL}. Instead, the
+default is to insert spacer columns in appropriate places. See documentation
+of the \code{spacerColumns} argument for details.
+}
 }
 \examples{
 data(iris)
