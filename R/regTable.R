@@ -178,7 +178,10 @@ regTable <- function (
     out[rowNamesToUse, (i*2 -1):(i*2)] <- coefsAndSEs[[i]][rowNamesToUse, ]
   } 
 
+  
+  # ADD CLASS AND ATTRIBUTES TO THE TO-BE-RETURNED OBJECT
   class(out) <- c('regTable', class(out))  
+  attr(out, "N") <- sapply(objList, nobs)
   out
 }
 

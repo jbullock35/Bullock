@@ -116,7 +116,9 @@
 #'   is typically included in \code{footerRows}. Each element in the list 
 #'   corresponds to a row in the footer. The first entry in each 
 #'   \code{footerRows} list-element should be the row name for the corresponding 
-#'   footer row (e.g., '$N$', '$R^2$').  
+#'   footer row (e.g., '$N$', '$R^2$').\cr
+#'     \indent By default, the only footer row indicates the number of 
+#'   observations for each model in \code{mat}.
 #' @param colNames List, or object that can be coerced to a list, of column
 #'   headings. Typically, each element in the list is a character vector, and 
 #'   the elements of the character vector specify the names of the table's
@@ -273,23 +275,15 @@
 
 
 # TODO: 
-# --Finish the spacerColumns_default() argument. Shouldn't be hard:
-#   --Update the @params spacerColumns documentation with info on the default
-#     that is taken from the function spec.
-#   --Remove this to-do note and commit to Git. (Amend the previous commit.)
-#     [2019 12 20]
-#
 # --Consider changing the default arguments. I want simpler examples, and I 
 #   don't want people to need to specify any arguments to get a well-formatted
 #   table by default.  [2019 12 19]
-#   --colNames = numbers. Or should it be "numbers"? This would just add "(1)"
-#     "(2)" etc. But it shouldn't be the default; the default argument should 
-#     instead remain the colnames of "mat."  [2019 12 19]
-#   --footerRows: automatic nobs and R^2 options.  [2019 12 19]
-#   --Consider changing the default spacerColumns argument, even though it'll 
-#     mean that I need to change the tests. But first, compare the latexTablePDF
-#     example table with and without spacerColumns.  [2019 12 16]
+#   --footerRows: automatic R^2 options.  [2019 12 19]
 #
+# --Update examples:
+#   --Add a very simple example.
+#   --Add example of overriding default colNames with lt_colNumbers().
+#     [2019 12 21]
 # --Add tests with many columns. Is the default layout still OK, or does it 
 #   need to change?
 
@@ -329,7 +323,7 @@ latexTable <- function(
   horizOffset         = '-0in',
   
   rowNames            = rownames(mat), 
-  footerRows          = if (is.null(rowNames)) NULL else c('Number of observations', rep('000', ncol(mat)/2)),
+  footerRows          = if (is.null(rowNames)) NULL else lt_nobsRow(),
   colNames            = colNames_default(),
   colNameExpand       = FALSE,
 
@@ -343,7 +337,7 @@ latexTable <- function(
   columnTierSeparator = '  ',
 
   printCaption        = TRUE,
-  caption             = paste0(label, 'Caption'),
+  caption             = paste0(label, ' caption goes here.'),
   captionMargins      = NULL, 
 
   formatNumbers       = TRUE,  
@@ -942,6 +936,32 @@ lt_colNumbers <- function (
   
   colNames
 }
+
+
+
+#' Specify a footer row that indicates the number of observations for each regression.
+#' 
+#' Given a \code{mat} produced by \code{\link{regTable}()}, this function 
+#' returns a footer row that indicates the number of observations for each 
+#' model in \code{mat}.
+#' 
+#' The function is not exported and is intended to be called only by 
+#' \code{latexTable()}.
+
+#' @return A vector of strings. The first element in the vector is "Number of 
+#' observations". The remaining elements are the numbers of observations for 
+#' each regression in \code{mat}.
+lt_nobsRow <- function (mat = sys.frame(-1)$mat) {
+
+  if (! 'regTable' %in% class(mat)) {
+    warning("mat was not produced with regTable(). The number-of-observations row in your footer is unlikely to be correct. You may want to specify your footerRows argument explicitly.")
+  }
+     
+  c('Number of observations', attr(mat, "N"))
+}
+
+
+
 
 
 

@@ -15,8 +15,7 @@ latexTable(
   starredFloat = FALSE,
   horizOffset = "-0in",
   rowNames = rownames(mat),
-  footerRows = if (is.null(rowNames)) NULL else c("Number of observations", rep("000",
-    ncol(mat)/2)),
+  footerRows = if (is.null(rowNames)) NULL else lt_nobsRow(),
   colNames = colNames_default(),
   colNameExpand = FALSE,
   extraRowHeight = if (SE_table) "2pt" else "4pt",
@@ -28,7 +27,7 @@ latexTable(
   spaceBetweenColNameRows = TRUE,
   columnTierSeparator = "  ",
   printCaption = TRUE,
-  caption = paste0(label, "Caption"),
+  caption = paste0(label, " caption goes here."),
   captionMargins = NULL,
   formatNumbers = TRUE,
   decimalPlaces = 2,
@@ -105,7 +104,9 @@ rows. Information about N and \ifelse{html}{\out{R<sup>2</sup>}}{\eqn{R^2}}
 is typically included in \code{footerRows}. Each element in the list
 corresponds to a row in the footer. The first entry in each
 \code{footerRows} list-element should be the row name for the corresponding
-footer row (e.g., '$N$', '$R^2$').}
+footer row (e.g., '$N$', '$R^2$').\cr
+\indent By default, the only footer row indicates the number of
+observations for each model in \code{mat}.}
 
 \item{colNames}{List, or object that can be coerced to a list, of column
 headings. Typically, each element in the list is a character vector, and
