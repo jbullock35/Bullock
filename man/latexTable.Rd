@@ -16,10 +16,10 @@ latexTable(
   horizOffset = "-0in",
   rowNames = rownames(mat),
   footerRows = if (is.null(rowNames)) NULL else lt_nobsRow(),
-  colNames = colNames_default(),
+  colNames = lt_colNames_default(),
   colNameExpand = FALSE,
   extraRowHeight = if (SE_table) "2pt" else "4pt",
-  spacerColumns = spacerColumns_default(),
+  spacerColumns = lt_spacerColumns_default(),
   spacerColumnsWidth = ".67em",
   spacerRows = NULL,
   spacerRowsHeight = ".15in",
@@ -247,7 +247,7 @@ a LaTeX macro that creates a well-formatted LaTeX table. It can take many
 arguments to adjust the table's formatting.\improveCSS
 }
 \note{
-\link{SEE THE VIGNETTE FOR BENEFITS.}
+SEE THE VIGNETTE FOR BENEFITS.
 \emph{Creating PDF tables.} \code{latexTable} tables can be transformed to
 PDF with \code{\link{latexTablePDF}}.\cr\cr
 \emph{Adjusting LaTeX code "by hand."} Because the returned object is of

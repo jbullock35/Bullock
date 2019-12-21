@@ -9,6 +9,11 @@ lt_rSquaredRow(
   decimalPlaces = sys.frame(-1)$decimalPlaces
 )
 }
+\arguments{
+\item{mat}{A matrix, typically a \code{regTable} object.}
+
+\item{decimalPlaces}{Integer. See \code{\link{latexTable}}.}
+}
 \value{
 A vector of strings. The first element in the vector is "R$^2$". 
 The remaining elements are strings that indicate 
@@ -20,8 +25,4 @@ The strings are rounded to the number of digits specified by the
 Given a \code{mat} produced by \code{\link{regTable}()} in which all
 regressions are of class \code{lm}, this function returns a footer row that 
 indicates \ifelse{html}{\out{R<sup>2</sup>}}{\eqn{R^2}} for each model in \code{mat}.
-}
-\details{
-The function is not exported and is intended to be called only by 
-\code{latexTable()}.
 }

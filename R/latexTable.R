@@ -12,7 +12,7 @@
 
 
 #' @note
-#' [SEE THE VIGNETTE FOR BENEFITS.]
+#' SEE THE VIGNETTE FOR BENEFITS.
 
 #' \emph{Creating PDF tables.} \code{latexTable} tables can be transformed to  
 #' PDF with \code{\link{latexTablePDF}}.\cr\cr
@@ -264,16 +264,13 @@
 
 
 # TODO: 
-# --Add tests with many columns. Is the default layout still OK, or does it 
-#   need to change?
-
 # --Add a vignette that shows the R code and the LaTeX code, illustrating how 
 #   to call the LaTeX table in R.  [2019 12 14]
 # --Check that LaTeX can't handle macro names that include digits. And if I 
 #   am right about that, add a function that checks to ensure that there are 
 #   no digits in commandName.  [2019 12 07]
 # --See if I can use clipr::write_clip to copy to clipboard for non-Windows
-#     systems. Try with Ubuntu (in Windows).  [2019 12 08]
+#   systems. Try with Ubuntu (in Windows).  [2019 12 08]
 # --Add a numprint option to specify the number of digits in each 
 #   numprint-specification-column, both before and after the decimal 
 #   place.  [2015 02 22]
@@ -303,11 +300,11 @@ latexTable <- function(
   
   rowNames            = rownames(mat), 
   footerRows          = if (is.null(rowNames)) NULL else lt_nobsRow(),
-  colNames            = colNames_default(),
+  colNames            = lt_colNames_default(),
   colNameExpand       = FALSE,
 
   extraRowHeight      = if (SE_table) '2pt' else '4pt',
-  spacerColumns       = spacerColumns_default(),
+  spacerColumns       = lt_spacerColumns_default(),
   spacerColumnsWidth  = '.67em',
   spacerRows          = NULL,
   spacerRowsHeight    = '.15in',
@@ -870,13 +867,16 @@ latexTable <- function(
 #' If \code{colnames(mat)} is not \code{NULL}, this function will use 
 #' \code{colnames(mat)} as the \code{colNames} argument in \code{latexTable()}.
 #' If \code{colnames(mat)} is \code{NULL}, column names will be determined by
-#' \code{lt_colNumbers()}.
+#' \code{\link{lt_colNumbers}()}.
 #' 
 #' The function is not exported and is intended to be called only by 
 #' \code{latexTable()}.
 
 #' @return A vector of strings. Each string is a column{\NB}name.
-colNames_default <- function (  
+
+#' @param mat A matrix, typically a \code{regTable} object.
+#' @param SE_table Logical variable. See \code{\link{latexTable}}.
+lt_colNames_default <- function (  
   # If arguments are not supplied, this function will look to the parent frame
   # for the arguments. Typically, the parent frame will be a latexTable()
   # call.  [2019 12 21]
@@ -907,6 +907,11 @@ colNames_default <- function (
 #' \code{ncol(mat)/2}. If \code{SE_table} is \code{FALSE}, the vector 
 #' elements are "(1)", "(2)", etc., where the last column number is simply 
 #' \code{ncol(mat)}.  
+
+#' @param mat A matrix, typically a \code{regTable} object.
+#' @param SE_table Logical variable. See \code{\link{latexTable}}.
+
+#' @export 
 lt_colNumbers <- function (
   mat      = sys.frame(-1)$mat, 
   SE_table = sys.frame(-1)$SE_table) {
@@ -927,13 +932,14 @@ lt_colNumbers <- function (
 #' Given a \code{mat} produced by \code{\link{regTable}()}, this function 
 #' returns a footer row that indicates the number of observations for each 
 #' model in \code{mat}.
-#' 
-#' The function is not exported and is intended to be called only by 
-#' \code{latexTable()}.
 
 #' @return A vector of strings. The first element in the vector is "Number of 
 #' observations". The remaining elements are the numbers of observations for 
 #' each regression in \code{mat}.
+
+#' @param mat A \code{regTable} object.
+
+#' @export
 lt_nobsRow <- function (mat = sys.frame(-1)$mat) {
 
   if (! 'regTable' %in% class(mat)) {
@@ -950,15 +956,17 @@ lt_nobsRow <- function (mat = sys.frame(-1)$mat) {
 #' Given a \code{mat} produced by \code{\link{regTable}()} in which all
 #' regressions are of class \code{lm}, this function returns a footer row that 
 #' indicates \ifelse{html}{\out{R<sup>2</sup>}}{\eqn{R^2}} for each model in \code{mat}.
-#' 
-#' The function is not exported and is intended to be called only by 
-#' \code{latexTable()}.
 
 #' @return A vector of strings. The first element in the vector is "R$^2$". 
 #' The remaining elements are strings that indicate 
 #' \ifelse{html}{\out{R<sup>2</sup>}}{\eqn{R^2}} for each model in \code{mat}.
 #' The strings are rounded to the number of digits specified by the 
 #' \code{decimalPlaces} argument.
+
+#' @param mat A matrix, typically a \code{regTable} object.
+#' @param decimalPlaces Integer. See \code{\link{latexTable}}.
+
+#' @export 
 lt_rSquaredRow <- function (
   
   # We specify the default arguments this way so that end users can write a 
@@ -1005,7 +1013,7 @@ lt_rSquaredRow <- function (
 #' @param mat Matrix.
 #' @param SE_table Logical variable.
 #' @param rowNames Vector.
-spacerColumns_default <- function (
+lt_spacerColumns_default <- function (
   
   # If arguments are not supplied, this function will look to the parent frame
   # for the arguments. Typically, the parent frame will be a latexTable()
@@ -1014,8 +1022,16 @@ spacerColumns_default <- function (
   SE_table = parent.frame()$SE_table, 
   rowNames = parent.frame()$rowNames) { 
 
-  sC <- if (SE_table) seq(2, ncol(mat)-2, by = 2) else 1:(ncol(mat)-1)
+  sC <- if (SE_table && ncol(mat) > 2) { 
+    seq(2, ncol(mat)-2, by = 2) 
+  } else if (SE_table && ncol(mat) == 2) {
+    NULL
+  } else {
+    1:(ncol(mat)-1)
+  }
+
   if (!is.null(rowNames)) sC <- c(0, sC)
+  
   sC
 }
 
@@ -1052,6 +1068,25 @@ print.latexTable <- function (x, ...) {
 
 
 # Adapted from update.default()  [2019 12 20]
+#' Update a latexTable object with new arguments.
+#' 
+#' Each \code{latexTable} object stores, as an attribute, the call that 
+#' produced{\NB}it. \code{update.latexTable()} updates the call by replacing 
+#' arguments or adding new ones. It then calls \code{\link{latexTable}()} to produce
+#' a new \code{latexTable} object. 
+#' 
+#' \code{update.latexTable()} is adapted from \code{stats::update.default()}.  
+#' It is a method for the generic \code{update()}.
+
+#' @return A \code{latexTable} object.
+
+#' @param object A \code{latexTable} object
+#' @param ... Arguments to \code{latexTable()}, e.g., \code{colNames}, 
+#'   \code{caption}.
+
+#' @examples
+#' lT1 <- latexTable(matrix(1:16, nrow = 4))
+#' lT2 <- update(lT1, mat = matrix(2:17, nrow = 8), commandName = "intTable")
 update.latexTable <- function (object, ...) {
   oldCall <- attr(object, "call")  
   if (is.null(oldCall)) 

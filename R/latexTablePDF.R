@@ -19,7 +19,7 @@
 #' @note \emph{Required LaTeX tools.} If \code{writePDF} is \code{TRUE}, 
 #'   \code{pdflatex} must be installed on your system. (It is part of almost 
 #'   every LaTeX installation.) In addition, if \code{writePDF} is \code{TRUE}  
-#'   and \code{containerFilename} is \code{NULL} (the default), the following 
+#'   and \code{containerFilename} is "containerFilename.tex" (the default), the following 
 #'   LaTeX packages must be installed: \code{array, booktabs, caption, 
 #'   fancyhdr, geometry, pdflscape, } and \code{ragged2e}. Most of these, and 
 #'   perhaps all of them, are already part of your LaTeX installation.\cr\cr\cr\cr
@@ -39,18 +39,13 @@
 #'   rT1 <- regTable(lmList)
 #'   lT1 <- latexTable(
 #'     mat        = rT1,
-#'     colNames   = qw("(1) (2) (3)"),
+#'     colNames   = lt_colNumbers(),
 #'     rowNames   = c("Intercept", "Petal length", "Petal width", "Petal length $\\times$ petal width"),
-#'     footerRows = list(
-#'       c("Number of observations", sapply(lmList, nobs)),
-#'       c("R$^2$", sapply(lmList, function (x) round(summary(x)$r.squared, 2)))
-#'     ),
-#'     spacerColumns      = c(0, 2, 4),
-#'     spacerColumnsWidth = '.67em',
-#'     spacerRows         = 1,  # separate Intercept row from other rows
-#'     caption            = '\\textit{Sepal length as a function of petal length and petal width.} Lorem ipsum dolor.'
+#'     footerRows = list(lt_nobsRow(), lt_rSquaredRow()),
+#'     spacerRows = 1,  # insert white space between Intercept row and other rows
+#'     caption    = '\\textit{Sepal length as a function of petal length and petal width.} Lorem ipsum dolor.'
 #'   )
-#'   latexTablePDF(lT1)
+#'   latexTablePDF(lT1, outputFilenameStem = "irisData")
 #' }
 
 
@@ -67,7 +62,8 @@
 #'   document, \code{container} should probably be \code{FALSE}.  
 #' @param containerFilename A string. Specifies the path of the "container" 
 #'   LaTeX file into which the \code{latexTable} table or tables will be 
-#'   inserted to make a complete LaTeX file that can be rendered as PDF.
+#'   inserted to make a complete LaTeX file that can be rendered as PDF. By
+#'   default, it is "tableContainer.tex", which is included in this package.
 #' @param outputFilenameStem A string. It is the path and name of the file   
 #'   is to be saved to disk, up to the extension. For example, if you want to  
 #'   save "myTable.pdf" to disk, set \code{outputFilenameStem = "mytable"}.
@@ -77,7 +73,8 @@
 #'   existing files that have the same names?
 #' @param verbose Logical variable. \code{latexTablePDF} calls  
 #'   \code{pdflatex} to render PDF files, and if \code{verbose} is \code{TRUE}, 
-#'   all of the output from \code{pdflatex} will be printed to screen.\cr\cr\cr\cr 
+#'   all of the output from \code{pdflatex} will be printed to screen. Useful 
+#'   for debugging.\cr\cr\cr\cr 
 
 #' @param continuedFloat Logical variable. Should be \code{TRUE} if the table 
 #'   or tables to be rendered are part of a series and should all share the 
@@ -129,8 +126,8 @@
 #' @export
 latexTablePDF <- function(
   latexTable,
-  container          = TRUE,  # if FALSE, .tex file can't be PDF'd
-  containerFilename  = NULL,
+  container          = TRUE,                  # if FALSE, .tex file can't be PDF'd
+  containerFilename  = "tableContainer.tex",  # included in the Bullock package
   outputFilenameStem = 'latexTable',
   writePDF           = TRUE,
   writeTex           = FALSE,
@@ -174,6 +171,9 @@ latexTablePDF <- function(
   if (continuedFloat && continuedFloatStar) {
     stop('"continuedFloat" and "continuedFloatStar" cannot both be TRUE.')    
   }    
+  if (container && is.null(containerFilename)) {
+    stop('if "container" is TRUE, "containerFilename" must not be NULL.')
+  }
   if (!container && writePDF) {
     stop('if "container" is FALSE, "writePDF" must also be FALSE.')    
   }    
@@ -231,13 +231,12 @@ latexTablePDF <- function(
   
   # CREATE THE ENTIRE LATEX DOCUMENT
   if (container) {
-    if (!is.null(containerFilename)) {
+    if (containerFilename == 'tableContainer.tex') {
+      latexContainer <- readLines(system.file(containerFilename, package = "Bullock", mustWork = TRUE))
+    }    
+    else {
       latexContainer <- readLines(containerFilename)
-    } else {
-      latexContainer <- readLines(
-        system.file("tableContainer.tex", package = "Bullock", mustWork = TRUE)
-      )
-    }
+    } 
     lineToReplace  <- which(grepl('TABLE GOES HERE!', latexContainer))  
     newTable <- latexContainer[1:(lineToReplace)-1]
     for (i in 1:length(latexTable)) {

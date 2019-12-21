@@ -11,6 +11,7 @@ lt1_noSC     <- latexTable(mat1, spacerColumns = NULL)
   # TODO: figure out how to run something like
   # update(lt1, spacerColumns = spacerColumns_default())
 lt1_noSC_dp3 <- update(lt1_noSC, decimalPlaces = 3)
+lt1_mat2col  <- update(lt1_default, mat = matrix(1:16, nrow = 8)) 
 
 
 test_that("numbers are formatted correctly when no arguments except 'mat' are given", {
@@ -139,6 +140,11 @@ test_that("\\multicolumn specifications are correct", {
     lt2_spacerColumns,
     '\\\\multicolumn\\{2\\}\\{c\\}\\{4\\}\\\\tabularnewline',
     all = FALSE)
+  
+  expect_match(                                       # mat has only 2 columns
+    lt1_mat2col,
+    '\\\\multicolumn\\{2\\}\\{c\\}\\{\\(1\\)\\}\\\\tabularnewline',
+    all = FALSE)  
 })
 
 
@@ -158,6 +164,13 @@ test_that("\\cmidrule specifications are correct", {
     lt2_spacerColumns,
     '\\\\cmidrule\\{2-4\\}\\s*\\\\cmidrule\\{6-7\\}\\s*\\\\cmidrule\\{8-9\\}\\s*\\\\cmidrule\\{10-11\\}\\s*',
     all = FALSE)
+  
+  expect_match(
+    lt1_mat2col,  # mat has only two columns
+    '\\\\cmidrule\\(lr\\)\\{1-2\\}\\s*$',
+    all = FALSE)
 })
+
+
 
 

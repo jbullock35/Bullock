@@ -6,6 +6,9 @@
 \usage{
 lt_nobsRow(mat = sys.frame(-1)$mat)
 }
+\arguments{
+\item{mat}{A \code{regTable} object.}
+}
 \value{
 A vector of strings. The first element in the vector is "Number of 
 observations". The remaining elements are the numbers of observations for 
@@ -15,8 +18,4 @@ each regression in \code{mat}.
 Given a \code{mat} produced by \code{\link{regTable}()}, this function 
 returns a footer row that indicates the number of observations for each 
 model in \code{mat}.
-}
-\details{
-The function is not exported and is intended to be called only by 
-\code{latexTable()}.
 }
