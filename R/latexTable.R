@@ -63,7 +63,7 @@
 #'   Defaults to \code{TRUE}. If \code{TRUE}, the even-numbered columns of \code{mat}
 #'   will be rendered in smaller type than the odd-numbered columns: that is,
 #'   the standard errors will be rendered in smaller type than their 
-#'   corresponding estimates. This default behavior can be overridden by 
+#'   corresponding estimates. This default type sizing can be overridden by 
 #'   the \code{SE_fontSizeString} argument. 
 #' @param headerFooter Logical variable. If \code{TRUE}, which is the default,
 #'   the output will be (or at least include) a LaTeX macro that generates a 
@@ -208,7 +208,9 @@
 #'   
 #' @param printCaption Logical variable.
 #' @param caption A string. It can include LaTeX commands, e.g., 
-#'   "\\\\textit{Results from a minimal specification.}"
+#'   "\\\\textit{Results from a minimal specification.}" It can also include 
+#'   references to other labeled parts of your LaTeX document, e.g., 
+#'   "\\\\autoref{SomeFigure}". See the examples.
 #' @param captionMargins A vector of two strings that specify the margins of  
 #'   the caption. The strings should be LaTeX lengths, e.g., ".25in" or ".67em".
 #'   By default, \code{captionMargins} is \code{NULL}.\cr\cr\cr\cr
@@ -230,7 +232,7 @@
 #'   by the string.\cr\cr\cr\cr
 #' 
 #' 
-#' @param writeToClipboard Logical variable. Copy entire output to clipboard. 
+#' @param clipboard Logical variable. Copy entire output to clipboard. 
 #'   Useful if you want to paste the output directly into a \code{.tex} file.
 #'   Works only on Windows.
 
@@ -239,53 +241,29 @@
 #' data(iris)
 #' lm1 <- lm(Sepal.Length ~ Petal.Length,               data = iris)
 #' lm2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data = iris)
-#' rT1 <- regTable(list(lm1, lm2))
+#' lm3 <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
+#' rT1 <- regTable(list(lm1, lm2, lm3))
 #' latexTable(rT1)
-#' latexTable(rT1, headerFooter = FALSE, spacerColumns = c(0, 2))
-#' latexTable(rT1, colNames = qw("(1) (2)"))
-#' latexTable(
-#'   mat         = rT1,
+#' latexTable(rT1, SE_table = FALSE, colNames = lt_colNumbers())
+#' lt2 <- latexTable(
+#'   mat      = rT1, 
+#'   colNames = list(qw("model model model"), qw("1 2 3")))
+#' lt3 <- latexTable(
+#'   mat         = rT1, 
+#'   colNames    = lt_colNumbers(),
+#'   rowNames    = c("Intercept", "Petal length", "Petal width", "Petal length $\\times$ petal width"),
+#'   footerRows  = list(lt_nobsRow(), lt_rSquaredRow()),
 #'   commandName = 'mainEstimates',
-#'   caption     = "Each entry is an estimate or a standard error from a separate OLS regression. This table corresponds exactly to \\autoref{SomeFigure}; the difference is that it presents the estimates and standard errors in tabular form rather than graphically."
-#' ) 
-#' latexTable(mat = matrix(1:16, nrow=4), colNames = 1:2)
-#' latexTable(
-#'   mat = matrix(1:16, nrow=2), 
-#'   colNames = c('1', '', '', 4))
-#' latexTable(
-#'   mat = matrix(1:16, nrow=2), 
-#'   colNames = c('1', '', '3', '4'),
-#'   colNameExpand = TRUE)
-#' latexTable(                                      
-#'   mat           = matrix(1:16, nrow=4), 
-#'   colNames      = c('One big heading', ''),
-#'   colNameExpand = TRUE)
-#' latexTable(
-#'   mat           = matrix(1:16, nrow=4),
-#'   rowNames      = 1:4,
-#'   colNames      = c('One big heading', ''),
-#'   colNameExpand = TRUE)
-#' latexTable(
-#'   mat           = matrix(1:16, nrow=4), 
-#'   colNames      = 1:2,
-#'   rowNames      = qw("a b c d"),
-#'   spacerColumns = c(0, 2))
+#'   caption     = "Each entry is an estimate or a standard error from a separate OLS regression.")
+#' lt4 <- update(
+#'   lt3,
+#'   commandName = 'myEstimates',  # change LaTeX command name
+#'   spacerRows = 1)               # add vertical space after intercept row
 
 
 
 
 # TODO: 
-# --Consider changing the default arguments. I want simpler examples, and I 
-#   don't want people to need to specify any arguments to get a well-formatted
-#   table by default.  [2019 12 19]
-#   --footerRows: automatic R^2 options.  [2019 12 19]
-#
-# --Update examples:
-#   --Add a very simple example.
-#   --Add example of overriding default colNames with lt_colNumbers().
-#     [2019 12 21]
-#   --Add footerRows examples: (a) one row, (b) multiple rows, (c) using 
-#     lt_rSquaredRow() and lt_nobsRow().  [2019 12 21]
 # --Add tests with many columns. Is the default layout still OK, or does it 
 #   need to change?
 
@@ -346,7 +324,7 @@ latexTable <- function(
   SE_fontSizeString   = '\\fontsize{10.3bp}{10.3bp}\\selectfont',
   NA_text             = '',
 
-  writeToClipboard    = FALSE) {
+  clipboard           = FALSE) {
   
   
   # STORE CALL FOR LATER USE
@@ -430,18 +408,22 @@ latexTable <- function(
       # strike" attempt uses str_pad().  [2014 06 21]  
       matChar <- as.character(mat[i,])                       # get row "i" of "mat"
       matChar <- gsub('^0$', paste0('0.', z), matChar)       # take care of entries that are simply "0"
-      matChar <- gsub('^(-?\\d+)$', '\\1.', matChar)         # add decimal place to entries that contain only digits
+      matChar <- gsub('^(-?\\d+)$', '\\1.', matChar)         # add decimal point to entries that contain only digits
       matCharAfterDecimal <- gsub('-?\\d+\\.', '', matChar)  # get characters after the decimal place, e.g., "12" in "-3.12"
       
       decimalPlacesToAdd <- decimalPlaces - nchar(matCharAfterDecimal)  # e.g., add two zeroes to one entry, zero zeroes to another
       for (ind in 1:length(matChar)) {     # for each entry in row "i" of "mat"
-        if (is.na(matChar[ind])) { next }  # skip if NA
-        
-        matChar[ind] <- stringr::str_pad(  # otherwise, pad the entries with trailing zeroes
-          string = matChar[ind],
-          width  = nchar(matChar[ind]) + decimalPlacesToAdd[ind],
-          side   = 'right',
-          pad    = '0')
+        if (is.na(matChar[ind])) { next }         # skip if NA
+        else if (decimalPlacesToAdd[ind] >= 0) {
+          matChar[ind] <- stringr::str_pad(       # if entry is too short, pad the entries with trailing zeroes
+            string = matChar[ind],
+            width  = nchar(matChar[ind]) + decimalPlacesToAdd[ind],
+            side   = 'right',
+            pad    = '0')
+        }
+        else if (decimalPlacesToAdd[ind] < 0) {
+          matChar[ind] <- round(as.numeric(matChar[ind]), decimalPlaces)
+        }
       }
       matLine <- paste(matChar, collapse = ' & ')
       
@@ -461,8 +443,8 @@ latexTable <- function(
       matLine <- gsub('-0\\.',   '-.', matLine)
       
       # Replace, e.g., '.1' with '.10' [2011 02 17]
-      matLine <- gsub('(\\.\\d)\\s', '\\10 ', matLine)
-      matLine <- gsub('(\\.\\d)$',   '\\10',  matLine)
+      # matLine <- gsub('(\\.\\d)\\s', '\\10 ', matLine)  # ".1 " becomes ".10 "
+      # matLine <- gsub('(\\.\\d)$',   '\\10',  matLine)  # ".1"  becomes ".10"
       
       # Replace NA values [2012 07 22]
       if (! is.null(NA_text)) {
@@ -869,7 +851,7 @@ latexTable <- function(
   # RETURN THE latexTable OBJECT
   class(outputStrings) <- c('latexTable', class(outputStrings))
   attr(outputStrings, "call") <- latexTableCall
-  if (writeToClipboard && Sys.info()['sysname'] == 'Windows') {
+  if (clipboard && Sys.info()['sysname'] == 'Windows') {
     utils::writeClipboard(paste0(outputStrings, collapse = "\n"))
   }
   outputStrings

@@ -6,10 +6,11 @@ context("Check LaTeX output from latexTable()")
 
 mat1 <- matrix(c(-3:12, 0.0, 0.0000, -1.0000008, NA, 1.555, 9:11), nrow = 4)
 lt1_default  <- latexTable(mat1) 
-lt1_noSC          <- latexTable(mat1, spacerColumns = NULL)
+lt1_dp1      <- latexTable(mat1, decimalPlaces = 1) 
+lt1_noSC     <- latexTable(mat1, spacerColumns = NULL)
   # TODO: figure out how to run something like
   # update(lt1, spacerColumns = spacerColumns_default())
-lt1_noSC_dp3      <- update(lt1_noSC, decimalPlaces = 3)
+lt1_noSC_dp3 <- update(lt1_noSC, decimalPlaces = 3)
 
 
 test_that("numbers are formatted correctly when no arguments except 'mat' are given", {
@@ -30,6 +31,28 @@ test_that("numbers are formatted correctly when no arguments except 'mat' are gi
     '\\.00\\s*&\\s*4\\.00\\s*&&\\s*8\\.00\\s*&\\s*12\\.00\\s*&&\\s+&\\s*11\\.00',
     all = FALSE)
 })
+
+
+
+test_that("numbers are formatted correctly when decimalPlaces == 1", {
+  expect_match(
+    lt1_dp1,
+    '-3\\.0\\s*&\\s*1\\.0\\s*&&\\s*5\\.0\\s*&\\s*9\\.0\\s*&&\\s*\\.0\\s*&\\s*1\\.6',
+    all = FALSE)
+  expect_match(
+    lt1_dp1,
+    '-2\\.0\\s*&\\s*2\\.0\\s*&&\\s*6\\.0\\s*&\\s*10\\.0\\s*&&\\s*\\.0\\s*&\\s*9\\.0',
+    all = FALSE)
+  expect_match(
+    lt1_dp1,
+    '-1\\.0\\s*&\\s*3\\.0\\s*&&\\s*7\\.0\\s*&\\s*11\\.0\\s*&&\\s*-1\\.0\\s*&\\s*10\\.0',
+    all = FALSE)
+  expect_match(
+    lt1_dp1,
+    '\\.0\\s*&\\s*4\\.0\\s*&&\\s*8\\.0\\s*&\\s*12\\.0\\s*&&\\s+&\\s*11\\.0',
+    all = FALSE)
+})
+
 
 
 test_that("numbers are formatted correctly when spacerColumns is NULL", {

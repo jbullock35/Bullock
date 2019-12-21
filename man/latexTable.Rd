@@ -33,7 +33,7 @@ latexTable(
   decimalPlaces = 2,
   SE_fontSizeString = "\\\\fontsize{10.3bp}{10.3bp}\\\\selectfont",
   NA_text = "",
-  writeToClipboard = FALSE
+  clipboard = FALSE
 )
 }
 \arguments{
@@ -46,7 +46,7 @@ and the second column containing the corresponding standard errors.
 Defaults to \code{TRUE}. If \code{TRUE}, the even-numbered columns of \code{mat}
 will be rendered in smaller type than the odd-numbered columns: that is,
 the standard errors will be rendered in smaller type than their
-corresponding estimates. This default behavior can be overridden by
+corresponding estimates. This default type sizing can be overridden by
 the \code{SE_fontSizeString} argument.}
 
 \item{headerFooter}{Logical variable. If \code{TRUE}, which is the default,
@@ -204,7 +204,9 @@ typeset (e.g., PDF) version of the table.\cr\cr\cr\cr}
 \item{printCaption}{Logical variable.}
 
 \item{caption}{A string. It can include LaTeX commands, e.g.,
-"\\\\textit{Results from a minimal specification.}"}
+"\\\\textit{Results from a minimal specification.}" It can also include
+references to other labeled parts of your LaTeX document, e.g.,
+"\\\\autoref{SomeFigure}". See the examples.}
 
 \item{captionMargins}{A vector of two strings that specify the margins of
 the caption. The strings should be LaTeX lengths, e.g., ".25in" or ".67em".
@@ -228,7 +230,7 @@ errors in slightly smaller type than the corresponding estimates.}
 \item{NA_text}{A string. \code{NA} entries in \code{mat} will be replaced
 by the string.\cr\cr\cr\cr}
 
-\item{writeToClipboard}{Logical variable. Copy entire output to clipboard.
+\item{clipboard}{Logical variable. Copy entire output to clipboard.
 Useful if you want to paste the output directly into a \code{.tex} file.
 Works only on Windows.}
 }
@@ -284,37 +286,24 @@ of the \code{spacerColumns} argument for details.
 data(iris)
 lm1 <- lm(Sepal.Length ~ Petal.Length,               data = iris)
 lm2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data = iris)
-rT1 <- regTable(list(lm1, lm2))
+lm3 <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
+rT1 <- regTable(list(lm1, lm2, lm3))
 latexTable(rT1)
-latexTable(rT1, headerFooter = FALSE, spacerColumns = c(0, 2))
-latexTable(rT1, colNames = qw("(1) (2)"))
-latexTable(
-  mat         = rT1,
+latexTable(rT1, SE_table = FALSE, colNames = lt_colNumbers())
+lt2 <- latexTable(
+  mat      = rT1, 
+  colNames = list(qw("model model model"), qw("1 2 3")))
+lt3 <- latexTable(
+  mat         = rT1, 
+  colNames    = lt_colNumbers(),
+  rowNames    = c("Intercept", "Petal length", "Petal width", "Petal length $\\\\times$ petal width"),
+  footerRows  = list(lt_nobsRow(), lt_rSquaredRow()),
   commandName = 'mainEstimates',
-  caption     = "Each entry is an estimate or a standard error from a separate OLS regression. This table corresponds exactly to \\\\autoref{SomeFigure}; the difference is that it presents the estimates and standard errors in tabular form rather than graphically."
-) 
-latexTable(mat = matrix(1:16, nrow=4), colNames = 1:2)
-latexTable(
-  mat = matrix(1:16, nrow=2), 
-  colNames = c('1', '', '', 4))
-latexTable(
-  mat = matrix(1:16, nrow=2), 
-  colNames = c('1', '', '3', '4'),
-  colNameExpand = TRUE)
-latexTable(                                      
-  mat           = matrix(1:16, nrow=4), 
-  colNames      = c('One big heading', ''),
-  colNameExpand = TRUE)
-latexTable(
-  mat           = matrix(1:16, nrow=4),
-  rowNames      = 1:4,
-  colNames      = c('One big heading', ''),
-  colNameExpand = TRUE)
-latexTable(
-  mat           = matrix(1:16, nrow=4), 
-  colNames      = 1:2,
-  rowNames      = qw("a b c d"),
-  spacerColumns = c(0, 2))
+  caption     = "Each entry is an estimate or a standard error from a separate OLS regression.")
+lt4 <- update(
+  lt3,
+  commandName = 'myEstimates',  # change LaTeX command name
+  spacerRows = 1)               # add vertical space after intercept row
 }
 \seealso{
 Other functions for making tables: 
