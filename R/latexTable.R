@@ -52,10 +52,10 @@
 #' @param headerFooter Logical variable. If \code{TRUE}, which is the default,
 #'   the output will be (or at least include) a LaTeX macro that generates a 
 #'   table. For example, you will be able to produce a table simply by calling
-#'   \code{\\myTable{p}} or \code{\\myTable{h}} in your LaTeX code.\cr
+#'   \code{\\myTable{p}} or \code{\\myTable{h}} in your master LaTeX document.\cr
 #'   \indent If \code{headerFooter} is \code{FALSE}, the only output of the 
-#'   function will be rows from a LaTeX table (possibly including column   
-#'   headers). The function may not produce valid LaTeX output if both   
+#'   function will be LaTeX code for "data rows"---one row for each row of 
+#'   \code{mat}. The function may not produce valid LaTeX output if both   
 #'   \code{SE_table} and \code{headerFooter} are \code{FALSE}.
 #' @param commandName A string. It is the name of the macro that produces the
 #'   LaTeX table (if \code{headerFooter} is \code{TRUE}). By default, it is 
@@ -65,17 +65,17 @@
 #'   \code{latexTable} object be a a call to the macro that creates the table?
 #'   If \code{callCommand} is \code{TRUE}, which is the default, sourcing a 
 #'   file that contains \code{latexTable} output---that is, by using
-#'   \code{\\input} or \code{\\include} in LaTeX---will produce a table when 
-#'   your LaTeX document is rendered. If \code{callCommand} is \code{FALSE}, 
-#'   the macro that can create your table will be included in your LaTeX 
-#'   document, but you will need to manually edit the LaTeX document to call 
-#'   the macro and thereby produce a table when the LaTeX document is 
-#'   rendered.    
+#'   \code{\\input} or \code{\\include} in your master LaTeX document---will 
+#'   produce a table when that master LaTeX document is rendered. If
+#'   \code{callCommand} is \code{FALSE}, sourcing the file will make the macro
+#'   available in your LaTeX document, but it will not call the macro. (You 
+#'   will need to call the macro yourself by adding a line like 
+#'   \code{\\myTable{p}} to your LaTeX document.)
 #' @param label A string. Specifies the LaTeX label for table. It is not printed  
 #'   anywhere in the table or the caption, but references to the figure in 
 #'   your LaTeX document (for example, references created by \code{\\ref} or 
 #'   \code{\\autoref} must be include the label name. For simplicity, the 
-#'   default \code{label} is \code{commandName}.\cr\cr\cr\cr
+#'   default \code{label} is the same as the \code{commandName} argument.\cr\cr\cr\cr
 
 
 #' @param landscape Logical variable. Determines whether the table is printed 
@@ -250,6 +250,16 @@
 # TODO: 
 # --Add a vignette that shows the R code and the LaTeX code, illustrating how 
 #   to call the LaTeX table in R.  [2019 12 14]
+# --Find out why this code is OK
+#     lT1 <- latexTable(matrix(1:16, nrow=4), headerFooter = FALSE)
+#     update(lT1, headerFooter = FALSE)
+#   but this code throws a warning
+#     lT1 <- latexTable(matrix(1:16, nrow=4), headerFooter = FALSE)
+#     update(lT1, headerFooter = FALSE, rowNames = 1:4)
+#  (It shouldn't throw a warning.)  [2019 12 23]
+# --Revisit this line in the "headerFooter} help: "The function may not produce valid LaTeX output if both   
+#'   \code{SE_table} and \code{headerFooter} are \code{FALSE}." Why should this 
+#'   be a problem?  [2019 12 23]
 # --See if I can use clipr::write_clip to copy to clipboard for non-Windows
 #   systems. Try with Ubuntu (in Windows).  [2019 12 08]
 # --Add a numprint option to specify the number of digits in each 
@@ -845,6 +855,7 @@ latexTable <- function(
 
 
 
+
 ##############################################################################
 # HELPER UTILITIES (NOT NEW METHODS FOR GENERICS) 
 ##############################################################################
@@ -1101,3 +1112,5 @@ update.latexTable <- function (object, ...) {
   eval(newCall, parent.frame())
 }
   
+
+
