@@ -12,24 +12,8 @@
 
 
 #' @note
-#' SEE THE VIGNETTE FOR BENEFITS.
-
 #' \emph{Creating PDF tables.} \code{latexTable} tables can be transformed to  
 #' PDF with \code{\link{latexTablePDF}}.\cr\cr
-
-#' \emph{Adjusting LaTeX code "by hand."} Because the returned object is of 
-#' the \code{character} class (in addition to the \code{latexTable} class), it 
-#' can easily be tweaked "by hand" in R after it is generated. And in some 
-#' cases, tweaking may be necessary to get the desired appearance.\cr
-#'   \indent In particular, the formatting of each column is specified with 
-#' \code{numprint} codes, and these rules may need to be tweaked. For example, 
-#' if your column names are long (and not split across multiple lines), you 
-#' may want to modify the object that \code{latexTable} returns. 
-#' Specifically, you may want to change \code{N{2}{2}} in 
-#' the estimate-column specification to \code{N{3}{2}} or \code{N{4}{2}} to 
-#' get the column pair centered beneath its heading. See the \href{http://mirrors.ctan.org/macros/latex/contrib/numprint/numprint.pdf}{documentation for  
-#' the \code{numprint} LaTeX package} for more information on \code{numprint} 
-#' column specifications like \code{N{2}{2}}.\cr\cr
 
 #' \emph{Required LaTeX packages.} The LaTeX code produced by the  
 #'  \code{latexTable} makes use of capabilities provided by the \code{array}, 
@@ -132,7 +116,7 @@
 #'   appear in the next row of the column label, and so{\NB}on.\cr
 #'     \indent By default, column names will be taken from \code{colnames(mat)}.
 #'   If \code{colnames(mat)} is \code{NULL}, columns will be numbered "(1)", 
-#'   "(2)", etc. See \code{\link{colNames_default}()} for more information. 
+#'   "(2)", etc. See \code{\link{lt_colNames_default}()} for more information. 
 #' @param colNameExpand Logical variable. By default, an entry of '' in a
 #'   \code{colNames} list element---that is, an empty entry---indicates that a 
 #'   column should have no column heading. But if \code{colNameExpand} is 
@@ -266,9 +250,6 @@
 # TODO: 
 # --Add a vignette that shows the R code and the LaTeX code, illustrating how 
 #   to call the LaTeX table in R.  [2019 12 14]
-# --Check that LaTeX can't handle macro names that include digits. And if I 
-#   am right about that, add a function that checks to ensure that there are 
-#   no digits in commandName.  [2019 12 07]
 # --See if I can use clipr::write_clip to copy to clipboard for non-Windows
 #   systems. Try with Ubuntu (in Windows).  [2019 12 08]
 # --Add a numprint option to specify the number of digits in each 
@@ -358,10 +339,23 @@ latexTable <- function(
   }
 
   
-  # CHECK ARGUMENTS
+  ############################################################################
+  # CHECK ARGUMENTS 
+  ############################################################################
   if (SE_table && !is.null(colNames) && length(colNames[[1]]) != ncol/2) {
     stop("length of colNames[[1]], ", length(colNames), ", is not half of ncol(mat).")
   }
+  if (grepl('&', columnTierSeparator)) {
+    warning(stringr::str_wrap("columnTierSeparator includes an ampersand.  This is likely to screw up the layout of your table.", 72, exdent = 2))
+  }
+  if (!is.null(captionMargins) && length(captionMargins) != 2) {
+    stop("length(captionMargins) must be NULL or equal 2.")
+  }
+  if (! grepl('^[[:alpha:]]+$', commandName)) {
+    stop("commandName has non-letter characters, but LaTeX macro names must contain only letters")
+  }
+  
+  # SPACER COLUMNS
   if ( any(grepl('&', rowNames)) ) {
     if (! is.null(spacerColumns)) {
       stop("spacerColumns is non-NULL and there are ampersands (perhaps escaped ampersands) in your rowNames.  This is a recipe for havoc.")
@@ -370,23 +364,18 @@ latexTable <- function(
       warning("the ampersands in your rowNames could screw up the table, even if they are escaped.")
     }
   }  
-  if (grepl('&', columnTierSeparator)) {
-    warning(stringr::str_wrap("columnTierSeparator includes an ampersand.  This is likely to screw up the layout of your table.", 72, exdent = 2))
-  }
   if (!is.null(spacerColumns) && colNameExpand) {
     warning("You have specified spacerColumns and colNameExpand is TRUE. The output of the function probably won't be valid; you will probably need to adjust the header to get the column specifications right.")
-  }
-  
+  }  
   if(!is.null(spacerColumns) && max(spacerColumns) >= ncol) {
     stop("max(spacerColumns) must be less than ncol(mat).")
   }
   if (!is.null(spacerColumns) && (ncol %% 2 != 0) && headerFooter) {
     warning("spacerColumns is non-NULL, ncol(mat) is odd, and headerFooter == TRUE.  This combination of options is unlikely to produce a table that will work in LaTeX.")
   }
-  if (!is.null(captionMargins) && length(captionMargins) != 2) {
-    stop("length(captionMargins) must be NULL or equal 2.")
-  }
+
   
+ 
   
   # ADJUST DIGIT SETTINGS  [2014]
   oldDigitsOption <- as.integer(options("digits"))
