@@ -9,12 +9,9 @@
 #' document that contains many different sections and tables. When 
 #' \code{latexTablePDF} is used with \code{writeTex = TRUE}, it will produce a 
 #' single file that contains LaTeX code for all of the tables in your list. 
-#' You can insert those tables into your LaTeX document by adding a 
+#' You can then insert those tables into your LaTeX document by adding a 
 #' single \code{\\input} or \code{\\include} command to your LaTeX document.
-#' Doing so will either insert the tables directly (if you ran  
-#' \code{latexTable()} with \code{callCommand = FALSE} or make available to  
-#' you a set of LaTeX macros that you can use to insert the tables into  
-#' arbitrary places in your LaTeX document.  [PUT THIS INTO THE VIGNETTE!] 
+#' For details, see \href{../doc/tables.html}{\code{vignette("tables", package = "Bullock")}}.
 
 #' @note \emph{Required LaTeX tools.} If \code{writePDF} is \code{TRUE}, 
 #'   \code{pdflatex} must be installed on your system. (It is part of almost 
@@ -23,7 +20,6 @@
 #'   LaTeX packages must be installed: \code{array, booktabs, caption, 
 #'   fancyhdr, geometry, pdflscape, } and \code{ragged2e}. Most of these, and 
 #'   perhaps all of them, are already part of your LaTeX installation.\cr\cr\cr\cr
-
 
 
 #' @family functions for making tables
@@ -46,8 +42,23 @@
 #'     caption    = '\\textit{Sepal length as a function of petal length and petal width.} Lorem ipsum dolor.'
 #'   )
 #'   latexTablePDF(lT1, outputFilenameStem = "irisData")
-#' }
-
+#' 
+#' 
+#'   # Create a PDF or .tex file that contains two tables:
+#'   lm1v <- update(lm1, subset = (Species == 'versicolor'))
+#'   lm2v <- update(lm2, subset = (Species == 'versicolor'))
+#'   lm3v <- update(lm3, subset = (Species == 'versicolor'))
+#'   rT2  <- regTable(list(lm1v, lm2v, lm3v))
+#'   lT2  <- update(lT1, mat = rT2, commandName = "tableVersicolor")
+#' 
+#'   latexTablePDF(                                # PDF with two pages
+#'     lT2, 
+#'     outputFilenameStem = "irisData_twoTables")  
+#'   latexTablePDF(                                # add .tex file with code for two tables
+#'     lT2, 
+#'     outputFilenameStem = "irisData_twoTables",
+#'     writeTex           = TRUE)
+#' }  
 
 
 
@@ -114,13 +125,12 @@
 
 
 # TODO:
-# --Explain how the function can be useful even when not producing PDF. See 
-#   IV_tables_firstStage.R for an example.
-# --Check for existence of pdflatex in the path.  [2019 12 16]
 # --Write a unit test: write a temporary PDF file and then test to see whether
 #   it has actually been written.  [2019 12 16]
 # --Test this function (a) on systems that don't have fontcommands.sty or 
 #   mathcommands.sty installed, and (b) on non-Windows systems.  [2019 12 16]
+# --When multiple tables are in the latexTable list, check to ensure that they
+#   have different command names and different labels.  [2019 12 23]
 
 
 #' @export
@@ -151,6 +161,31 @@ latexTablePDF <- function(
   if ('list' %in% class(latexTable) && any(!grepl('latexTable', sapply(latexTable, class)))) {
     stop("Every element in the latexTable list must be of the 'latexTable' class.")
   }
+  if (writePDF && system2('pdflatex', stdout=FALSE)==127) {
+    stop("pdflatex doesn't seem to be on your path. A PDF file can't be created.")
+  }
+  
+  
+  # CHECK FOR INSTALLED PACKAGES
+  kpsewhichExists <- system2("kpsewhich", "--version", stdout=FALSE, stderr=FALSE)==0  # LaTeX package-checking tool
+  if (containerFilename=='tableContainer.tex' && kpsewhichExists) {
+    requiredPackageList <- qw("array booktabs caption fancyhdr geometry ragged2e")
+    if (writePDF && system2("kpsewhich", paste0(requiredPackageList, ".sty", collapse=' '), stdout=FALSE, stderr=FALSE) == 1) {
+      stop(stringr::str_wrap(
+        string = paste0("It seems that the \"", package, "\" LaTeX package isn't installed. Before you can create a PDF file, you must install it. For details, see the note near the end of the latexTablePDF() help file."),
+        width  = 72,
+        exdent = 2))
+    }
+    else if (writeTex && system2("kpsewhich", paste0(requiredPackageList, ".sty", collapse=' '), stdout=FALSE, stderr=FALSE) == 1) {
+      warning(stringr::str_wrap(
+        string = paste0("It seems that the \"", package, "\" LaTeX package isn't installed. You must install it before you can use the .tex file that you are creating. For details, see the note near the end of the latexTablePDF() help file."),
+        width  = 72,
+        exdent = 2))
+    } 
+  }
+  
+  
+  
   
   # Transform "latexTable" into a list if need be
   if ('latexTable' %in% class(latexTable)) {
