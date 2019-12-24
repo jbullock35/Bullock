@@ -39,6 +39,32 @@
 #' @concept tables
 #' @family functions for making tables
 
+
+#' @examples
+#' data(iris)
+#' lm1 <- lm(Sepal.Length ~ Petal.Length,               data = iris)
+#' lm2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data = iris)
+#' lm3 <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
+#' rT1 <- regTable(list(lm1, lm2, lm3))
+#' latexTable(rT1)
+#' latexTable(rT1, SE_table = FALSE, colNames = lt_colNumbers())
+#' lt2 <- latexTable(
+#'   mat      = rT1, 
+#'   colNames = list(qw("model model model"), qw("1 2 3")))
+#' lt3 <- latexTable(
+#'   mat         = rT1, 
+#'   colNames    = lt_colNumbers(),
+#'   rowNames    = c("Intercept", "Petal length", "Petal width", "Petal length $\\times$ petal width"),
+#'   footerRows  = list(lt_nobsRow(), lt_rSquaredRow()),
+#'   commandName = 'mainEstimates',
+#'   caption     = "Each entry is an estimate or a standard error from a separate OLS regression.")
+#' lt4 <- update(
+#'   lt3,
+#'   commandName = 'myEstimates',  # change name of LaTeX macro
+#'   spacerRows  = 1)              # add vertical space after intercept row
+
+
+
 #' @param mat Matrix of information to be displayed in a LaTeX table.
 #' @param SE_table Logical variable that indicates whether \code{mat} contains
 #'   pairs of columns, with the first column in each pair containing estimates,
@@ -74,7 +100,7 @@
 #' @param label A string. Specifies the LaTeX label for table. It is not printed  
 #'   anywhere in the table or the caption, but references to the figure in 
 #'   your LaTeX document (for example, references created by \code{\\ref} or 
-#'   \code{\\autoref} must be include the label name. For simplicity, the 
+#'   \code{\\autoref}) must be include the label name. For simplicity, the 
 #'   default \code{label} is the same as the \code{commandName} argument.\cr\cr\cr\cr
 
 
@@ -221,28 +247,8 @@
 #'   Works only on Windows.
 
 
-#' @examples
-#' data(iris)
-#' lm1 <- lm(Sepal.Length ~ Petal.Length,               data = iris)
-#' lm2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data = iris)
-#' lm3 <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
-#' rT1 <- regTable(list(lm1, lm2, lm3))
-#' latexTable(rT1)
-#' latexTable(rT1, SE_table = FALSE, colNames = lt_colNumbers())
-#' lt2 <- latexTable(
-#'   mat      = rT1, 
-#'   colNames = list(qw("model model model"), qw("1 2 3")))
-#' lt3 <- latexTable(
-#'   mat         = rT1, 
-#'   colNames    = lt_colNumbers(),
-#'   rowNames    = c("Intercept", "Petal length", "Petal width", "Petal length $\\times$ petal width"),
-#'   footerRows  = list(lt_nobsRow(), lt_rSquaredRow()),
-#'   commandName = 'mainEstimates',
-#'   caption     = "Each entry is an estimate or a standard error from a separate OLS regression.")
-#' lt4 <- update(
-#'   lt3,
-#'   commandName = 'myEstimates',  # change LaTeX command name
-#'   spacerRows = 1)               # add vertical space after intercept row
+
+
 
 
 

@@ -52,10 +52,10 @@ the \code{SE_fontSizeString} argument.}
 \item{headerFooter}{Logical variable. If \code{TRUE}, which is the default,
 the output will be (or at least include) a LaTeX macro that generates a
 table. For example, you will be able to produce a table simply by calling
-\code{\\myTable{p}} or \code{\\myTable{h}} in your LaTeX code.\cr
+\code{\\myTable{p}} or \code{\\myTable{h}} in your master LaTeX document.\cr
 \indent If \code{headerFooter} is \code{FALSE}, the only output of the
-function will be rows from a LaTeX table (possibly including column
-headers). The function may not produce valid LaTeX output if both
+function will be LaTeX code for "data rows"---one row for each row of
+\code{mat}. The function may not produce valid LaTeX output if both
 \code{SE_table} and \code{headerFooter} are \code{FALSE}.}
 
 \item{commandName}{A string. It is the name of the macro that produces the
@@ -67,18 +67,18 @@ LaTeX table (if \code{headerFooter} is \code{TRUE}). By default, it is
 \code{latexTable} object be a a call to the macro that creates the table?
 If \code{callCommand} is \code{TRUE}, which is the default, sourcing a
 file that contains \code{latexTable} output---that is, by using
-\code{\\input} or \code{\\include} in LaTeX---will produce a table when
-your LaTeX document is rendered. If \code{callCommand} is \code{FALSE},
-the macro that can create your table will be included in your LaTeX
-document, but you will need to manually edit the LaTeX document to call
-the macro and thereby produce a table when the LaTeX document is
-rendered.}
+\code{\\input} or \code{\\include} in your master LaTeX document---will
+produce a table when that master LaTeX document is rendered. If
+\code{callCommand} is \code{FALSE}, sourcing the file will make the macro
+available in your LaTeX document, but it will not call the macro. (You
+will need to call the macro yourself by adding a line like
+\code{\\myTable{p}} to your LaTeX document.)}
 
 \item{label}{A string. Specifies the LaTeX label for table. It is not printed
 anywhere in the table or the caption, but references to the figure in
 your LaTeX document (for example, references created by \code{\\ref} or
-\code{\\autoref} must be include the label name. For simplicity, the
-default \code{label} is \code{commandName}.\cr\cr\cr\cr}
+\code{\\autoref}) must be include the label name. For simplicity, the
+default \code{label} is the same as the \code{commandName} argument.\cr\cr\cr\cr}
 
 \item{landscape}{Logical variable. Determines whether the table is printed
 in landscape or in portrait mode. Affects the output only if if
@@ -121,7 +121,7 @@ top row of the column label, the entries in the second list element will
 appear in the next row of the column label, and so{\NB}on.\cr
 \indent By default, column names will be taken from \code{colnames(mat)}.
 If \code{colnames(mat)} is \code{NULL}, columns will be numbered "(1)",
-"(2)", etc. See \code{\link{colNames_default}()} for more information.}
+"(2)", etc. See \code{\link{lt_colNames_default}()} for more information.}
 
 \item{colNameExpand}{Logical variable. By default, an entry of '' in a
 \code{colNames} list element---that is, an empty entry---indicates that a
@@ -232,7 +232,9 @@ by the string.\cr\cr\cr\cr}
 
 \item{clipboard}{Logical variable. Copy entire output to clipboard.
 Useful if you want to paste the output directly into a \code{.tex} file.
-Works only on Windows.}
+Works only on Windows.
+\code{SE_table} and \code{headerFooter} are \code{FALSE}." Why should this
+be a problem?  \link{2019 12 23}}
 }
 \value{
 An object of class \code{latexTable} and \code{character}. The
@@ -247,22 +249,8 @@ a LaTeX macro that creates a well-formatted LaTeX table. It can take many
 arguments to adjust the table's formatting.\improveCSS
 }
 \note{
-SEE THE VIGNETTE FOR BENEFITS.
 \emph{Creating PDF tables.} \code{latexTable} tables can be transformed to
 PDF with \code{\link{latexTablePDF}}.\cr\cr
-\emph{Adjusting LaTeX code "by hand."} Because the returned object is of
-the \code{character} class (in addition to the \code{latexTable} class), it
-can easily be tweaked "by hand" in R after it is generated. And in some
-cases, tweaking may be necessary to get the desired appearance.\cr
-\indent In particular, the formatting of each column is specified with
-\code{numprint} codes, and these rules may need to be tweaked. For example,
-if your column names are long (and not split across multiple lines), you
-may want to modify the object that \code{latexTable} returns.
-Specifically, you may want to change \code{N{2}{2}} in
-the estimate-column specification to \code{N{3}{2}} or \code{N{4}{2}} to
-get the column pair centered beneath its heading. See the \href{http://mirrors.ctan.org/macros/latex/contrib/numprint/numprint.pdf}{documentation for
-the \code{numprint} LaTeX package} for more information on \code{numprint}
-column specifications like \code{N{2}{2}}.\cr\cr
 \emph{Required LaTeX packages.} The LaTeX code produced by the
 \code{latexTable} makes use of capabilities provided by the \code{array},
 \code{booktabs}, \code{caption}, and \code{numprint} LaTeX packages. If
@@ -302,8 +290,8 @@ lt3 <- latexTable(
   caption     = "Each entry is an estimate or a standard error from a separate OLS regression.")
 lt4 <- update(
   lt3,
-  commandName = 'myEstimates',  # change LaTeX command name
-  spacerRows = 1)               # add vertical space after intercept row
+  commandName = 'myEstimates',  # change name of LaTeX macro
+  spacerRows  = 1)              # add vertical space after intercept row
 }
 \seealso{
 Other functions for making tables: 

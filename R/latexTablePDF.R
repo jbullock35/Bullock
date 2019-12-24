@@ -131,6 +131,22 @@
 #   mathcommands.sty installed, and (b) on non-Windows systems.  [2019 12 16]
 # --When multiple tables are in the latexTable list, check to ensure that they
 #   have different command names and different labels.  [2019 12 23]
+# --latexTablePDF() will fail if run on a latexTable with headerFooter = FALSE.
+#   So check for the presence of a header (something like a macro name) so that 
+#   I can give a good error message.  [2019 12 24]
+#   --Better: check to see whether every row ends in \\tabularnewline. That is
+#     a sign that headerFooter == FALSE. But recall that this needs to be done
+#     for every element of the latexTable list that is passed to 
+#     latexTablePDF().  [2019 12 24]
+# --Checking of pdflatex existence and package existence:
+#   --The checking for pdflatex and packages is still too slow. See whether 
+#     there's a way to cache the result so that the full check is done only 
+#     once per session. (I could write a cookie-like file, but would it last?)  
+#     through the session?  [2019 12 24]
+#   --Test for existence of pdflscape package only if at least one table in 
+#     the table list is landscaped. Don't both adding a "landscape" attribute
+#     to the latexTable objects; instead, just grep for "\landscape{" or 
+#     whatever the relevant string is.  [2019 12 23]
 
 
 #' @export
@@ -161,7 +177,7 @@ latexTablePDF <- function(
   if ('list' %in% class(latexTable) && any(!grepl('latexTable', sapply(latexTable, class)))) {
     stop("Every element in the latexTable list must be of the 'latexTable' class.")
   }
-  if (writePDF && system2('pdflatex', stdout=FALSE)==127) {
+  if (writePDF && !nzchar(Sys.which("pdflatex"))) {
     stop("pdflatex doesn't seem to be on your path. A PDF file can't be created.")
   }
   
@@ -183,8 +199,6 @@ latexTablePDF <- function(
         exdent = 2))
     } 
   }
-  
-  
   
   
   # Transform "latexTable" into a list if need be
@@ -333,3 +347,4 @@ latexTablePDF <- function(
   
 }
   
+
