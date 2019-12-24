@@ -5,11 +5,13 @@ Version: 1.19.1.9000
 Date: 2019-12-04
 Authors@R: person("John", "Bullock", email = "john@johnbullock.org", 
   role = c("aut", "cre")) 
-Imports: lmtest, dplyr, gdata, stringr
+Imports: lmtest, magrittr, stringr
 Suggests: 
     ivpack,
     multiwayvcov,
-    testthat
+    testthat,
+    knitr,
+    rmarkdown
 Description: These functions are used in John Bullock's code; they are 
   typically needed for replication purposes. They range in complexity from a 
   function that removes NA values from a vector prior to summing it 
@@ -22,3 +24,4 @@ BugReports: https://github.com/jbullock35/Bullock/issues
 RoxygenNote: 7.0.2
 Encoding: UTF-8
 Language: nob
+VignetteBuilder: knitr

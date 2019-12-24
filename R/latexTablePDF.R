@@ -69,8 +69,8 @@
 #'   the \code{\\begin{document}} and \code{\\end{document}} tags? If you want 
 #'   \code{latexTablePDF} to produce a PDF file, \code{container} must be 
 #'   \code{TRUE}. But if you just want to write \code{latexTable} to disk as 
-#'   a set of .tex files that you will insert into your own larger LaTeX 
-#'   document, \code{container} should probably be \code{FALSE}.  
+#'   a .tex file that you will insert into your own larger LaTeX document,  
+#'   \code{container} should probably be \code{FALSE}.  
 #' @param containerFilename A string. Specifies the path of the "container" 
 #'   LaTeX file into which the \code{latexTable} table or tables will be 
 #'   inserted to make a complete LaTeX file that can be rendered as PDF. By
@@ -96,8 +96,8 @@
 #'   or tables to be rendered are part of a series, and if all tables should 
 #'   share the same number but be distinguished by some secondary character.
 #'   For example, \code{continuedFloatStar} should be true if \code{latexTable} 
-#'   is a list of tables and you all want them to be numbered as Table~3a, 
-#'   Table~3b, etc.\cr
+#'   is a list of tables and you all want them to be numbered as Table{\NB}3a, 
+#'   Table{\NB}3b, etc.\cr
 #'     \indent \code{continuedFloat} and \code{continuedFloatStar} cannot both 
 #'   be \code{TRUE}.
 #' @param firstPageEmpty Logical variable. If \code{TRUE}, the page that 
@@ -107,16 +107,13 @@
 #'   table in \code{latexTable}.)    
 #' @param firstTableNumber Integer. What number should the first table in 
 #'   \code{latexTable} have?\cr
-#'   \indent By default, the table numbering will be "natural." For example, 
-#' if \code{latexTablePDF} is used to produce a PDF document, the first table 
-#' in the document will be Table{\NB}1. And if \code{latexTablePDF} is instead
-#' used to create a .tex file that is to be included in a larger LaTeX 
-#' document, the number of the first \code{latexTable} table will be determined
+#'   \indent By default, the table numbering will be "natural." That is, the 
+#' number of the first \code{latexTable} table will be determined
 #' by the number of preceding tables in the document. For example, if 
-#' you use \code{latexTablePDF} to create a .tex file that you then insert 
+#' you use \code{latexTablePDF()} to create a .tex file that you then insert 
 #' into a larger LaTeX document, and if the .tex file is preceded in the 
-#' LaTeX document by two tables, the first table in \code{latexTable} will be 
-#' Table{\NB}3.\cr\cr\cr\cr
+#' LaTeX document by two tables, the first table created by \code{latexTable()}
+#' will be Table{\NB}3.\cr\cr\cr\cr
 #' 
 #' @param openPDFOnExit Logical variable. Open the PDF file after it is created
 #'   by \code{latexTablePDF}? This argument has an effect only on Windows, and
@@ -125,6 +122,9 @@
 
 
 # TODO:
+# --I think that the LaTeX package-checking isn't working. Check this, and 
+#   then write a test for this. (Make a random string, and then check for a 
+#   package of that name. The test should fail.)  [2019 12 24]
 # --Write a unit test: write a temporary PDF file and then test to see whether
 #   it has actually been written.  [2019 12 16]
 # --Test this function (a) on systems that don't have fontcommands.sty or 
@@ -183,18 +183,18 @@ latexTablePDF <- function(
   
   
   # CHECK FOR INSTALLED PACKAGES
-  kpsewhichExists <- system2("kpsewhich", "--version", stdout=FALSE, stderr=FALSE)==0  # LaTeX package-checking tool
+  kpsewhichExists <- nzchar(Sys.which("kpsewhich"))  # LaTeX package-checking tool
   if (containerFilename=='tableContainer.tex' && kpsewhichExists) {
     requiredPackageList <- qw("array booktabs caption fancyhdr geometry ragged2e")
     if (writePDF && system2("kpsewhich", paste0(requiredPackageList, ".sty", collapse=' '), stdout=FALSE, stderr=FALSE) == 1) {
       stop(stringr::str_wrap(
-        string = paste0("It seems that the \"", package, "\" LaTeX package isn't installed. Before you can create a PDF file, you must install it. For details, see the note near the end of the latexTablePDF() help file."),
+        string = paste0("It seems that a required LaTeX package isn't installed. Before you can create a PDF file, you must install it. For details, see the note near the end of the latexTablePDF() help file."),
         width  = 72,
         exdent = 2))
     }
     else if (writeTex && system2("kpsewhich", paste0(requiredPackageList, ".sty", collapse=' '), stdout=FALSE, stderr=FALSE) == 1) {
       warning(stringr::str_wrap(
-        string = paste0("It seems that the \"", package, "\" LaTeX package isn't installed. You must install it before you can use the .tex file that you are creating. For details, see the note near the end of the latexTablePDF() help file."),
+        string = paste0("It seems that a required LaTeX package isn't installed. You must install it before you can use the .tex file that you are creating. For details, see the note near the end of the latexTablePDF() help file."),
         width  = 72,
         exdent = 2))
     } 

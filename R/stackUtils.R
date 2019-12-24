@@ -5,6 +5,10 @@
 # Jeffrey A. Ryan's code at 
 # http://www.lemnica.com/esotericR/Introducing-Closures/.
 
+# TODO: write an appropriate print method for "stack" objects.  [2019 12 18]
+
+
+#' @export
 new_stack <- function(value = NULL) { 
   stack <- new.env()
   stack$.Data <- vector()

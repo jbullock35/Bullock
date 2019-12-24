@@ -3,7 +3,8 @@
 #' \code{latexTable} takes a single matrix, \code{mat}. By default, it returns 
 #' a LaTeX macro that creates a well-formatted LaTeX table. It can take many 
 #' arguments to adjust the table's formatting.\improveCSS 
-  
+
+
 #' @return An object of class \code{latexTable} and \code{character}. The 
 #' returned object is a vector of strings of LaTeX code; each string is a line
 #' in a LaTeX macro that can create a table. (There is one small exception. If
@@ -69,7 +70,7 @@
 #' @param SE_table Logical variable that indicates whether \code{mat} contains
 #'   pairs of columns, with the first column in each pair containing estimates,
 #'   and the second column containing the corresponding standard errors. 
-#'   (Matrices returned by \code{\link{regTable}} have this form.)
+#'   (Matrices returned by \code{\link[=regTable]{regTable()}} have this form.)
 #'   Defaults to \code{TRUE}. If \code{TRUE}, the even-numbered columns of \code{mat}
 #'   will be rendered in smaller type than the odd-numbered columns: that is,
 #'   the standard errors will be rendered in smaller type than their 
@@ -97,10 +98,10 @@
 #'   available in your LaTeX document, but it will not call the macro. (You 
 #'   will need to call the macro yourself by adding a line like 
 #'   \code{\\myTable{p}} to your LaTeX document.)
-#' @param label A string. Specifies the LaTeX label for table. It is not printed  
-#'   anywhere in the table or the caption, but references to the figure in 
+#' @param label A string. Specifies the LaTeX label for a table. It is not printed  
+#'   anywhere in the table, but references to the figure in 
 #'   your LaTeX document (for example, references created by \code{\\ref} or 
-#'   \code{\\autoref}) must be include the label name. For simplicity, the 
+#'   \code{\\autoref}) must include the label name. For simplicity, the 
 #'   default \code{label} is the same as the \code{commandName} argument.\cr\cr\cr\cr
 
 
@@ -126,7 +127,7 @@
 #'   is typically included in \code{footerRows}. Each element in the list 
 #'   corresponds to a row in the footer. The first entry in each 
 #'   \code{footerRows} list-element should be the row name for the corresponding 
-#'   footer row (e.g., '$N$', '$R^2$').\cr
+#'   footer row (e.g., '$F$', '$R^2$').\cr
 #'     \indent By default, the only footer row indicates the number of 
 #'   observations for each model in \code{mat}.
 #' @param colNames List, or object that can be coerced to a list, of column
@@ -249,13 +250,11 @@
 
 
 
-
-
-
-
 # TODO: 
 # --Add a vignette that shows the R code and the LaTeX code, illustrating how 
 #   to call the LaTeX table in R.  [2019 12 14]
+# --Automatically add R^2 and Std. error of regression lines to the footer 
+#   when all all models are OLS. Start by creating lt_SER_row().  [2019 12 24]
 # --Find out why this code is OK
 #     lT1 <- latexTable(matrix(1:16, nrow=4), headerFooter = FALSE)
 #     update(lT1, headerFooter = FALSE)
@@ -264,8 +263,8 @@
 #     update(lT1, headerFooter = FALSE, rowNames = 1:4)
 #  (It shouldn't throw a warning.)  [2019 12 23]
 # --Revisit this line in the "headerFooter} help: "The function may not produce valid LaTeX output if both   
-#'   \code{SE_table} and \code{headerFooter} are \code{FALSE}." Why should this 
-#'   be a problem?  [2019 12 23]
+#   \code{SE_table} and \code{headerFooter} are \code{FALSE}." Why should this 
+#   be a problem?  [2019 12 23]
 # --See if I can use clipr::write_clip to copy to clipboard for non-Windows
 #   systems. Try with Ubuntu (in Windows).  [2019 12 08]
 # --Add a numprint option to specify the number of digits in each 
