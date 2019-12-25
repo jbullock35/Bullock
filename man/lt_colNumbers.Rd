@@ -9,7 +9,7 @@ lt_colNumbers(mat = sys.frame(-1)$mat, SE_table = sys.frame(-1)$SE_table)
 \arguments{
 \item{mat}{A matrix, typically a \code{regTable} object.}
 
-\item{SE_table}{Logical variable. See \code{\link{latexTable}}.}
+\item{SE_table}{Logical variable. See \linkInt{latexTable}.}
 }
 \value{
 A vector of strings. If \code{SE_table} is \code{TRUE}, the vector 

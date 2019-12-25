@@ -14,7 +14,7 @@
 
 #' @note
 #' \emph{Creating PDF tables.} \code{latexTable} tables can be transformed to  
-#' PDF with \code{\link{latexTablePDF}}.\cr\cr
+#' PDF with \linkInt{latexTablePDF}.\cr\cr
 
 #' \emph{Required LaTeX packages.} The LaTeX code produced by the  
 #'  \code{latexTable} makes use of capabilities provided by the \code{array}, 
@@ -70,7 +70,7 @@
 #' @param SE_table Logical variable that indicates whether \code{mat} contains
 #'   pairs of columns, with the first column in each pair containing estimates,
 #'   and the second column containing the corresponding standard errors. 
-#'   (Matrices returned by \code{\link[=regTable]{regTable()}} have this form.)
+#'   (Matrices returned by \linkInt{regTable} have this form.)
 #'   Defaults to \code{TRUE}. If \code{TRUE}, the even-numbered columns of \code{mat}
 #'   will be rendered in smaller type than the odd-numbered columns: that is,
 #'   the standard errors will be rendered in smaller type than their 
@@ -143,7 +143,7 @@
 #'   appear in the next row of the column label, and so{\NB}on.\cr
 #'     \indent By default, column names will be taken from \code{colnames(mat)}.
 #'   If \code{colnames(mat)} is \code{NULL}, columns will be numbered "(1)", 
-#'   "(2)", etc. See \code{\link{lt_colNames_default}()} for more information. 
+#'   "(2)", etc. See \linkInt{lt_colNames_default} for more information. 
 #' @param colNameExpand Logical variable. By default, an entry of '' in a
 #'   \code{colNames} list element---that is, an empty entry---indicates that a 
 #'   column should have no column heading. But if \code{colNameExpand} is 
@@ -255,6 +255,11 @@
 #   to call the LaTeX table in R.  [2019 12 14]
 # --Automatically add R^2 and Std. error of regression lines to the footer 
 #   when all all models are OLS. Start by creating lt_SER_row().  [2019 12 24]
+# --Add a tablePosition argument that specifies how the table will be placed.
+#   Defaults to "p", such that each table will appear on its own page. Other 
+#   acceptable values are "h", "H", "t", [anything else]? Link to LaTeX float
+#   placement docs, and see if this is a good case for match.arg().  
+#   [2019 12 25]
 # --Find out why this code is OK
 #     lT1 <- latexTable(matrix(1:16, nrow=4), headerFooter = FALSE)
 #     update(lT1, headerFooter = FALSE)
@@ -872,7 +877,7 @@ latexTable <- function(
 #' If \code{colnames(mat)} is not \code{NULL}, this function will use 
 #' \code{colnames(mat)} as the \code{colNames} argument in \code{latexTable()}.
 #' If \code{colnames(mat)} is \code{NULL}, column names will be determined by
-#' \code{\link{lt_colNumbers}()}.
+#' \linkInt{lt_colNumbers}.
 #' 
 #' The function is not exported and is intended to be called only by 
 #' \code{latexTable()}.
@@ -880,7 +885,7 @@ latexTable <- function(
 #' @return A vector of strings. Each string is a column{\NB}name.
 
 #' @param mat A matrix, typically a \code{regTable} object.
-#' @param SE_table Logical variable. See \code{\link{latexTable}}.
+#' @param SE_table Logical variable. See \linkInt{latexTable}.
 lt_colNames_default <- function (  
   # If arguments are not supplied, this function will look to the parent frame
   # for the arguments. Typically, the parent frame will be a latexTable()
@@ -914,7 +919,7 @@ lt_colNames_default <- function (
 #' \code{ncol(mat)}.  
 
 #' @param mat A matrix, typically a \code{regTable} object.
-#' @param SE_table Logical variable. See \code{\link{latexTable}}.
+#' @param SE_table Logical variable. See \linkInt{latexTable}.
 
 #' @export 
 lt_colNumbers <- function (

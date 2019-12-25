@@ -42,7 +42,7 @@ latexTable(
 \item{SE_table}{Logical variable that indicates whether \code{mat} contains
 pairs of columns, with the first column in each pair containing estimates,
 and the second column containing the corresponding standard errors.
-(Matrices returned by \code{\link{regTable}} have this form.)
+(Matrices returned by \linkInt{regTable} have this form.)
 Defaults to \code{TRUE}. If \code{TRUE}, the even-numbered columns of \code{mat}
 will be rendered in smaller type than the odd-numbered columns: that is,
 the standard errors will be rendered in smaller type than their
@@ -74,10 +74,10 @@ available in your LaTeX document, but it will not call the macro. (You
 will need to call the macro yourself by adding a line like
 \code{\\myTable{p}} to your LaTeX document.)}
 
-\item{label}{A string. Specifies the LaTeX label for table. It is not printed
-anywhere in the table or the caption, but references to the figure in
+\item{label}{A string. Specifies the LaTeX label for a table. It is not printed
+anywhere in the table, but references to the figure in
 your LaTeX document (for example, references created by \code{\\ref} or
-\code{\\autoref}) must be include the label name. For simplicity, the
+\code{\\autoref}) must include the label name. For simplicity, the
 default \code{label} is the same as the \code{commandName} argument.\cr\cr\cr\cr}
 
 \item{landscape}{Logical variable. Determines whether the table is printed
@@ -104,7 +104,7 @@ rows. Information about N and \ifelse{html}{\out{R<sup>2</sup>}}{\eqn{R^2}}
 is typically included in \code{footerRows}. Each element in the list
 corresponds to a row in the footer. The first entry in each
 \code{footerRows} list-element should be the row name for the corresponding
-footer row (e.g., '$N$', '$R^2$').\cr
+footer row (e.g., '$F$', '$R^2$').\cr
 \indent By default, the only footer row indicates the number of
 observations for each model in \code{mat}.}
 
@@ -121,7 +121,7 @@ top row of the column label, the entries in the second list element will
 appear in the next row of the column label, and so{\NB}on.\cr
 \indent By default, column names will be taken from \code{colnames(mat)}.
 If \code{colnames(mat)} is \code{NULL}, columns will be numbered "(1)",
-"(2)", etc. See \code{\link{lt_colNames_default}()} for more information.}
+"(2)", etc. See \linkInt{lt_colNames_default} for more information.}
 
 \item{colNameExpand}{Logical variable. By default, an entry of '' in a
 \code{colNames} list element---that is, an empty entry---indicates that a
@@ -232,9 +232,7 @@ by the string.\cr\cr\cr\cr}
 
 \item{clipboard}{Logical variable. Copy entire output to clipboard.
 Useful if you want to paste the output directly into a \code{.tex} file.
-Works only on Windows.
-\code{SE_table} and \code{headerFooter} are \code{FALSE}." Why should this
-be a problem?  \link{2019 12 23}}
+Works only on Windows.}
 }
 \value{
 An object of class \code{latexTable} and \code{character}. The
@@ -250,7 +248,7 @@ arguments to adjust the table's formatting.\improveCSS
 }
 \note{
 \emph{Creating PDF tables.} \code{latexTable} tables can be transformed to
-PDF with \code{\link{latexTablePDF}}.\cr\cr
+PDF with \linkInt{latexTablePDF}.\cr\cr
 \emph{Required LaTeX packages.} The LaTeX code produced by the
 \code{latexTable} makes use of capabilities provided by the \code{array},
 \code{booktabs}, \code{caption}, and \code{numprint} LaTeX packages. If

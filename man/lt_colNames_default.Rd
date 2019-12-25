@@ -12,7 +12,7 @@ lt_colNames_default(
 \arguments{
 \item{mat}{A matrix, typically a \code{regTable} object.}
 
-\item{SE_table}{Logical variable. See \code{\link{latexTable}}.}
+\item{SE_table}{Logical variable. See \linkInt{latexTable}.}
 }
 \value{
 A vector of strings. Each string is a column{\NB}name.
@@ -21,7 +21,7 @@ A vector of strings. Each string is a column{\NB}name.
 If \code{colnames(mat)} is not \code{NULL}, this function will use 
 \code{colnames(mat)} as the \code{colNames} argument in \code{latexTable()}.
 If \code{colnames(mat)} is \code{NULL}, column names will be determined by
-\code{\link{lt_colNumbers}()}.
+\linkInt{lt_colNumbers}.
 }
 \details{
 The function is not exported and is intended to be called only by 
