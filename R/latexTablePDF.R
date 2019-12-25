@@ -122,9 +122,6 @@
 
 
 # TODO:
-# --I think that the LaTeX package-checking isn't working. Check this, and 
-#   then write a test for this. (Make a random string, and then check for a 
-#   package of that name. The test should fail.)  [2019 12 24]
 # --Write a unit test: write a temporary PDF file and then test to see whether
 #   it has actually been written.  [2019 12 16]
 # --Test this function (a) on systems that don't have fontcommands.sty or 
@@ -185,21 +182,15 @@ latexTablePDF <- function(
   # CHECK FOR INSTALLED PACKAGES
   kpsewhichExists <- nzchar(Sys.which("kpsewhich"))  # LaTeX package-checking tool
   if (containerFilename=='tableContainer.tex' && kpsewhichExists) {
-    requiredPackageList <- qw("array booktabs caption fancyhdr geometry ragged2e")
-    if (writePDF && system2("kpsewhich", paste0(requiredPackageList, ".sty", collapse=' '), stdout=FALSE, stderr=FALSE) == 1) {
-      stop(stringr::str_wrap(
-        string = paste0("It seems that a required LaTeX package isn't installed. Before you can create a PDF file, you must install it. For details, see the note near the end of the latexTablePDF() help file."),
-        width  = 72,
-        exdent = 2))
+    requiredPackageList  <- qw("array booktabs caption fancyhdr geometry ragged2e")
+    installedPackageList <- system2(
+      command = "kpsewhich", 
+      args    = paste0(requiredPackageList, ".sty", collapse=' '), 
+      stdout  = TRUE)
+    if (length(installedPackageList) < length(requiredPackageList)) {  # if a package is missing
+      missingPackageString(installedPackageList, requiredPackageList, writePDF, writeTex)  
     }
-    else if (writeTex && system2("kpsewhich", paste0(requiredPackageList, ".sty", collapse=' '), stdout=FALSE, stderr=FALSE) == 1) {
-      warning(stringr::str_wrap(
-        string = paste0("It seems that a required LaTeX package isn't installed. You must install it before you can use the .tex file that you are creating. For details, see the note near the end of the latexTablePDF() help file."),
-        width  = 72,
-        exdent = 2))
-    } 
   }
-  
   
   # Transform "latexTable" into a list if need be
   if ('latexTable' %in% class(latexTable)) {
@@ -347,4 +338,3 @@ latexTablePDF <- function(
   
 }
   
-
