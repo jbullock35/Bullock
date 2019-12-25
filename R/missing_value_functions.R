@@ -1,7 +1,8 @@
 #' Missing-value helper functions.
 #' 
 #' Functions to make code a little clearer. These are mainly ordinary functions,
-#' like \code{mean()}, with \code{na.rm} set to \code{TRUE}.
+#' like \code{mean()}, with \code{na.rm} set to \code{TRUE}. For example, 
+#' \code{meanNA()} is defined as \code{function(x) mean(x, na.rm = TRUE)}.
 #' 
 #' \code{lNA(x)} returns its value silently. \code{lNAv} is shorthand for 
 #' \code{lNA(x, verbose = TRUE)}; it returns the same value as \code{lNA(x)}  
