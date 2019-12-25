@@ -1,35 +1,49 @@
-lNA <- function(x, verbose = FALSE) {   # returns length of object without NAs
+#' Missing-value helper functions.
+#' 
+#' Functions to make code a little clearer. These are mainly ordinary functions,
+#' like \code{mean()}, with \code{na.rm} set to \code{TRUE}.
+#' 
+#' \code{lNA(x)} returns its value silently. \code{lNAv} is shorthand for 
+#' \code{lNA(x, verbose = TRUE)}; it returns the same value as \code{lNA(x)}  
+#' but also prints the lengths of the vector before and after NAs are removed.
+
+
+#' @examples 
+#' x <- c(1:3, NA, 5)
+#' lNA(x)
+#' lNAv(x)
+#' 
+#' sum(x)    # returns NA
+#' sumNA(x)  # returns 11
+#' meanNA(x)
+#' 
+#' sdNA(x)
+#' varNA(x)
+
+
+#' @param x An R object. 
+#' @param verbose Logical variable. If \code{TRUE}, \code{lNA} will print the 
+#'   lengths of \code{x} before and after \code{NA} values have been removed.
+#' @name missingValueFunctions
+
+#' @rdname missingValueFunctions
+lNA <- function(x, verbose = FALSE) {   
   y <- length(x[!is.na(x)])
   if (verbose) print(noquote(paste0(y, " (length with NA=",length(x), ")")))
   y
 }
 
+#' @rdname missingValueFunctions
 lNAv <- function (x) lNA(x, verbose = TRUE)
 
-meanNA <- function(x) { return(mean(x,na.rm=TRUE)) }
+#' @rdname missingValueFunctions
+meanNA <- function(x) mean(x, na.rm = TRUE)
 
-sdNA <- function(x,na.rm=TRUE) { # borrowed from the R code -- only the default na.rm setting has changed.
-  if (is.matrix(x)) 
-      apply(x, 2, sd, na.rm = na.rm)
-  else if (is.vector(x)) 
-      sqrt(var(x, na.rm = na.rm))
-  else if (is.data.frame(x)) 
-      sapply(x, sd, na.rm = na.rm)
-  else sqrt(var(as.vector(x), na.rm = na.rm))
-}
+#' @rdname missingValueFunctions
+sdNA <- function(x)  sd(x, na.rm = TRUE)
     
-sumNA <- function(x) { return(sum(x, na.rm=TRUE)) }
+#' @rdname missingValueFunctions
+sumNA <- function(x) sum(x, na.rm = TRUE)
 
-varNA <- function(x) {var(x, na.rm=TRUE)}
-# varNA <- function (x, y = NULL, na.rm=T, use) { # borrowed from the R code -- only the default na.rm setting has changed.
-#    if (missing(use)) 
-#        use <- if (na.rm) 
-#            "complete.obs"
-#        else "all.obs"
-#    na.method <- pmatch(use, c("all.obs", "complete.obs", "pairwise.complete.obs"))
-#    if (is.data.frame(x)) 
-#        x <- as.matrix(x)
-#    if (is.data.frame(y)) 
-#        y <- as.matrix(y)
-#    .Internal(cov(x, y, na.method))
-#    }
+#' @rdname missingValueFunctions
+varNA <- function(x) var(x, na.rm = TRUE)
