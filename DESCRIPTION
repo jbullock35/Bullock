@@ -3,8 +3,12 @@ Type: Package
 Title: Miscellaneous helper utilities for use with John Bullock's code
 Version: 1.19.1.9000
 Date: 2019-12-04
-Authors@R: person("John", "Bullock", email = "john@johnbullock.org", 
-  role = c("aut", "cre")) 
+Authors@R: c(
+  person("John", "Bullock", email = "john@johnbullock.org", role = c("aut", "cre")),
+  person("Jeffrey", "Ryan", role = "aut"),
+  person("Florent", "Delmotte", role = "ctb"),
+  person("Dirk", "Edelbuettel", role = "ctb"),
+  person("JD", "Long", role = "ctb")) 
 Imports: lmtest, magrittr, stringr
 Suggests: 
     ivpack,
