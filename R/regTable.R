@@ -2,7 +2,7 @@
 #' 
 #' \code{regTable} takes a list of regression objects, such as those created 
 #' by \code{lm}. It returns a matrix in which the columns are estimates and 
-#' standard errors -- two columns for each model. \improveCSS
+#' standard errors -- two columns for each model. 
 
 #' @importFrom magrittr %>%
 

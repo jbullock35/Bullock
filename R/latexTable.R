@@ -2,7 +2,7 @@
 #' 
 #' \code{latexTable} takes a single matrix, \code{mat}. By default, it returns 
 #' a LaTeX macro that creates a well-formatted LaTeX table. It can take many 
-#' arguments to adjust the table's formatting.\improveCSS 
+#' arguments to adjust the table's formatting. 
 
 
 #' @return An object of class \code{latexTable} and \code{character}. The 
@@ -173,7 +173,7 @@
 #'  * If \code{SE_table} is \code{TRUE}, there is a spacer column after  
 #'    every even-numbered column in \code{mat}, except for the last column.  
 #'  * If \code{rowNames} is not \code{NULL}, a spacer column is inserted 
-#'    between the table's row names and the first column of data.\improveCSS\cr
+#'    between the table's row names and the first column of data.\cr
 #'     \indent To add a spacerColumn between the rownames and the first data column, 
 #'   make 0 one of the values in spacerColumns.\cr
 #'     \indent \code{colNameExpand} and \code{spacerColumns} do not play well 
@@ -1011,7 +1011,7 @@ lt_rSquaredRow <- function (
 #' * If \code{SE_table} is \code{TRUE}, there is a spacer column after every 
 #' even-numbered column in \code{mat}, except for the last column.  
 #' * If \code{rowNames} is not \code{NULL}, a spacer column is inserted between
-#' the table's row names and the first column of data.\improveCSS
+#' the table's row names and the first column of data.
 #' @md
 
 #' @details 
