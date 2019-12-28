@@ -29,8 +29,8 @@ be inserted into a LaTeX file that contains a complete LaTeX preamble and
 the \code{\\begin{document}} and \code{\\end{document}} tags? If you want 
 \code{latexTablePDF} to produce a PDF file, \code{container} must be 
 \code{TRUE}. But if you just want to write \code{latexTable} to disk as 
-a set of .tex files that you will insert into your own larger LaTeX 
-document, \code{container} should probably be \code{FALSE}.}
+a .tex file that you will insert into your own larger LaTeX document,  
+\code{container} should probably be \code{FALSE}.}
 
 \item{containerFilename}{A string. Specifies the path of the "container" 
 LaTeX file into which the \code{latexTable} table or tables will be 
@@ -63,8 +63,8 @@ numbered as Table{\NB}3.}
 or tables to be rendered are part of a series, and if all tables should 
 share the same number but be distinguished by some secondary character.
 For example, \code{continuedFloatStar} should be true if \code{latexTable} 
-is a list of tables and you all want them to be numbered as Table~3a, 
-Table~3b, etc.\cr
+is a list of tables and you all want them to be numbered as Table{\NB}3a, 
+Table{\NB}3b, etc.\cr
   \indent \code{continuedFloat} and \code{continuedFloatStar} cannot both 
 be \code{TRUE}.}
 
@@ -76,16 +76,13 @@ table in \code{latexTable}.)}
 
 \item{firstTableNumber}{Integer. What number should the first table in 
   \code{latexTable} have?\cr
-  \indent By default, the table numbering will be "natural." For example, 
-if \code{latexTablePDF} is used to produce a PDF document, the first table 
-in the document will be Table{\NB}1. And if \code{latexTablePDF} is instead
-used to create a .tex file that is to be included in a larger LaTeX 
-document, the number of the first \code{latexTable} table will be determined
+  \indent By default, the table numbering will be "natural." That is, the 
+number of the first \code{latexTable} table will be determined
 by the number of preceding tables in the document. For example, if 
-you use \code{latexTablePDF} to create a .tex file that you then insert 
+you use \code{latexTablePDF()} to create a .tex file that you then insert 
 into a larger LaTeX document, and if the .tex file is preceded in the 
-LaTeX document by two tables, the first table in \code{latexTable} will be 
-Table{\NB}3.\cr\cr\cr\cr}
+LaTeX document by two tables, the first table created by \code{latexTable()}
+will be Table{\NB}3.\cr\cr\cr\cr}
 
 \item{openPDFOnExit}{Logical variable. Open the PDF file after it is created
 by \code{latexTablePDF}? This argument has an effect only on Windows, and
@@ -102,12 +99,9 @@ produced by \code{latexTable()} and a complex LaTeX
 document that contains many different sections and tables. When 
 \code{latexTablePDF} is used with \code{writeTex = TRUE}, it will produce a 
 single file that contains LaTeX code for all of the tables in your list. 
-You can insert those tables into your LaTeX document by adding a 
+You can then insert those tables into your LaTeX document by adding a 
 single \code{\\input} or \code{\\include} command to your LaTeX document.
-Doing so will either insert the tables directly (if you ran  
-\code{latexTable()} with \code{callCommand = FALSE} or make available to  
-you a set of LaTeX macros that you can use to insert the tables into  
-arbitrary places in your LaTeX document.  [PUT THIS INTO THE VIGNETTE!]
+For details, see \href{../doc/tables.html}{\code{vignette("tables", package = "Bullock")}}.
 }
 \note{
 \emph{Required LaTeX tools.} If \code{writePDF} is \code{TRUE}, 
@@ -132,10 +126,29 @@ arbitrary places in your LaTeX document.  [PUT THIS INTO THE VIGNETTE!]
     rowNames   = c("Intercept", "Petal length", "Petal width", "Petal length $\\\\times$ petal width"),
     footerRows = list(lt_nobsRow(), lt_rSquaredRow()),
     spacerRows = 1,  # insert white space between Intercept row and other rows
-    caption    = '\\\\textit{Sepal length as a function of petal length and petal width.} Lorem ipsum dolor.'
+    caption    = paste0(
+      "\\\\textit{Sepal length as a function of petal length and petal width.} ",
+      "Entries are estimates and standard errors from OLS regressions..."
+    )
   )
   latexTablePDF(lT1, outputFilenameStem = "irisData")
-}
+
+
+  # Create a PDF or .tex file that contains two tables:
+  lm1v <- update(lm1, subset = (Species == 'versicolor'))
+  lm2v <- update(lm2, subset = (Species == 'versicolor'))
+  lm3v <- update(lm3, subset = (Species == 'versicolor'))
+  rT2  <- regTable(list(lm1v, lm2v, lm3v))
+  lT2  <- update(lT1, mat = rT2, commandName = "tableVersicolor")
+
+  latexTablePDF(                                # PDF with two pages
+    lT2, 
+    outputFilenameStem = "irisData_twoTables")  
+  latexTablePDF(                                # add .tex file with code for two tables
+    lT2, 
+    outputFilenameStem = "irisData_twoTables",
+    writeTex           = TRUE)
+}  
 }
 \seealso{
 Other functions for making tables: 

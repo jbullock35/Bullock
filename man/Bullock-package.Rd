@@ -30,5 +30,17 @@ Useful links:
 \author{
 \strong{Maintainer}: John Bullock \email{john@johnbullock.org}
 
+Authors:
+\itemize{
+  \item Jeffrey Ryan
+}
+
+Other contributors:
+\itemize{
+  \item Florent Delmotte [contributor]
+  \item Dirk Edelbuettel [contributor]
+  \item JD Long [contributor]
+}
+
 }
 \keyword{internal}

@@ -30,7 +30,8 @@ lengths of \code{x} before and after \code{NA} values have been removed.}
 }
 \description{
 Functions to make code a little clearer. These are mainly ordinary functions,
-like \code{mean()}, with \code{na.rm} set to \code{TRUE}.
+like \code{mean()}, with \code{na.rm} set to \code{TRUE}. For example, 
+\code{meanNA()} is defined as \code{function(x) mean(x, na.rm = TRUE)}.
 }
 \details{
 \code{lNA(x)} returns its value silently. \code{lNAv} is shorthand for 

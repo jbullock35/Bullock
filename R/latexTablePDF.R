@@ -39,7 +39,10 @@
 #'     rowNames   = c("Intercept", "Petal length", "Petal width", "Petal length $\\times$ petal width"),
 #'     footerRows = list(lt_nobsRow(), lt_rSquaredRow()),
 #'     spacerRows = 1,  # insert white space between Intercept row and other rows
-#'     caption    = '\\textit{Sepal length as a function of petal length and petal width.} Lorem ipsum dolor.'
+#'     caption    = paste0(
+#'       "\\textit{Sepal length as a function of petal length and petal width.} ",
+#'       "Entries are estimates and standard errors from OLS regressions..."
+#'     )
 #'   )
 #'   latexTablePDF(lT1, outputFilenameStem = "irisData")
 #' 

@@ -251,8 +251,6 @@
 
 
 # TODO: 
-# --Add a vignette that shows the R code and the LaTeX code, illustrating how 
-#   to call the LaTeX table in R.  [2019 12 14]
 # --Automatically add R^2 and Std. error of regression lines to the footer 
 #   when all all models are OLS. Start by creating lt_SER_row().  [2019 12 24]
 # --Add a tablePosition argument that specifies how the table will be placed.

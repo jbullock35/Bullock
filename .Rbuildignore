@@ -1,3 +1,10 @@
+^.gitignore$
+^.project$
 ^README$
 ^Read-and-delete-me$
 ^tmp.*
+^.*\.Rproj$
+^\.Rproj\.user$
+^.settings$
+^doc$
+^Meta$
