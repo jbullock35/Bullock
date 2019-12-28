@@ -65,7 +65,6 @@
 #'   spacerRows  = 1)              # add vertical space after intercept row
 
 
-
 #' @param mat Matrix of information to be displayed in a LaTeX table.
 #' @param SE_table Logical variable that indicates whether \code{mat} contains
 #'   pairs of columns, with the first column in each pair containing estimates,
@@ -248,11 +247,20 @@
 #'   Works only on Windows.
 
 
-
-
 # TODO: 
 # --Automatically add R^2 and Std. error of regression lines to the footer 
-#   when all all models are OLS. Start by creating lt_SER_row().  [2019 12 24]
+#   when all models are OLS. [2019 12 28]
+#   --Pick up by getting lt_SER_row to get the number of decimal places right,
+#     and to eliminate the leading zero (if there is one). lt_rSquaredRow()
+#     does these things well.  [2019 12 28]
+#   --Write a test to ensure that the R^2 and SER lines are good. I will need 
+#     to write a regexp that matches multiple lines.  [2019 12 28]
+#   --Figure out why latexTable(rT1, footerRows = lt_footer()) doesn't work.
+#     It should, and the problem must have something to do with environments.
+#     [2019 12 28]
+#   --Then solve the related problem with 
+#     latexTable(rT1, footerRows = lt_rSquaredRow()).  [2019 12 28]
+
 # --Add a tablePosition argument that specifies how the table will be placed.
 #   Defaults to "p", such that each table will appear on its own page. Other 
 #   acceptable values are "h", "H", "t", [anything else]? Link to LaTeX float
@@ -284,6 +292,8 @@
 
 
 
+
+
 #' @export
 latexTable <- function(
   mat, 
@@ -298,7 +308,7 @@ latexTable <- function(
   horizOffset         = '-0in',
   
   rowNames            = rownames(mat), 
-  footerRows          = if (is.null(rowNames)) NULL else lt_nobsRow(),
+  footerRows          = lt_footer(),
   colNames            = lt_colNames_default(),
   colNameExpand       = FALSE,
 
@@ -323,6 +333,7 @@ latexTable <- function(
   clipboard           = FALSE) {
   
   
+    
   # STORE CALL FOR LATER USE
   # In case user wants to update the latexTable object with update.latexTable.
   # [2019 12 19]
@@ -339,8 +350,13 @@ latexTable <- function(
   #
   # TODO: can I get around this by using "force(rowNames)" and "force(colNames)"?
   # See http://adv-r.had.co.nz/Functions.html#all-calls.  [2019 12 20]
-  rowNames   <- rowNames
-  colNames   <- colNames 
+  # --Replacing the "decimalPlaces" assignment with force(decimalPlaces) 
+  #   doesn't work; instead, I get an error from lt_rSquaredRow(). Perhaps   
+  #   it would work if force(decimalPlaces) were called from lt_footer().
+  #   Date: 2019 12 28
+  rowNames      <- rowNames
+  colNames      <- colNames 
+  decimalPlaces <- decimalPlaces  
   
   if (! is.null(colNames)) {
     colNames <- if (is.list(colNames)) colNames else list(colNames)
@@ -870,7 +886,7 @@ latexTable <- function(
 
 
 
-#' Compute default column names in calls to latexTable().
+#' Compute default column names for latexTable objects.
 #' 
 #' If \code{colnames(mat)} is not \code{NULL}, this function will use 
 #' \code{colnames(mat)} as the \code{colNames} argument in \code{latexTable()}.
@@ -878,7 +894,7 @@ latexTable <- function(
 #' \linkInt{lt_colNumbers}.
 #' 
 #' The function is not exported and is intended to be called only by 
-#' \code{latexTable()}.
+#' \linkInt{latexTable}.
 
 #' @return A vector of strings. Each string is a column{\NB}name.
 
@@ -904,6 +920,59 @@ lt_colNames_default <- function (
 
 
 
+#' Compute default footers for latexTable() objects.
+ 
+#' @description 
+#' The default footer row or rows are determined in this way: if 
+#' \code{SE_table} is \code{FALSE} or \code{rowNames} is \code{NULL}, 
+#' no footer rows are produced. Otherwise, a footer row will be added for each 
+#' of the following attributes of \code{mat}: "r.squared", "SER", and "N". If 
+#' \code{mat} lacks one of those attributes, there will be no corresponding 
+#' footer{\NB}row.   
+
+
+#' The function is not exported and is intended to be called only by 
+#' \linkInt{latexTable}.
+#' 
+#' @return A list of string vectors. Each list element contains the strings
+#' needed to produce a footer{\NB}row.
+#' 
+#' @param mat A matrix, typically a \code{regTable} object.
+#' @param rowNames Character vector. See \linkInt{latexTable}.
+#' @param SE_table Logical variable. See \linkInt{latexTable}.
+lt_footer <- function (  
+  # If arguments are not supplied, this function will look to the parent frame
+  # for the arguments. Typically, the parent frame will be a latexTable()
+  # call.  [2019 12 21]
+  mat           = parent.frame()$mat,
+  rowNames      = parent.frame()$rowNames,
+  SE_table      = parent.frame()$SE_table,
+  decimalPlaces = parent.frame()$decimalPlaces) { 
+
+  # Force evaluation -- that is, escape lazy evaluation. Without this command,
+  # lt_rSquaredRow() will throw an error. The problem is that decimalPlaces is
+  # in the parent frame when lt_footer() is called, but not when 
+  # lt_rSquaredRow() is called.  /2019 12 28/
+  force(decimalPlaces)  
+  
+  if (SE_table && !is.null(rowNames)) {
+    footerList <- list()
+
+    if (!is.null(attr(mat, "r.squared")))
+      footerList <- c(footerList, lt_rSquaredRow(mat, decimalPlaces) %>% list)
+    if (!is.null(attr(mat, "SER")))
+      footerList <- c(footerList, lt_SER_row(mat, decimalPlaces) %>% list)
+    if (!is.null(attr(mat, "N")))
+      footerList <- c(footerList, lt_nobsRow(mat) %>% list)
+  }
+  
+  if ( !exists('footerList') || length(footerList)==0 ) footerList <- NULL
+  
+  footerList
+}
+
+
+
 
 #' Automatically determine column names of the form (1), (2), etc.
 #' 
@@ -921,8 +990,8 @@ lt_colNames_default <- function (
 
 #' @export 
 lt_colNumbers <- function (
-  mat      = sys.frame(-1)$mat, 
-  SE_table = sys.frame(-1)$SE_table) {
+  mat      = parent.frame()$mat, 
+  SE_table = parent.frame()$SE_table) {
 
   if (SE_table) {
     colNames <- paste0("(", 1:(ncol(mat)/2), ")")
@@ -948,7 +1017,7 @@ lt_colNumbers <- function (
 #' @param mat A \code{regTable} object.
 
 #' @export
-lt_nobsRow <- function (mat = sys.frame(-1)$mat) {
+lt_nobsRow <- function (mat = parent.frame()$mat) {
 
   if (! 'regTable' %in% class(mat)) {
     warning("mat was not produced with regTable(). The number-of-observations row in your footer is unlikely to be correct. You may want to specify your footerRows argument explicitly.")
@@ -976,12 +1045,12 @@ lt_nobsRow <- function (mat = sys.frame(-1)$mat) {
 
 #' @export 
 lt_rSquaredRow <- function (
-  
+
   # We specify the default arguments this way so that end users can write a 
   # latexTable() command with footerRows = lt_rSquaredRow(), and not need to 
   # specify any additional arguments.  [2019 12 21]
-  mat = sys.frame(-1)$mat,
-  decimalPlaces = sys.frame(-1)$decimalPlaces) {
+  mat = parent.frame()$mat,
+  decimalPlaces = parent.frame()$decimalPlaces) {
 
   if (! 'regTable' %in% class(mat)) 
     stop("The lt_rsquaredRow() function requires that mat be produced by regTable().")
@@ -992,6 +1061,40 @@ lt_rSquaredRow <- function (
   c("R$^2$", round(attr(mat, "r.squared"), decimalPlaces))
 }
 
+
+
+#' Specify a footer row that indicates the standard error of regression for each model
+#' 
+#' Given a \code{mat} produced by \code{\link{regTable}()} in which all
+#' regressions are of class \code{lm}, this function returns a footer row that 
+#' indicates the standard error of regression (i.e., \eqn{\sigma}, the 
+#' "residual standard error") for each model in \code{mat}.
+
+#' @return A vector of strings. The first element in the vector is "Std. error
+#' of regression". The remaining elements are strings that indicate the SER 
+#' for each model in \code{mat}.  The strings are rounded to the number of 
+#' digits specified by the \code{decimalPlaces} argument.
+
+#' @param mat A matrix, typically a \code{regTable} object.
+#' @param decimalPlaces Integer. See \code{\link{latexTable}}.
+
+#' @export 
+lt_SER_row <- function (
+  
+  # We specify the default arguments this way so that end users can write a 
+  # latexTable() command with footerRows = lt_rSquaredRow(), and not need to 
+  # specify any additional arguments.  [2019 12 21]
+  mat = parent.frame()$mat,
+  decimalPlaces = parent.frame()$decimalPlaces) {
+
+  if (! 'regTable' %in% class(mat)) 
+    stop("The lt_SER_row() function requires that mat be produced by regTable().")
+  
+  if (is.null(attr(mat, "r.squared")))
+    stop("mat doesn't have an 'SER' attribute, perhaps because some of the regressions in mat were not created by lm().")
+     
+  c("Std. error of regression", round(attr(mat, "SER"), decimalPlaces))
+}
 
 
 
@@ -1014,7 +1117,7 @@ lt_rSquaredRow <- function (
 
 #' @details 
 #' The function is not exported and is intended to be called only by 
-#' \code{latexTable()}.
+#' \linkInt{latexTable}.
 
 #' @return A vector of integers.
 

@@ -31,6 +31,14 @@
 #'  regressions in \code{objList} are instead of class \code{ivreg},
 #' \code{clustervar} is passed to \code{ivpack::cluster.robust.se}.
 
+#' @return A matrix in which the columns are estimates and 
+#' standard errors -- two columns for each model. The matrix has an "N"
+#' attribute that indicates the number of observations for each regression. If
+#' all regressions were of class \code{lm}, it also has the "r.squared" and 
+#' "SER" attributes. (The "SER" attribute indicates the standard error of 
+#' regression -- AKA \eqn{\sigma} or the "residual standard error" --- for 
+#' each model.)
+
 
 #' @note Before \code{regTable} was incorporated into this package,
 #' it used the \code{rowsToKeep} argument differently: variables were kept 
@@ -185,10 +193,13 @@ regTable <- function (
   class(out) <- c('regTable', class(out))  
   attr(out, "N")    <- sapply(objList, nobs)
   if ( all('lm' %in% sapply(objList, class)) ) {  # if every model is an lm() model 
-    attr(out, "r.squared") <- sapply(objList, function (x) summary(x)$r.squared)
+    objListSum <- sapply(objList, function (x) summary(x)[c('r.squared', 'sigma')] )
+    attr(out, "r.squared") <- as.numeric( objListSum['r.squared', ] )
+    attr(out, "SER")       <- as.numeric( objListSum['sigma', ] )
   }
   out
 }
+
 
 
 # Set up print method for regTable, so that print(regTable) doesn't list 

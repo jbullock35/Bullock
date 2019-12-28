@@ -15,7 +15,7 @@ latexTable(
   starredFloat = FALSE,
   horizOffset = "-0in",
   rowNames = rownames(mat),
-  footerRows = if (is.null(rowNames)) NULL else lt_nobsRow(),
+  footerRows = lt_footer(),
   colNames = lt_colNames_default(),
   colNameExpand = FALSE,
   extraRowHeight = if (SE_table) "2pt" else "4pt",
@@ -153,7 +153,7 @@ every column in \code{mat}.
 \item If \code{SE_table} is \code{TRUE}, there is a spacer column after
 every even-numbered column in \code{mat}, except for the last column.
 \item If \code{rowNames} is not \code{NULL}, a spacer column is inserted
-between the table's row names and the first column of data.\improveCSS\cr
+between the table's row names and the first column of data.\cr
 \indent To add a spacerColumn between the rownames and the first data column,
 make 0 one of the values in spacerColumns.\cr
 \indent \code{colNameExpand} and \code{spacerColumns} do not play well
@@ -244,7 +244,7 @@ instead, it calls the macro, thereby telling LaTeX to display the table).
 \description{
 \code{latexTable} takes a single matrix, \code{mat}. By default, it returns
 a LaTeX macro that creates a well-formatted LaTeX table. It can take many
-arguments to adjust the table's formatting.\improveCSS
+arguments to adjust the table's formatting.
 }
 \note{
 \emph{Creating PDF tables.} \code{latexTable} tables can be transformed to

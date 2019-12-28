@@ -39,10 +39,19 @@ the list indicates the clusters for the corresponding regression object in
  regressions in \code{objList} are instead of class \code{ivreg},
 \code{clustervar} is passed to \code{ivpack::cluster.robust.se}.}
 }
+\value{
+A matrix in which the columns are estimates and 
+standard errors -- two columns for each model. The matrix has an "N"
+attribute that indicates the number of observations for each regression. If
+all regressions were of class \code{lm}, it also has the "r.squared" and 
+"SER" attributes. (The "SER" attribute indicates the standard error of 
+regression -- AKA \eqn{\sigma} or the "residual standard error" --- for 
+each model.)
+}
 \description{
 \code{regTable} takes a list of regression objects, such as those created 
 by \code{lm}. It returns a matrix in which the columns are estimates and 
-standard errors -- two columns for each model. \improveCSS
+standard errors -- two columns for each model.
 }
 \note{
 Before \code{regTable} was incorporated into this package,

@@ -31,10 +31,10 @@ column in \code{mat}.
 \item If \code{SE_table} is \code{TRUE}, there is a spacer column after every
 even-numbered column in \code{mat}, except for the last column.
 \item If \code{rowNames} is not \code{NULL}, a spacer column is inserted between
-the table's row names and the first column of data.\improveCSS
+the table's row names and the first column of data.
 }
 }
 \details{
 The function is not exported and is intended to be called only by
-\code{latexTable()}.
+\linkInt{latexTable}.
 }
