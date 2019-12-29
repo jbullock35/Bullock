@@ -250,9 +250,6 @@
 # TODO: 
 # --Automatically add R^2 and Std. error of regression lines to the footer 
 #   when all models are OLS. [2019 12 28]
-#   --Figure out why latexTable(rT1, footerRows = lt_footer()) doesn't work.
-#     It should, and the problem must have something to do with environments.
-#     [2019 12 28]
 #   --Then solve the related problem with 
 #     latexTable(rT1, footerRows = lt_rSquaredRow()).  [2019 12 28]
 #   --Then see whether I can get rid of those early lines in which I assign 
@@ -938,18 +935,40 @@ lt_colNames_default <- function (
 #' @param rowNames Character vector. See \linkInt{latexTable}.
 #' @param SE_table Logical variable. See \linkInt{latexTable}.
 lt_footer <- function (  
-  # If arguments are not supplied, this function will look to the parent frame
-  # for the arguments. Typically, the parent frame will be a latexTable()
-  # call.  [2019 12 21]
+
+  # If arguments are not supplied, we look to the calling frame --
+  # parent.frame() -- for the arguments. This strategy is appropriate because
+  # this function will typically be called from latexTable(), rather than 
+  # directly by the user. And in that case, arguments like "mat" and 
+  # "rowNames" will take on their default values in the calling frame.
+  # [2019 12 29]
   mat           = parent.frame()$mat,
   rowNames      = parent.frame()$rowNames,
   SE_table      = parent.frame()$SE_table,
   decimalPlaces = parent.frame()$decimalPlaces) { 
 
+  
+  # If a user issues a call like "latexTable(rT1, footerRows = lt_footer())",
+  # the default arguments won't work, and mat, rowNames, etc. will all be 
+  # NULL. The problem in this case is that the calling environment is the 
+  # user's environment (typically the global environment), and mat, rowNames,
+  # etc. haven't been specified in that environment. We now solve that 
+  # problem by using the latexTable() default values for those arguments.
+  # [2019 12 29]
+  if (is.null(mat))           mat           <- call_args(sys.call(1))[[1]] %>% eval
+    # sys.call(1) is the user's call, e.g., "latexTable(rT1, footerRows = lt_footer()"
+    # In this line of code, we assume that the first argument is the "mat"
+    # argument.
+
+  if (is.null(rowNames))      rowNames      <- rownames(mat) 
+  if (is.null(SE_table))      SE_table      <- formals(latexTable)$SE_table
+  if (is.null(decimalPlaces)) decimalPlaces <- formals(latexTable)$decimalPlaces
+  
+  
   # Force evaluation -- that is, escape lazy evaluation. Without this command,
   # lt_rSquaredRow() will throw an error. The problem is that decimalPlaces is
   # in the parent frame when lt_footer() is called, but not when 
-  # lt_rSquaredRow() is called.  /2019 12 28/
+  # lt_rSquaredRow() is called.  [2019 12 29]
   force(decimalPlaces)  
   
   if (SE_table && !is.null(rowNames)) {
