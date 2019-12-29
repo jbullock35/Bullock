@@ -9,7 +9,7 @@ Authors@R: c(
   person("Florent", "Delmotte", role = "ctb"),
   person("Dirk", "Edelbuettel", role = "ctb"),
   person("JD", "Long", role = "ctb")) 
-Imports: lmtest, magrittr, stringr
+Imports: lmtest, magrittr, rlang, stringr
 Suggests: 
     ivpack,
     multiwayvcov,
