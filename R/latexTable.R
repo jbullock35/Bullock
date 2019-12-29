@@ -253,6 +253,8 @@
 #   --Pick up by getting lt_SER_row to get the number of decimal places right,
 #     and to eliminate the leading zero (if there is one). lt_rSquaredRow()
 #     does these things well.  [2019 12 28]
+#   --Then get the SER_row function to put all SERs on one line.  Then try 
+#     to do that for R^2 and nobs, too.  [2019 12 29]
 #   --Write a test to ensure that the R^2 and SER lines are good. I will need 
 #     to write a regexp that matches multiple lines.  [2019 12 28]
 #   --Figure out why latexTable(rT1, footerRows = lt_footer()) doesn't work.
@@ -260,6 +262,8 @@
 #     [2019 12 28]
 #   --Then solve the related problem with 
 #     latexTable(rT1, footerRows = lt_rSquaredRow()).  [2019 12 28]
+#   --Then see whether I can get rid of those early lines in which I assign 
+#     variables ot themselves.  [2019 12 28]
 
 # --Add a tablePosition argument that specifies how the table will be placed.
 #   Defaults to "p", such that each table will appear on its own page. Other 
@@ -806,7 +810,7 @@ latexTable <- function(
         # that it matches up with all of the other SERs, which will have more 
         # digits after the decimal place.  This code should always give the  
         # SER exactly two decimal places.
-        if (footerRowName %in% c('$R^2$', 'SER', 'Standard error of regression')) {
+        if (footerRowName %in% c('$R^2$', 'SER', 'Std. error of regression', 'Standard error of regression')) {
           for (i in 1: length(footerRow$.Data)) {
             footerRow$.Data[i] <- sub('^(\\d*\\.?\\d)$', '\\10', footerRow$.Data[i])
           }
