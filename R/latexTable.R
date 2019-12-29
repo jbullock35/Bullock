@@ -250,13 +250,6 @@
 # TODO: 
 # --Automatically add R^2 and Std. error of regression lines to the footer 
 #   when all models are OLS. [2019 12 28]
-#   --Pick up by getting lt_SER_row to get the number of decimal places right,
-#     and to eliminate the leading zero (if there is one). lt_rSquaredRow()
-#     does these things well.  [2019 12 28]
-#   --Then get the SER_row function to put all SERs on one line.  Then try 
-#     to do that for R^2 and nobs, too.  [2019 12 29]
-#   --Write a test to ensure that the R^2 and SER lines are good. I will need 
-#     to write a regexp that matches multiple lines.  [2019 12 28]
 #   --Figure out why latexTable(rT1, footerRows = lt_footer()) doesn't work.
 #     It should, and the problem must have something to do with environments.
 #     [2019 12 28]

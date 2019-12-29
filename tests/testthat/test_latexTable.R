@@ -4,6 +4,11 @@
 
 context("Check LaTeX output from latexTable()")
 
+regex_multicol2c <- '\\\\multicolumn\\{2\\}\\{c\\}'
+regex_N   <- '(N|Number of observations)' 
+regex_R2  <- 'R?\\$\\^2\\$'
+regex_SER <- '(SER|Standard error of regression|Std. error of regression)'
+
 mat1 <- matrix(c(-3:12, 0.0, 0.0000, -1.0000008, NA, 1.555, 9:11), nrow = 4)
 lt1_default  <- latexTable(mat1) 
 lt1_dp1      <- latexTable(mat1, decimalPlaces = 1) 
@@ -12,6 +17,8 @@ lt1_noSC     <- latexTable(mat1, spacerColumns = NULL)
   # update(lt1, spacerColumns = spacerColumns_default())
 lt1_noSC_dp3 <- update(lt1_noSC, decimalPlaces = 3)
 lt1_mat2col  <- update(lt1_default, mat = matrix(1:16, nrow = 8)) 
+
+
 
 
 test_that("numbers are formatted correctly when no arguments except 'mat' are given", {
@@ -173,4 +180,52 @@ test_that("\\cmidrule specifications are correct", {
 
 
 
+##############################################################################
+# FOOTER ROWS
+##############################################################################
+data(iris)
+lm1 <- lm(Sepal.Length ~ Petal.Length,               data = iris)
+lm2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data = iris)
+lm3 <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
+rT1 <- regTable(list(lm1, lm2, lm3))
+lT3 <- latexTable(rT1)
+lT3_collapsed <- paste0(lT3, collapse = '')
+
+test_that("footer rows are correct", {
+  expect_match(
+    lT3_collapsed,
+    paste0(
+      regex_R2, 
+      '\\s+&&\\s+', 
+      regex_multicol2c,
+      '\\{.76\\}\\s+&&\\s+',
+      regex_multicol2c,
+      '\\{.77\\}\\s+&&\\s+',
+      regex_multicol2c,
+      '\\{.81\\}\\s?\\\\tabularnewline'))
+  
+  expect_match(
+    lT3_collapsed,
+    paste0(
+      regex_SER, 
+      '\\s+&&\\s+', 
+      regex_multicol2c,
+      '\\{0?.41\\}\\s+&&\\s+',
+      regex_multicol2c,
+      '\\{0?.40\\}\\s+&&\\s+',
+      regex_multicol2c,
+      '\\{0?.37\\}\\s?\\\\tabularnewline'))
+
+  expect_match(
+    lT3_collapsed,
+    paste0(
+      regex_N, 
+      '\\s+&&\\s+', 
+      regex_multicol2c,
+      '\\{150\\}\\s+&&\\s+',
+      regex_multicol2c,
+      '\\{150\\}\\s+&&\\s+',
+      regex_multicol2c,
+      '\\{150\\}\\s?\\\\tabularnewline'))
+})
 
