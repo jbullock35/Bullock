@@ -18,6 +18,22 @@ lt1_noSC     <- latexTable(mat1, spacerColumns = NULL)
 lt1_noSC_dp3 <- update(lt1_noSC, decimalPlaces = 3)
 lt1_mat2col  <- update(lt1_default, mat = matrix(1:16, nrow = 8)) 
 
+lt2 <- latexTable(
+  mat = matrix(1:16, nrow=2), 
+  colNames = c('1', '', '', 4),
+  spacerColumns = NULL)
+lt2_colNameExpand <- update(lt2, colNameExpand = TRUE)
+lt2_spacerColumns <- update(lt2, spacerColumns = c(0,1,2))
+
+data(iris)
+lm1 <- lm(Sepal.Length ~ Petal.Length,               data = iris)
+lm2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data = iris)
+lm3 <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
+rT1 <- regTable(list(lm1, lm2, lm3))
+lT3 <- latexTable(rT1)
+lT3_collapsed <- paste0(lT3, collapse = '')
+lT3_dp3 <- update(lT3, decimalPlaces = 3)
+lT3_dp3_collapsed <- paste0(lT3_dp3, collapse = '')
 
 
 
@@ -81,35 +97,6 @@ test_that("numbers are formatted correctly when spacerColumns is NULL", {
     '\\.00\\s*&\\s*4\\.00\\s*&\\s*8\\.00\\s*&\\s*12\\.00\\s*&\\s+&\\s*11\\.00',
     all = FALSE)
 })
-
-
-test_that("numbers are formatted correctly when spacerColumns is NULL and decimalPlaces == 3", {
-  expect_match(
-    lt1_noSC_dp3,
-    '-3\\.000\\s*&\\s*1\\.000\\s*&\\s*5\\.000\\s*&\\s*9\\.000\\s*&\\s*\\.000\\s*&\\s*1\\.55[56]',
-    all = FALSE)
-  expect_match(
-    lt1_noSC_dp3,
-    '-2\\.000\\s*&\\s*2\\.000\\s*&\\s*6\\.000\\s*&\\s*10\\.000\\s*&\\s*\\.000\\s*&\\s*9\\.000',
-    all = FALSE)
-  expect_match(
-    lt1_noSC_dp3,
-    '-1\\.000\\s*&\\s*3\\.000\\s*&\\s*7\\.000\\s*&\\s*11\\.000\\s*&\\s*-1\\.000\\s*&\\s*10\\.000',
-    all = FALSE)
-  expect_match(
-    lt1_noSC_dp3,
-    '\\.000\\s*&\\s*4\\.000\\s*&\\s*8\\.000\\s*&\\s*12\\.000\\s*&\\s+&\\s*11\\.000',
-    all = FALSE)
-})
-
-
-
-lt2 <- latexTable(
-  mat = matrix(1:16, nrow=2), 
-  colNames = c('1', '', '', 4),
-  spacerColumns = NULL)
-lt2_colNameExpand <- update(lt2, colNameExpand = TRUE)
-lt2_spacerColumns <- update(lt2, spacerColumns = c(0,1,2))
 
 
 test_that("\\multicolumn specifications are correct", {
@@ -183,15 +170,7 @@ test_that("\\cmidrule specifications are correct", {
 ##############################################################################
 # FOOTER ROWS
 ##############################################################################
-data(iris)
-lm1 <- lm(Sepal.Length ~ Petal.Length,               data = iris)
-lm2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data = iris)
-lm3 <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
-rT1 <- regTable(list(lm1, lm2, lm3))
-lT3 <- latexTable(rT1)
-lT3_collapsed <- paste0(lT3, collapse = '')
-
-test_that("footer rows are correct", {
+test_that("footer rows are correct with default arguments", {
   expect_match(
     lT3_collapsed,
     paste0(
@@ -229,3 +208,41 @@ test_that("footer rows are correct", {
       '\\{150\\}\\s?\\\\tabularnewline'))
 })
 
+
+test_that("footer rows are correct when decimalPlaces == 3", {
+  expect_match(
+    lT3_dp3_collapsed,
+    paste0(
+      regex_R2, 
+      '\\s+&&\\s+', 
+      regex_multicol2c,
+      '\\{.760\\}\\s+&&\\s+',
+      regex_multicol2c,
+      '\\{.766\\}\\s+&&\\s+',
+      regex_multicol2c,
+      '\\{.808\\}\\s?\\\\tabularnewline'))
+  
+  expect_match(
+    lT3_dp3_collapsed,
+    paste0(
+      regex_SER, 
+      '\\s+&&\\s+', 
+      regex_multicol2c,
+      '\\{0?.407\\}\\s+&&\\s+',
+      regex_multicol2c,
+      '\\{0?.403\\}\\s+&&\\s+',
+      regex_multicol2c,
+      '\\{0?.367\\}\\s?\\\\tabularnewline'))
+
+  expect_match(
+    lT3_dp3_collapsed,
+    paste0(
+      regex_N, 
+      '\\s+&&\\s+', 
+      regex_multicol2c,
+      '\\{150\\}\\s+&&\\s+',
+      regex_multicol2c,
+      '\\{150\\}\\s+&&\\s+',
+      regex_multicol2c,
+      '\\{150\\}\\s?\\\\tabularnewline'))
+})

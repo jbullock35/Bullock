@@ -791,13 +791,17 @@ latexTable <- function(
           footerRow$.Data <- gsub('^0(\\.\\d+)$', '\\1', footerRow$.Data)
         }
         
-        # Add trailing zeroes for R^2 and SER, e.g., change "1.9" to "1.90" so 
-        # that it matches up with all of the other SERs, which will have more 
-        # digits after the decimal place.  This code should always give the  
-        # SER exactly two decimal places.
-        if (footerRowName %in% c('$R^2$', 'SER', 'Std. error of regression', 'Standard error of regression')) {
-          for (i in 1: length(footerRow$.Data)) {
-            footerRow$.Data[i] <- sub('^(\\d*\\.?\\d)$', '\\10', footerRow$.Data[i])
+        # Add trailing zeroes for R^2 and SER, e.g., change "1.9" to "1.90" or
+        # 1.9000 as needed.  [2019 12 30]
+        if (footerRowName %in% c('$R^2$', 'R$^2$', 'SER', 'Std. error of regression', 'Standard error of regression')) {
+          for (i in 1:length(footerRow$.Data)) {
+            ncharAfterDecimal  <- gsub('\\d*\\.', '', footerRow$.Data[i]) %>% nchar
+            decimalPlacesToAdd <- decimalPlaces - ncharAfterDecimal
+            footerRow$.Data[i] <- stringr::str_pad(
+              string = footerRow$.Data[i], 
+              width  = nchar(footerRow$.Data[i]) + decimalPlacesToAdd,
+              side   = 'right',
+              pad    = '0')
           }
         }
         
