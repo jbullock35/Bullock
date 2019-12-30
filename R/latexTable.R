@@ -107,6 +107,12 @@
 #' @param landscape Logical variable. Determines whether the table is printed 
 #'   in landscape or in portrait mode. Affects the output only if if 
 #'   \code{headerFooter == TRUE} and \code{callCommand == TRUE}.
+#' @param floatPlacement Character vector of length{\NB}1. Acceptable values 
+#'   are \code{p} (the default, which places each table on its own page), 
+#'   \code{h, H, t, b,} and \code{!}. Affects the output only if 
+#'   \code{landscape} is \code{FALSE}. See 
+#'   \link{https://en.wikibooks.org/wiki/LaTeX/Floats,_Figures_and_Captions}
+#'   for more on float placement in LaTeX. 
 #' @param starredFloat Logical variable that indicates whether the LaTeX 
 #'   table should be specified with \code{table*} instead of \code{table}. The
 #'   default is FALSE, but you may want to set it to TRUE if you want you are 
@@ -248,13 +254,8 @@
 
 
 # TODO: 
-# --Fix the problem with the first R^2 value not being padded on the right 
-#   when decimalPlaces > 2. Should be easy.  [2019 12 29]
-# --Add a tablePosition argument that specifies how the table will be placed.
-#   Defaults to "p", such that each table will appear on its own page. Other 
-#   acceptable values are "h", "H", "t", [anything else]? Link to LaTeX float
-#   placement docs, and see if this is a good case for match.arg().  
-#   [2019 12 25]
+# --Update the vignette screenshot, as the footer has changed.  [2019 12 30]
+# --Add test for the tablePosition arguments.  [2019 12 30]
 # --Find out why this code is OK
 #     lT1 <- latexTable(matrix(1:16, nrow=4), headerFooter = FALSE)
 #     update(lT1, headerFooter = FALSE)
@@ -292,6 +293,7 @@ latexTable <- function(
   callCommand         = TRUE,
   label               = commandName,
   
+  floatPlacement      = 'p',
   landscape           = if (SE_table) ncol(mat) / 2 >= 6 else ncol(mat) >= 6,
   starredFloat        = FALSE,
   horizOffset         = '-0in',
@@ -361,10 +363,23 @@ latexTable <- function(
     mat <- round(mat, decimalPlaces)
   }
 
+
   
   ############################################################################
   # CHECK ARGUMENTS 
   ############################################################################
+  tmp <- 'htp'
+  grepl('^[phHtb]+$', tmp)
+
+  tmp <- 'htp!'
+  grepl('^[phHtb!]+$', tmp)
+
+  tmp <- 'ht!b'
+  grepl('[^phHtb!]', tmp)
+  
+  if (grepl('[^bhHpt!]', floatPlacement)) {
+    stop('floatPlacement can contain only these characters: "p", "h", "H", "t", "b", and "!".')
+  }
   if (SE_table && !is.null(colNames) && length(colNames[[1]]) != ncol/2) {
     stop("length of colNames[[1]], ", length(colNames), ", is not half of ncol(mat).")
   }
@@ -855,7 +870,7 @@ latexTable <- function(
         outputStrings <- c(outputStrings, '}')
       }
       else {
-        outputStrings <- c(outputStrings, paste0('\\', commandName, '{p}'))
+        outputStrings <- c(outputStrings, paste0('\\', commandName, '{', floatPlacement, '}'))
       }
     }
   }
@@ -907,12 +922,13 @@ lt_colNames_default <- function (
   # environment (typically the global environment), and mat and SE_table  
   # haven't been specified in that environment. We now solve that problem by   
   # using the latexTable() default values for those arguments. [2019 12 29]
-  if (is.null(mat))  mat <- call_args(sys.call(1))[[1]] %>% eval
-    # sys.call(1) is the user's call, e.g., "latexTable(rT1, colNames = lt_colNames_default())"
+  userCall <- sys.call(-1)  
+  if (is.null(mat))  mat <- rlang::call_args(userCall)[[1]] %>% eval
+    # sys.call(-1) is the user's call, e.g., "latexTable(rT1, colNames = lt_colNames_default())"
     # In this line of code, we assume that the first argument is the "mat"
     # argument.
 
-  if (is.null(SE_table))  SE_table <- call_args(sys.call(1))[['SE_table']] %>% eval
+  if (is.null(SE_table))  SE_table <- rlang::call_args(userCall)[['SE_table']] %>% eval
   if (is.null(SE_table))  SE_table <- formals(latexTable)$SE_table  # get default value
 
   if (is.null(colnames(mat))) {
@@ -969,17 +985,18 @@ lt_footer <- function (
   # etc. haven't been specified in that environment. We now solve that 
   # problem by using the latexTable() default values when the user hasn't 
   # supplied them in his call.  [2019 12 29]
-  if (is.null(mat))  mat <- call_args(sys.call(1))[[1]] %>% eval
-    # sys.call(1) is the user's call, e.g., "latexTable(rT1, footerRows = lt_footer()"
+  userCall <- sys.call(-1)  
+  if (is.null(mat))  mat <- rlang::call_args(userCall)[[1]] %>% eval
+    # sys.call(-1) is the user's call, e.g., "latexTable(rT1, footerRows = lt_footer()"
     # In this line of code, we assume that the first argument is the "mat"
     # argument.
 
   if (is.null(rowNames))  rowNames <- rownames(mat)
   
-  if (is.null(SE_table))  SE_table <- call_args(sys.call(1))[['SE_table']] %>% eval
+  if (is.null(SE_table))  SE_table <- rlang::call_args(userCall)[['SE_table']] %>% eval
   if (is.null(SE_table))  SE_table <- formals(latexTable)$SE_table  # get default value
 
-  if (is.null(decimalPlaces))  decimalPlaces <- call_args(sys.call(1))[['decimalPlaces ']] %>% eval
+  if (is.null(decimalPlaces))  decimalPlaces <- rlang::call_args(userCall)[['decimalPlaces ']] %>% eval
   if (is.null(decimalPlaces))  decimalPlaces <- formals(latexTable)$decimalPlaces  # get default value
   
   
@@ -1024,6 +1041,8 @@ lt_footer <- function (
 
 #' @export 
 lt_colNumbers <- function (
+  
+
   # If arguments are not supplied, we look to the calling frame --
   # parent.frame() -- for the arguments. This strategy is appropriate because
   # this function will typically be called from lt_footer(), which will supply
@@ -1031,21 +1050,22 @@ lt_colNumbers <- function (
   mat      = parent.frame()$mat,
   SE_table = parent.frame()$SE_table) {
 
-  # If a user issues a call like "latexTable(rT1, colNames = lt_colNames_default())",
+  # If a user issues a call like "latexTable(rT1, colNames = lt_colNumbers())",
   # the default arguments won't work; instead, mat and SE_table will be NULL. 
   # The problem in this case is that the calling environment is the user's  
   # environment (typically the global environment), and mat and SE_table  
   # haven't been specified in that environment. We now solve that problem by   
   # using the latexTable() default values when the user hasn't supplied his 
   # own values.  [2019 12 29]
-  if (is.null(mat))  mat <- call_args(sys.call(1))[[1]] %>% eval
-    # sys.call(1) is the user's call, e.g., "latexTable(rT1, colNames = lt_colNames_default())"
+  userCall <- sys.call(-1)  
+  if (is.null(mat))  mat <- rlang::call_args(userCall)[[1]] %>% eval
+    # sys.call(-1) is the user's call, e.g., "latexTable(rT1, colNames = lt_colNumbers())"
     # In this line of code, we assume that the first argument is the "mat"
     # argument.
-
-  if (is.null(SE_table))  SE_table <- call_args(sys.call(1))[['SE_table']] %>% eval
+  
+  if (is.null(SE_table))  SE_table <- rlang::call_args(userCall)[['SE_table']] %>% eval
   if (is.null(SE_table))  SE_table <- formals(latexTable)$SE_table  # get default value
-
+ 
   if (SE_table) {
     colNames <- paste0("(", 1:(ncol(mat)/2), ")")
   } else {
@@ -1083,8 +1103,9 @@ lt_nobsRow <- function (
   # environment (typically the global environment), and mat hasn't been 
   # specified in that environment. We solve that problem with the line below.
   # [2019 12 29]
-  if (is.null(mat))  mat <- call_args(sys.call(1))[[1]] %>% eval
-    # sys.call(1) is the user's call, e.g., "latexTable(rT1, footerRows = lt_nobsRow())"
+  userCall <- sys.call(-1)  
+  if (is.null(mat))  mat <- rlang::call_args(userCall)[[1]] %>% eval
+    # sys.call(-1) is the user's call, e.g., "latexTable(rT1, footerRows = lt_nobsRow())"
     # In this line of code, we assume that the first argument is the "mat"
     # argument.
 
@@ -1129,12 +1150,13 @@ lt_rSquaredRow <- function (
   # decimalPlaces haven't been specified in that environment. We now solve  
   # that problem by using the latexTable() default values when the user hasn't
   # supplied his own values.  [2019 12 29]
-  if (is.null(mat))  mat <- call_args(sys.call(1))[[1]] %>% eval
-    # sys.call(1) is the user's call, e.g., "latexTable(rT1, footerRows = lt_rSquaredRow())"
+  userCall <- sys.call(-1)  
+  if (is.null(mat))  mat <- rlang::call_args(userCall)[[1]] %>% eval
+    # sys.call(-1) is the user's call, e.g., "latexTable(rT1, footerRows = lt_rSquaredRow())"
     # In this line of code, we assume that the first argument is the "mat"
     # argument.
 
-  if (is.null(decimalPlaces)) decimalPlaces <- call_args(sys.call(1))[['decimalPlaces']] %>% eval
+  if (is.null(decimalPlaces)) decimalPlaces <- rlang::call_args(userCall)[['decimalPlaces']] %>% eval
   if (is.null(decimalPlaces)) decimalPlaces <- formals(latexTable)$decimalPlaces  # get default value
   
   if (! 'regTable' %in% class(mat)) 
@@ -1180,12 +1202,13 @@ lt_SER_row <- function (
   # decimalPlaces haven't been specified in that environment. We now solve  
   # that problem by using the latexTable() default values when the user hasn't
   # supplied his own values.  [2019 12 29]
-  if (is.null(mat))           mat           <- call_args(sys.call(1))[[1]] %>% eval
-    # sys.call(1) is the user's call, e.g., "latexTable(rT1, footerRows = lt_SER_row())"
+  userCall <- sys.call(-1)  
+  if (is.null(mat))  mat <- rlang::call_args(userCall)[[1]] %>% eval
+    # sys.call(-1) is the user's call, e.g., "latexTable(rT1, footerRows = lt_SER_row())"
     # In this line of code, we assume that the first argument is the "mat"
     # argument.
 
-  if (is.null(decimalPlaces)) decimalPlaces <- call_args(sys.call(1))[['decimalPlaces']] %>% eval
+  if (is.null(decimalPlaces)) decimalPlaces <- rlang::call_args(userCall)[['decimalPlaces']] %>% eval
   if (is.null(decimalPlaces)) decimalPlaces <- formals(latexTable)$decimalPlaces  # get default value
 
   if (! 'regTable' %in% class(mat)) 
@@ -1323,6 +1346,3 @@ update.latexTable <- function (object, ...) {
   
   eval(newCall, parent.frame())
 }
-  
-
-

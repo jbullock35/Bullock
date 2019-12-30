@@ -4,7 +4,7 @@
 \alias{lt_colNumbers}
 \title{Automatically determine column names of the form (1), (2), etc.}
 \usage{
-lt_colNumbers(mat = sys.frame(-1)$mat, SE_table = sys.frame(-1)$SE_table)
+lt_colNumbers(mat = parent.frame()$mat, SE_table = parent.frame()$SE_table)
 }
 \arguments{
 \item{mat}{A matrix, typically a \code{regTable} object.}

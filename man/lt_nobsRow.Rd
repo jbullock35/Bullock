@@ -4,7 +4,7 @@
 \alias{lt_nobsRow}
 \title{Specify a footer row that indicates the number of observations for each regression.}
 \usage{
-lt_nobsRow(mat = sys.frame(-1)$mat)
+lt_nobsRow(mat = parent.frame()$mat)
 }
 \arguments{
 \item{mat}{A \code{regTable} object.}

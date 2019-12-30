@@ -5,8 +5,8 @@
 \title{Specify a footer row that indicates \ifelse{html}{\out{R<sup>2</sup>}}{\eqn{R^2}} for each regression.}
 \usage{
 lt_rSquaredRow(
-  mat = sys.frame(-1)$mat,
-  decimalPlaces = sys.frame(-1)$decimalPlaces
+  mat = parent.frame()$mat,
+  decimalPlaces = parent.frame()$decimalPlaces
 )
 }
 \arguments{

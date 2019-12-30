@@ -2,7 +2,7 @@
 % Please edit documentation in R/latexTable.R
 \name{lt_colNames_default}
 \alias{lt_colNames_default}
-\title{Compute default column names in calls to latexTable().}
+\title{Compute default column names for latexTable objects.}
 \usage{
 lt_colNames_default(
   mat = parent.frame()$mat,
@@ -25,5 +25,5 @@ If \code{colnames(mat)} is \code{NULL}, column names will be determined by
 }
 \details{
 The function is not exported and is intended to be called only by 
-\code{latexTable()}.
+\linkInt{latexTable}.
 }

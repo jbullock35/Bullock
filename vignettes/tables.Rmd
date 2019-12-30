@@ -83,6 +83,9 @@ library(Bullock)
 
 
 
+
+
+
 ## Quick start
 Begin by generating a few regression objects with `lm()` and then putting the
 results into a matrix:
@@ -97,14 +100,15 @@ rT1
 ```
 
 
+
+
 Then use `latexTable()` convert the matrix into LaTeX code:
 ```{r quickstart-latexTable}
 lT1 <- latexTable(
-  mat        = rT1,
-  rowNames   = c("Intercept", "Petal length", "Petal width", "Petal length $\\times$ petal width"),
+  mat      = rT1,
+  rowNames = c("Intercept", "Petal length", "Petal width", "Petal length $\\times$ petal width"),
   colNames   = lt_colNumbers(),
-  footerRows = list(lt_nobsRow(), lt_rSquaredRow()),
-  caption            = '\\textit{Sepal length as a function of petal length and petal width.}'
+  caption    = '\\textit{Sepal length as a function of petal length and petal width.}'
 )
 
 head(lT1)

@@ -5,8 +5,8 @@
 \title{Specify a footer row that indicates the standard error of regression for each model}
 \usage{
 lt_SER_row(
-  mat = sys.frame(-1)$mat,
-  decimalPlaces = sys.frame(-1)$decimalPlaces
+  mat = parent.frame()$mat,
+  decimalPlaces = parent.frame()$decimalPlaces
 )
 }
 \arguments{
