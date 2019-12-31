@@ -34,7 +34,9 @@ lT3 <- latexTable(rT1)
 lT3_collapsed <- paste0(lT3, collapse = '')
 lT3_dp3 <- update(lT3, decimalPlaces = 3)
 lT3_dp3_collapsed <- paste0(lT3_dp3, collapse = '')
-
+lT3_placement_t        <- update(lT3, floatPlacement = 't')
+lT3_placement_H        <- update(lT3, floatPlacement = 'H')
+lT3_placement_not_thbH <- update(lT3, floatPlacement = '!thbH')
 
 
 test_that("numbers are formatted correctly when no arguments except 'mat' are given", {
@@ -245,4 +247,12 @@ test_that("footer rows are correct when decimalPlaces == 3", {
       '\\{150\\}\\s+&&\\s+',
       regex_multicol2c,
       '\\{150\\}\\s?\\\\tabularnewline'))
+})
+
+
+test_that("floatPlacement argument is used correctly", {
+  expect_equal(as.character(lT3[length(lT3)]), "\\myTable{p}")
+  expect_equal(as.character(lT3_placement_t[length(lT3_placement_t)]), "\\myTable{t}")
+  expect_equal(as.character(lT3_placement_H[length(lT3_placement_H)]), "\\myTable{H}")    
+  expect_equal(as.character(lT3_placement_not_thbH[length(lT3_placement_not_thbH)]), "\\myTable{!thbH}")        
 })

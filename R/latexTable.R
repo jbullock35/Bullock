@@ -254,8 +254,6 @@
 
 
 # TODO: 
-# --Update the vignette screenshot, as the footer has changed.  [2019 12 30]
-# --Add test for the tablePosition arguments.  [2019 12 30]
 # --Find out why this code is OK
 #     lT1 <- latexTable(matrix(1:16, nrow=4), headerFooter = FALSE)
 #     update(lT1, headerFooter = FALSE)
