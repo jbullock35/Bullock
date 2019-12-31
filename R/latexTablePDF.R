@@ -127,15 +127,6 @@
 # TODO:
 # --Test this function (a) on systems that don't have fontcommands.sty or 
 #   mathcommands.sty installed, and (b) on non-Windows systems.  [2019 12 16]
-# --When multiple tables are in the latexTable list, check to ensure that they
-#   have different command names and different labels.  [2019 12 23]
-# --latexTablePDF() will fail if run on a latexTable with headerFooter = FALSE.
-#   So check for the presence of a header (something like a macro name) so that 
-#   I can give a good error message.  [2019 12 24]
-#   --Better: check to see whether every row ends in \\tabularnewline. That is
-#     a sign that headerFooter == FALSE. But recall that this needs to be done
-#     for every element of the latexTable list that is passed to 
-#     latexTablePDF().  [2019 12 24]
 # --Checking of pdflatex existence and package existence:
 #   --The checking for pdflatex and packages is still too slow. See whether 
 #     there's a way to cache the result so that the full check is done only 
@@ -166,16 +157,53 @@ latexTablePDF <- function(
   openPDFOnExit      = TRUE) {
   
 
-  # PRELIMINARIES AND ERROR-CHECKING
-  if (! any(grepl('list|latexTable', class(latexTable)))) { 
-    stop("latexTable must be of the 'list' or 'latexTable' classes.")
+  # TRANSFORM latexTable TO A LIST IF NEED BE
+  # The first argument to the function is "latexTable". The user can specify 
+  # that latexTable is either a single latexTable object or a list of such
+  # objects. If the user specifies a single latexTable object, we now convert
+  # it to a list.
+  if ('latexTable' %in% class(latexTable)) {
+    latexTable <- list(latexTable)
   }
-  if ('list' %in% class(latexTable) && any(!grepl('latexTable', sapply(latexTable, class)))) {
+
+  
+  # PRELIMINARIES AND ERROR-CHECKING
+  lT_listClass               <- sapply(latexTable, function (x) 'latexTable' %in% class(x))  
+  lt_headerFooterNotIncluded <- sapply(latexTable, function (x) all(grepl('\\\\tabularnewline', x)))
+  lt_duplicatedCommandNames  <- sapply(latexTable, function (x) x[length(x)] ) %>% 
+    duplicated %>% 
+    any
+  lt_duplicatedLabels        <- sapply(latexTable, function (x) {
+      x <- paste0(x, collapse = '')  # make latexTable object into a single string
+      gsub('.*\\\\label\\{(.*?)\\}.*', '\\1', x)  # return the label
+    }) %>%
+    duplicated %>%
+    any
+  
+  
+  
+  if ( ! all(lT_listClass) ) {
     stop("Every element in the latexTable list must be of the 'latexTable' class.")
+  }
+  if ( any(lt_headerFooterNotIncluded) ) {
+    stop(
+      stringr::str_wrap('It seems that at least one latexTable object was created with "headerFooter = FALSE". latexTablePDF() cannot work with latexTable objects unless they have headers and footers.')
+    )
+  }
+  if (lt_duplicatedCommandNames) {
+    stop(
+      stringr::str_wrap('At least two of the latexTable objects share the same command name (that is, the same macro name). LaTeX cannot handle duplicated command names. Change them by running latexTable() while using the "commandName" argument to specify a different command name for each table.')
+    )    
+  }
+  if (lt_duplicatedLabels){
+    stop(
+      stringr::str_wrap('At least two of the latexTable objects share the same label. Problems will arise if you try to cross-reference your tables in your LaTeX document -- for example, with "\\ref" or "\\pageref".')
+    )        
   }
   if (writePDF && !nzchar(Sys.which("pdflatex"))) {
     stop("pdflatex doesn't seem to be on your path. A PDF file can't be created.")
   }
+  
   
   
   # CHECK FOR INSTALLED PACKAGES
@@ -190,12 +218,7 @@ latexTablePDF <- function(
       missingPackageString(installedPackageList, requiredPackageList, writePDF, writeTex)  
     }
   }
-  
-  # Transform "latexTable" into a list if need be
-  if ('latexTable' %in% class(latexTable)) {
-    latexTable <- list(latexTable)
-  }
-  
+    
   # Further warnings and errors
   if (file.exists(paste0(outputFilenameStem, '.pdf')) && overwriteExisting) {
     warning(paste0(outputFilenameStem, '.pdf will be overwritten.'))
