@@ -56,8 +56,7 @@ table. For example, you will be able to produce a table simply by calling
 \code{\\myTable{p}} or \code{\\myTable{h}} in your master LaTeX document.\cr
 \indent If \code{headerFooter} is \code{FALSE}, the only output of the
 function will be LaTeX code for "data rows"---one row for each row of
-\code{mat}. The function may not produce valid LaTeX output if both
-\code{SE_table} and \code{headerFooter} are \code{FALSE}.}
+\code{mat}.}
 
 \item{commandName}{A string. It is the name of the macro that produces the
 LaTeX table (if \code{headerFooter} is \code{TRUE}). By default, it is

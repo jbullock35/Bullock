@@ -81,8 +81,7 @@
 #'   \code{\\myTable{p}} or \code{\\myTable{h}} in your master LaTeX document.\cr
 #'   \indent If \code{headerFooter} is \code{FALSE}, the only output of the 
 #'   function will be LaTeX code for "data rows"---one row for each row of 
-#'   \code{mat}. The function may not produce valid LaTeX output if both   
-#'   \code{SE_table} and \code{headerFooter} are \code{FALSE}.
+#'   \code{mat}. 
 #' @param commandName A string. It is the name of the macro that produces the
 #'   LaTeX table (if \code{headerFooter} is \code{TRUE}). By default, it is 
 #'   "myTable"; you can change it to something more descriptive, e.g., 
@@ -254,16 +253,6 @@
 
 
 # TODO: 
-# --Find out why this code is OK
-#     lT1 <- latexTable(matrix(1:16, nrow=4), headerFooter = FALSE)
-#     update(lT1, headerFooter = FALSE)
-#   but this code throws a warning
-#     lT1 <- latexTable(matrix(1:16, nrow=4), headerFooter = FALSE)
-#     update(lT1, headerFooter = FALSE, rowNames = 1:4)
-#  (It shouldn't throw a warning.)  [2019 12 23]
-# --Revisit this line in the "headerFooter} help: "The function may not produce valid LaTeX output if both   
-#   \code{SE_table} and \code{headerFooter} are \code{FALSE}." Why should this 
-#   be a problem?  [2019 12 23]
 # --See if I can use clipr::write_clip to copy to clipboard for non-Windows
 #   systems. Try with Ubuntu (in Windows).  [2019 12 08]
 # --Add a numprint option to specify the number of digits in each 
@@ -366,15 +355,6 @@ latexTable <- function(
   ############################################################################
   # CHECK ARGUMENTS 
   ############################################################################
-  tmp <- 'htp'
-  grepl('^[phHtb]+$', tmp)
-
-  tmp <- 'htp!'
-  grepl('^[phHtb!]+$', tmp)
-
-  tmp <- 'ht!b'
-  grepl('[^phHtb!]', tmp)
-  
   if (grepl('[^bhHpt!]', floatPlacement)) {
     stop('floatPlacement can contain only these characters: "p", "h", "H", "t", "b", and "!".')
   }
@@ -382,7 +362,7 @@ latexTable <- function(
     stop("length of colNames[[1]], ", length(colNames), ", is not half of ncol(mat).")
   }
   if (grepl('&', columnTierSeparator)) {
-    warning(stringr::str_wrap("columnTierSeparator includes an ampersand.  This is likely to screw up the layout of your table.", 72, exdent = 2))
+    warning(stringr::str_wrap("columnTierSeparator includes an ampersand. This is likely to screw up the layout of your table.", 72, exdent = 2))
   }
   if (!is.null(captionMargins) && length(captionMargins) != 2) {
     stop("length(captionMargins) must be NULL or equal 2.")
@@ -394,7 +374,7 @@ latexTable <- function(
   # SPACER COLUMNS
   if ( any(grepl('&', rowNames)) ) {
     if (! is.null(spacerColumns)) {
-      stop("spacerColumns is non-NULL and there are ampersands (perhaps escaped ampersands) in your rowNames.  This is a recipe for havoc.")
+      stop("spacerColumns is non-NULL and there are ampersands (perhaps escaped ampersands) in your rowNames. This is a recipe for havoc.")
     }
     else {
       warning("the ampersands in your rowNames could screw up the table, even if they are escaped.")
@@ -407,7 +387,7 @@ latexTable <- function(
     stop("max(spacerColumns) must be less than ncol(mat).")
   }
   if (!is.null(spacerColumns) && (ncol %% 2 != 0) && headerFooter) {
-    warning("spacerColumns is non-NULL, ncol(mat) is odd, and headerFooter == TRUE.  This combination of options is unlikely to produce a table that will work in LaTeX.")
+    warning("spacerColumns is non-NULL, ncol(mat) is odd, and headerFooter == TRUE. This combination of options is unlikely to produce a table that will work in LaTeX.")
   }
 
   
