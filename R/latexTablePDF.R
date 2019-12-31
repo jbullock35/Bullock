@@ -125,8 +125,6 @@
 
 
 # TODO:
-# --Write a unit test: write a temporary PDF file and then test to see whether
-#   it has actually been written.  [2019 12 16]
 # --Test this function (a) on systems that don't have fontcommands.sty or 
 #   mathcommands.sty installed, and (b) on non-Windows systems.  [2019 12 16]
 # --When multiple tables are in the latexTable list, check to ensure that they
@@ -169,8 +167,6 @@ latexTablePDF <- function(
   
 
   # PRELIMINARIES AND ERROR-CHECKING
-  oldWD <- getwd()
-  on.exit(setwd(oldWD))
   if (! any(grepl('list|latexTable', class(latexTable)))) { 
     stop("latexTable must be of the 'list' or 'latexTable' classes.")
   }
@@ -305,37 +301,50 @@ latexTablePDF <- function(
   # CREATE FILES IN THE NEW TEMPORARY DIRECTORY
   tmpFilename <- tempfile(fileext = '.tex')  # includes path to tempdir()
   writeLines(newTable, tmpFilename)
-  setwd(tempdir())
   if (writePDF) {  
     if (container && verbose) {
-      system2('pdflatex', shQuote(tmpFilename))
+      system2(
+        command = 'pdflatex', 
+        args    = c(
+          shQuote(tmpFilename), 
+          paste("-output-directory", shQuote(tempdir()))
+        )
+      )
     } 
     else if (container && !verbose) {
-      system2('pdflatex', shQuote(tmpFilename), stdout = FALSE, stderr = FALSE)
+      system2(
+        command = 'pdflatex', 
+        args    = c(
+          shQuote(tmpFilename), 
+          paste("-output-directory", shQuote(tempdir()))
+        ),
+        stdout  = FALSE,
+        stderr  = FALSE        
+      )
     }  
   }
 
   
   
   
-  # MOVE PDF OUT OF TEMPORARY DIRECTORY, THEN DELETE TEMP. DIRECTORY
+  # MOVE PDF TO FINAL DESTINATION, THEN DELETE THE TEMPORARY DIRECTORY
   if (writePDF) {
     file.copy(
       from      = sub("\\.tex", "\\.pdf", tmpFilename), 
-      to        = paste0(oldWD, '/', outputFilenameStem, '.pdf'),
+      to        = normalizePath(paste0(outputFilenameStem, '.pdf'), mustWork = FALSE),
       overwrite = overwriteExisting)
   }
   if (writeTex) {
     file.copy(
       from      = tmpFilename, 
-      to        = paste0(oldWD, '/', outputFilenameStem, '.tex'),
+      to        = normalizePath(paste0(outputFilenameStem, '.tex'), mustWork = FALSE),
       overwrite = overwriteExisting)
   }
 
   
   # OPEN THE NEW PDF FILE (IF RUNNING WINDOWS)
   if (writePDF && openPDFOnExit && Sys.info()['sysname'] == 'Windows') {
-    PDFFullPath <- normalizePath(paste0(oldWD, '/', outputFilenameStem, '.pdf'))
+    PDFFullPath <- normalizePath(paste0(outputFilenameStem, '.pdf'))
     shell.exec(PDFFullPath)
   }
   
