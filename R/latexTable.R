@@ -110,9 +110,9 @@
 #' @param floatPlacement Character vector of length{\NB}1. Acceptable values 
 #'   are \code{p} (the default, which places each table on its own page), 
 #'   \code{h, H, t, b,} and \code{!}. Affects the output only if 
-#'   \code{landscape} is \code{FALSE}. See 
-#'   \link{https://en.wikibooks.org/wiki/LaTeX/Floats,_Figures_and_Captions}
-#'   for more on float placement in LaTeX. 
+#'   \code{landscape} is \code{FALSE}. See the 
+#'   \href{https://bit.ly/LaTeX-floats}{LaTeX wikibook} for more on float 
+#'   placement in LaTeX. 
 #' @param starredFloat Logical variable that indicates whether the LaTeX 
 #'   table should be specified with \code{table*} instead of \code{table}. The
 #'   default is FALSE, but you may want to set it to TRUE if you want you are 
@@ -962,6 +962,7 @@ lt_colNames_default <- function (
 #' @param mat A matrix, typically a \code{regTable} object.
 #' @param rowNames Character vector. See \linkInt{latexTable}.
 #' @param SE_table Logical variable. See \linkInt{latexTable}.
+#' @param decimalPlaces Integer. See See \linkInt{latexTable}.
 lt_footer <- function (  
 
   # If arguments are not supplied, we look to the calling frame --

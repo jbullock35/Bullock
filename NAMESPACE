@@ -1,4 +1,5 @@
 importFrom("magrittr", "%>%")
+importFrom("rlang", ".data")
 importFrom("stats", "logLik", "model.matrix", "nobs", "sd", "var")
 export(
   "%IN%", factorToDummyMatrix, latexTable, latexTablePDF, lNA, lNAv, lsos,   

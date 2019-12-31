@@ -17,6 +17,8 @@ lt_footer(
 \item{rowNames}{Character vector. See \linkInt{latexTable}.}
 
 \item{SE_table}{Logical variable. See \linkInt{latexTable}.}
+
+\item{decimalPlaces}{Integer. See See \linkInt{latexTable}.}
 }
 \value{
 A list of string vectors. Each list element contains the strings

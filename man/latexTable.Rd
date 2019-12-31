@@ -84,9 +84,9 @@ default \code{label} is the same as the \code{commandName} argument.\cr\cr\cr\cr
 \item{floatPlacement}{Character vector of length{\NB}1. Acceptable values
 are \code{p} (the default, which places each table on its own page),
 \code{h, H, t, b,} and \code{!}. Affects the output only if
-\code{landscape} is \code{FALSE}. See
-\link{https://en.wikibooks.org/wiki/LaTeX/Floats,_Figures_and_Captions}
-for more on float placement in LaTeX.}
+\code{landscape} is \code{FALSE}. See the
+\href{https://bit.ly/LaTeX-floats}{LaTeX wikibook} for more on float
+placement in LaTeX.}
 
 \item{landscape}{Logical variable. Determines whether the table is printed
 in landscape or in portrait mode. Affects the output only if if

@@ -11,6 +11,7 @@
 #' is \code{TRUE}) or a warning (if \code{writePDF} is \code{FALSE} but
 #' \code{writeTex} is \code{TRUE}).
 
+#' @importFrom rlang .data
 
 #' @param installedPackageList,requiredPackageList Character vectors.
 #' @param writePDF,writeTex Logical variables. See the 
@@ -18,8 +19,8 @@
 #' information about these arguments.
 missingPackageString <- function (installedPackageList, requiredPackageList, writePDF, writeTex) {
   missingPackages <- sapply(requiredPackageList, grepl, installedPackageList) %>% 
-    apply(., 2, any) %>%
-    { which(!.) } %>%
+    apply(.data, 2, any) %>%
+    { which(!.data) } %>%
     names
   
   missingPackageString <- switch(
