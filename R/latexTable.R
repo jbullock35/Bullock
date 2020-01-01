@@ -1,8 +1,7 @@
 #' Create a LaTeX table from a matrix.
 #' 
 #' \code{latexTable} takes a single matrix, \code{mat}. By default, it returns 
-#' a LaTeX macro that creates a well-formatted LaTeX table. It can take many 
-#' arguments to adjust the table's formatting. 
+#' a LaTeX macro that creates a well-formatted LaTeX table. 
 
 
 #' @return An object of class \code{latexTable} and \code{character}. The 
@@ -18,8 +17,9 @@
 
 #' \emph{Required LaTeX packages.} The LaTeX code produced by the  
 #'  \code{latexTable} makes use of capabilities provided by the \code{array}, 
-#'  \code{booktabs}, \code{caption}, and \code{numprint} LaTeX packages. If 
-#' you haven't installed those LaTeX packages, you won't be able to render 
+#'  \code{booktabs}, \code{caption}, and \code{numprint}{\NB}LaTeX packages---and,
+#' for landscaped tables, the \code{afterpage} and \code{pdflscape}{\NB}packages.
+#' If you haven't installed those LaTeX packages, you won't be able to render 
 #' the tables produced by \code{latexTable}.\cr\cr
  
 #' \emph{Changes from pre-release versions:}

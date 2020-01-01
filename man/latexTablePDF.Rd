@@ -21,24 +21,24 @@ latexTablePDF(
 )
 }
 \arguments{
-\item{latexTable}{Object of class \code{latexTable} (typically produced by 
+\item{latexTable}{Object of class \code{latexTable} (typically produced by
 \code{latexTable()} or a list of such objects.}
 
 \item{container}{Logical variable. Should the LaTeX code in \code{latexTable}
 be inserted into a LaTeX file that contains a complete LaTeX preamble and
-the \code{\\begin{document}} and \code{\\end{document}} tags? If you want 
-\code{latexTablePDF} to produce a PDF file, \code{container} must be 
-\code{TRUE}. But if you just want to write \code{latexTable} to disk as 
-a .tex file that you will insert into your own larger LaTeX document,  
+the \code{\\begin{document}} and \code{\\end{document}} tags? If you want
+\code{latexTablePDF} to produce a PDF file, \code{container} must be
+\code{TRUE}. But if you just want to write \code{latexTable} to disk as
+a .tex file that you will insert into your own larger LaTeX document,
 \code{container} should probably be \code{FALSE}.}
 
-\item{containerFilename}{A string. Specifies the path of the "container" 
-LaTeX file into which the \code{latexTable} table or tables will be 
+\item{containerFilename}{A string. Specifies the path of the "container"
+LaTeX file into which the \code{latexTable} table or tables will be
 inserted to make a complete LaTeX file that can be rendered as PDF. By
 default, it is "tableContainer.tex", which is included in this package.}
 
 \item{outputFilenameStem}{A string. It is the path and name of the file
-is to be saved to disk, up to the extension. For example, if you want to  
+is to be saved to disk, up to the extension. For example, if you want to
 save "myTable.pdf" to disk, set \code{outputFilenameStem = "mytable"}.}
 
 \item{writePDF}{Logical variable. Should a PDF file be saved to disk?}
@@ -49,38 +49,38 @@ save "myTable.pdf" to disk, set \code{outputFilenameStem = "mytable"}.}
 existing files that have the same names?}
 
 \item{verbose}{Logical variable. \code{latexTablePDF} calls
-\code{pdflatex} to render PDF files, and if \code{verbose} is \code{TRUE}, 
-all of the output from \code{pdflatex} will be printed to screen. Useful 
+\code{pdflatex} to render PDF files, and if \code{verbose} is \code{TRUE},
+all of the output from \code{pdflatex} will be printed to screen. Useful
 for debugging.\cr\cr\cr\cr}
 
-\item{continuedFloat}{Logical variable. Should be \code{TRUE} if the table 
-or tables to be rendered are part of a series and should all share the 
-same number. For example, \code{continuedFloat} should be true if 
-\code{latexTable} is a list of tables and you all want them to be 
+\item{continuedFloat}{Logical variable. Should be \code{TRUE} if the table
+or tables to be rendered are part of a series and should all share the
+same number. For example, \code{continuedFloat} should be true if
+\code{latexTable} is a list of tables and you all want them to be
 numbered as Table{\NB}3.}
 
-\item{continuedFloatStar}{Logical variable. Should be \code{TRUE} if the table 
-or tables to be rendered are part of a series, and if all tables should 
+\item{continuedFloatStar}{Logical variable. Should be \code{TRUE} if the table
+or tables to be rendered are part of a series, and if all tables should
 share the same number but be distinguished by some secondary character.
-For example, \code{continuedFloatStar} should be true if \code{latexTable} 
-is a list of tables and you all want them to be numbered as Table{\NB}3a, 
+For example, \code{continuedFloatStar} should be true if \code{latexTable}
+is a list of tables and you all want them to be numbered as Table{\NB}3a,
 Table{\NB}3b, etc.\cr
-  \indent \code{continuedFloat} and \code{continuedFloatStar} cannot both 
+\indent \code{continuedFloat} and \code{continuedFloatStar} cannot both
 be \code{TRUE}.}
 
-\item{firstPageEmpty}{Logical variable. If \code{TRUE}, the page that 
+\item{firstPageEmpty}{Logical variable. If \code{TRUE}, the page that
 contains the first table in \code{latexTable} will have an empty header
-and footer. (Technically, \code{latexTablePDF} will insert 
+and footer. (Technically, \code{latexTablePDF} will insert
 \code{\\thispagestyle{empty}} into the code block that contains the first
 table in \code{latexTable}.)}
 
-\item{firstTableNumber}{Integer. What number should the first table in 
-  \code{latexTable} have?\cr
-  \indent By default, the table numbering will be "natural." That is, the 
+\item{firstTableNumber}{Integer. What number should the first table in
+\code{latexTable} have?\cr
+\indent By default, the table numbering will be "natural." That is, the
 number of the first \code{latexTable} table will be determined
-by the number of preceding tables in the document. For example, if 
-you use \code{latexTablePDF()} to create a .tex file that you then insert 
-into a larger LaTeX document, and if the .tex file is preceded in the 
+by the number of preceding tables in the document. For example, if
+you use \code{latexTablePDF()} to create a .tex file that you then insert
+into a larger LaTeX document, and if the .tex file is preceded in the
 LaTeX document by two tables, the first table created by \code{latexTable()}
 will be Table{\NB}3.\cr\cr\cr\cr}
 
@@ -89,28 +89,36 @@ by \code{latexTablePDF}? This argument has an effect only on Windows, and
 only if \code{writePDF} is \code{TRUE}.}
 }
 \description{
-\code{latexTablePDF} takes an object produced by \code{latexTable} and 
+\code{latexTablePDF} takes an object produced by \code{latexTable} and
 writes a PDF file. It can also write the corresponding .tex file.
 }
 \details{
-Although \code{latexTablePDF} produces PDF files by default, it is also 
+Although \code{latexTablePDF} produces PDF files by default, it is also
 useful for creating .tex files. For example, you may have a list of tables
-produced by \code{latexTable()} and a complex LaTeX 
-document that contains many different sections and tables. When 
-\code{latexTablePDF} is used with \code{writeTex = TRUE}, it will produce a 
-single file that contains LaTeX code for all of the tables in your list. 
-You can then insert those tables into your LaTeX document by adding a 
+produced by \code{latexTable()} and a complex LaTeX
+document that contains many different sections and tables. When
+\code{latexTablePDF} is used with \code{writeTex = TRUE}, it will produce a
+single file that contains LaTeX code for all of the tables in your list.
+You can then insert those tables into your LaTeX document by adding a
 single \code{\\input} or \code{\\include} command to your LaTeX document.
 For details, see \href{../doc/tables.html}{\code{vignette("tables", package = "Bullock")}}.
 }
 \note{
-\emph{Required LaTeX tools.} If \code{writePDF} is \code{TRUE}, 
-  \code{pdflatex} must be installed on your system. (It is part of almost 
-  every LaTeX installation.) In addition, if \code{writePDF} is \code{TRUE}  
-  and \code{containerFilename} is "containerFilename.tex" (the default), the following 
-  LaTeX packages must be installed: \code{array, booktabs, caption, 
-  fancyhdr, geometry, pdflscape, } and \code{ragged2e}. Most of these, and 
-  perhaps all of them, are already part of your LaTeX installation.\cr\cr\cr\cr
+\emph{Required LaTeX tools.} If \code{writePDF} is \code{TRUE},
+\code{pdflatex} must be installed on your system. (It is part of almost
+every LaTeX installation.) The \verb{array,} \verb{booktabs,} \verb{caption,} and
+\code{numprint} packages must also be installed. In addition:
+\itemize{
+\item If \code{writePDF} is \code{TRUE} and \code{containerFilename} is
+"tableContainer.tex" (the default), the \verb{fancyhdr,} \verb{geometry,}
+and \code{ragged2e} packages must be installed.
+\item If \code{writePDF} is \code{TRUE} and you are producing a landscaped
+table, the \code{afterpage} and \code{pdflscape} packages must be
+installed.
+}
+
+Most of these packages, and perhaps all of them, are already part of your
+LaTeX installation.
 }
 \examples{
 \dontrun{

@@ -15,11 +15,18 @@
 
 #' @note \emph{Required LaTeX tools.} If \code{writePDF} is \code{TRUE}, 
 #'   \code{pdflatex} must be installed on your system. (It is part of almost 
-#'   every LaTeX installation.) In addition, if \code{writePDF} is \code{TRUE}  
-#'   and \code{containerFilename} is "containerFilename.tex" (the default), the following 
-#'   LaTeX packages must be installed: \code{array, booktabs, caption, 
-#'   fancyhdr, geometry, pdflscape, } and \code{ragged2e}. Most of these, and 
-#'   perhaps all of them, are already part of your LaTeX installation.\cr\cr\cr\cr
+#'   every LaTeX installation.) The `array,` `booktabs,` `caption,` and 
+#'   `numprint` packages must also be installed. In addition:
+#' * If \code{writePDF} is \code{TRUE} and \code{containerFilename} is 
+#'   "tableContainer.tex" (the default), the `fancyhdr,` `geometry,`
+#'   and `ragged2e` packages must be installed.
+#' * If \code{writePDF} is \code{TRUE} and you are producing a landscaped 
+#'   table, the \code{afterpage} and \code{pdflscape} packages must be
+#'   installed.
+#' 
+#' Most of these packages, and perhaps all of them, are already part of your 
+#' LaTeX installation.
+#' @md
 
 
 #' @family functions for making tables
@@ -199,6 +206,10 @@ latexTablePDF <- function(
   
   
   # CHECK FOR PDFLATEX
+  # This is a time-consuming operation. So if we find pdflatex the first time,  
+  # we create the ".pdflatex_found" variable in the user's environment. In 
+  # future runs of latexTablePDF(), the check aborts if ".pdflatex_found" 
+  # exists.  [2020 01 01]
   if (writePDF && !exists(".pdflatex_found")) {
     if (!nzchar(Sys.which("pdflatex")))  {
       stop("pdflatex doesn't seem to be on your path. A PDF file can't be created.")
@@ -211,9 +222,32 @@ latexTablePDF <- function(
   
   
   # CHECK FOR INSTALLED PACKAGES
+  # This is a time-consuming operation. To be efficient, we create
+  # ".latex_packages_found", a boolean, in the user's environment the first 
+  # time in the user's session that the packages are found. In subsequent
+  # calls to latexTablePDF(), the check is aborted if ".latex_packages_found"
+  # exists.  [2020 01 01]
+  #
+  # TODO: The .latex_packages_found variable is created if packages are found
+  # -- but the packages that are checked depend on the user's latexTable call.
+  # For example, if the user isn't working with landscaped tables, 
+  # .latex_packages_found may be created even if the "pdflscape" LaTeX package
+  # isn't installed. That could lead to problems if the user wants to create a
+  # landscaped table later in the session. We could get around this by 
+  # making .latex_packages_found a string that tells us exactly which packages
+  # have been installed.  [2020 01 01]
   kpsewhichExists <- nzchar(Sys.which("kpsewhich"))  # LaTeX package-checking tool
   if (containerFilename=='tableContainer.tex' && kpsewhichExists && !exists(".latex_packages_found")) {
-    requiredPackageList  <- qw("array booktabs caption fancyhdr geometry ragged2e")
+    latexTable_collapsed <- sapply(latexTable, paste0, collapse = '')
+    tablesAreLandscaped <- grepl("\\\\begin\\{landscape\\}", latexTable_collapsed) %>%
+      any
+    requiredPackageList  <- qw("array booktabs caption numprint")
+    if (containerFilename == 'tableContainer.tex') {
+      requiredPackageList <- c(requiredPackageList, qw("fancyhdr geometry ragged2e"))
+    }
+    if (tablesAreLandscaped) {
+      requiredPackageList <- c(requiredPackageList, qw("afterpage pdflscape"))
+    }
     installedPackageList <- system2(
       command = "kpsewhich", 
       args    = paste0(requiredPackageList, ".sty", collapse=' '), 

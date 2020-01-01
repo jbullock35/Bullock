@@ -47,13 +47,20 @@ checkLatexPackages <- function () {
   if (!kpsewhichExists) {
     skip("Cannot locate kpsewhich.")
   }
-  requiredPackageList  <- qw("array booktabs caption fancyhdr geometry ragged2e")
+  requiredPackageList  <- qw("array booktabs caption fancyhdr geometry numprint ragged2e")
   installedPackageList <- system2(
     command = "kpsewhich", 
     args    = paste0(requiredPackageList, ".sty", collapse=' '), 
     stdout  = TRUE)
   if (length(installedPackageList) < length(requiredPackageList)) {  # if a package is missing
-    skip(stringr::str_wrap("Can't locate one of these required LaTeX packages: array, booktabs, caption, fancyhdr, geometry, pdflscape, ragged2e."))  
+    skip(
+      stringr::str_wrap(
+        paste(
+          "Can't locate one of these LaTeX packages: ",
+          paste(requiredPackageList, collapse = ', ')
+        )
+      )
+    )
   }
 }
 
@@ -68,6 +75,11 @@ test_that("latexTablePDF() can write PDF files to disk", {
   expect_true(
     file.exists(paste0(lT2_filenameStem, '.pdf'))  # list of tables
   )  
+  expect_true(
+    exists(".pdflatex_found")
+  )
+  expect_true(
+    exists(".latex_packages_found"))
 })
 
 

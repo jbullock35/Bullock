@@ -250,16 +250,16 @@ instead, it calls the macro, thereby telling LaTeX to display the table).
 }
 \description{
 \code{latexTable} takes a single matrix, \code{mat}. By default, it returns
-a LaTeX macro that creates a well-formatted LaTeX table. It can take many
-arguments to adjust the table's formatting.
+a LaTeX macro that creates a well-formatted LaTeX table.
 }
 \note{
 \emph{Creating PDF tables.} \code{latexTable} tables can be transformed to
 PDF with \linkInt{latexTablePDF}.\cr\cr
 \emph{Required LaTeX packages.} The LaTeX code produced by the
 \code{latexTable} makes use of capabilities provided by the \code{array},
-\code{booktabs}, \code{caption}, and \code{numprint} LaTeX packages. If
-you haven't installed those LaTeX packages, you won't be able to render
+\code{booktabs}, \code{caption}, and \code{numprint}{\NB}LaTeX packages---and,
+for landscaped tables, the \code{afterpage} and \code{pdflscape}{\NB}packages.
+If you haven't installed those LaTeX packages, you won't be able to render
 the tables produced by \code{latexTable}.\cr\cr
 \emph{Changes from pre-release versions:}
 \itemize{
