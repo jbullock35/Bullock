@@ -126,10 +126,6 @@
 
 # TODO:
 # --Checking of pdflatex existence and package existence:
-#   --The checking for pdflatex and packages is still too slow. See whether 
-#     there's a way to cache the result so that the full check is done only 
-#     once per session. (I could write a cookie-like file, but would it last?)  
-#     through the session?  [2019 12 24]
 #   --Test for existence of pdflscape package only if at least one table in 
 #     the table list is landscaped. Don't both adding a "landscape" attribute
 #     to the latexTable objects; instead, just grep for "\landscape{" or 
@@ -200,22 +196,34 @@ latexTablePDF <- function(
       stringr::str_wrap('At least two of the latexTable objects share the same label. Problems will arise if you try to cross-reference your tables in your LaTeX document -- for example, with "\\ref" or "\\pageref".')
     )        
   }
-  if (writePDF && !nzchar(Sys.which("pdflatex"))) {
-    stop("pdflatex doesn't seem to be on your path. A PDF file can't be created.")
+  
+  
+  # CHECK FOR PDFLATEX
+  if (writePDF && !exists(".pdflatex_found")) {
+    if (!nzchar(Sys.which("pdflatex")))  {
+      stop("pdflatex doesn't seem to be on your path. A PDF file can't be created.")
+    }
+    else {
+      assign(".pdflatex_found", TRUE, envir = parent.frame())
+    }
   }
   
   
   
   # CHECK FOR INSTALLED PACKAGES
   kpsewhichExists <- nzchar(Sys.which("kpsewhich"))  # LaTeX package-checking tool
-  if (containerFilename=='tableContainer.tex' && kpsewhichExists) {
+  if (containerFilename=='tableContainer.tex' && kpsewhichExists && !exists(".latex_packages_found")) {
     requiredPackageList  <- qw("array booktabs caption fancyhdr geometry ragged2e")
     installedPackageList <- system2(
       command = "kpsewhich", 
       args    = paste0(requiredPackageList, ".sty", collapse=' '), 
       stdout  = TRUE)
     if (length(installedPackageList) < length(requiredPackageList)) {  # if a package is missing
+      # Stop if trying to write PDF, warn if only trying to write .tex.
       missingPackageString(installedPackageList, requiredPackageList, writePDF, writeTex)  
+    }
+    else {
+      assign(".latex_packages_found", TRUE, envir = parent.frame())
     }
   }
     
