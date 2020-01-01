@@ -125,8 +125,6 @@
 
 
 # TODO:
-# --Test this function (a) on systems that don't have fontcommands.sty or 
-#   mathcommands.sty installed, and (b) on non-Windows systems.  [2019 12 16]
 # --Checking of pdflatex existence and package existence:
 #   --The checking for pdflatex and packages is still too slow. See whether 
 #     there's a way to cache the result so that the full check is done only 
@@ -136,6 +134,8 @@
 #     the table list is landscaped. Don't both adding a "landscape" attribute
 #     to the latexTable objects; instead, just grep for "\landscape{" or 
 #     whatever the relevant string is.  [2019 12 23]
+# --Test this function (a) on systems that don't have fontcommands.sty or 
+#   mathcommands.sty installed, and (b) on non-Windows systems.  [2019 12 16]
 
 
 #' @export
@@ -220,14 +220,14 @@ latexTablePDF <- function(
   }
     
   # Further warnings and errors
-  if (file.exists(paste0(outputFilenameStem, '.pdf')) && overwriteExisting) {
-    warning(paste0(outputFilenameStem, '.pdf will be overwritten.'))
-  } else if (file.exists(paste0(outputFilenameStem, '.pdf')) && !overwriteExisting) {
+  if (writePDF && file.exists(paste0(outputFilenameStem, '.pdf')) && overwriteExisting) {
+    message(paste0(outputFilenameStem, '.pdf will be overwritten.'))
+  } else if (writePDF && file.exists(paste0(outputFilenameStem, '.pdf')) && !overwriteExisting) {
     stop(paste0(outputFilenameStem, '.pdf already exists and overwriteExisting = FALSE.'))
   }
-  if (file.exists(paste0(outputFilenameStem, '.tex')) && overwriteExisting && writeTex) {
-    warning(paste0(outputFilenameStem, '.tex will be overwritten.'))
-  } else if (file.exists(paste0(outputFilenameStem, '.tex')) && !overwriteExisting) {
+  if (writeTex && file.exists(paste0(outputFilenameStem, '.tex')) && overwriteExisting) {
+    message(paste0(outputFilenameStem, '.tex will be overwritten.'))
+  } else if (writeTex && file.exists(paste0(outputFilenameStem, '.tex')) && !overwriteExisting) {
     stop(paste0(outputFilenameStem, '.tex already exists and overwriteExisting = FALSE.'))
   }
   if (continuedFloat && continuedFloatStar) {
