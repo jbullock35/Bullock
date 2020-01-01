@@ -18,10 +18,12 @@
 #' \code{\link[=latexTable]{latexTable()}} documentation for further 
 #' information about these arguments.
 missingPackageString <- function (installedPackageList, requiredPackageList, writePDF, writeTex) {
-  missingPackages <- sapply(requiredPackageList, grepl, installedPackageList) %>% 
-    apply(.data, 2, any) %>%
-    { which(!.data) } %>%
-    names
+  # Better to do this with the pipe. But I have trouble getting "." or ".data"
+  # to work with apply or grepl.  [2020 01 01]
+  missingPackages <- sapply(requiredPackageList, grepl, installedPackageList) 
+  missingPackages <- apply(missingPackages, 2, any)
+  missingPackages <- which(!missingPackages)
+  missingPackages <- names(missingPackages)
   
   missingPackageString <- switch(
     length(missingPackages),
