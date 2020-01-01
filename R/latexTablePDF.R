@@ -18,7 +18,7 @@
 #'   every LaTeX installation.) The `array,` `booktabs,` `caption,` and 
 #'   `numprint` packages must also be installed. In addition:
 #' * If \code{writePDF} is \code{TRUE} and \code{containerFilename} is 
-#'   "tableContainer.tex" (the default), the `fancyhdr,` `geometry,`
+#'   "tableContainer.tex" (the default), the `fancyhdr,` `footmisc`, `geometry,`
 #'   and `ragged2e` packages must be installed.
 #' * If \code{writePDF} is \code{TRUE} and you are producing a landscaped 
 #'   table, the \code{afterpage} and \code{pdflscape} packages must be
@@ -132,13 +132,26 @@
 
 
 # TODO:
-# --Checking of pdflatex existence and package existence:
-#   --Test for existence of pdflscape package only if at least one table in 
-#     the table list is landscaped. Don't both adding a "landscape" attribute
-#     to the latexTable objects; instead, just grep for "\landscape{" or 
-#     whatever the relevant string is.  [2019 12 23]
-# --Test this function (a) on systems that don't have fontcommands.sty or 
-#   mathcommands.sty installed, and (b) on non-Windows systems.  [2019 12 16]
+# --Get the tests working in Ubuntu:
+#   --In Ubuntu, don't start R with root permissions.  [2020 01 01]
+#   --In Ubuntu, it seems that I can write the .tex files to disk -- this is 
+#     done straight from R. But system2() doesn't create the PDF files.
+#     Perhaps the problem lies with system2() trying to run pdflatex in 
+#     /tmp. Perhaps it should simply be run in the user's working directory.
+#     After all, there is no need to create temporary files in a special 
+#     directory: tempfile() ensures a unique filename, and I unlink() the 
+#     temporary files almost as soon as they're created. So *start by 
+#     writing the temporary files to the user's working directory.* This will 
+#     simplify the code, and it may also get the tests working on Ubuntu.
+#     [2020 01 01]
+#     --OR is the problem that system2() is writing the PDF to the 
+#       tests/testthat directory? THIS MAY BE THE PROBLEM -- CHECK IT FIRST!
+#       (Even if it is the problem, the key may still be to stop futzing with
+#       temporary directories.)  [2020 01 01]
+#
+# --Test this function on systems that don't have fontcommands.sty or 
+#   mathcommands.sty installed. What does the PDF look like in those cases?
+#   [2019 12 16]
 
 
 #' @export
@@ -243,7 +256,7 @@ latexTablePDF <- function(
       any
     requiredPackageList  <- qw("array booktabs caption numprint")
     if (containerFilename == 'tableContainer.tex') {
-      requiredPackageList <- c(requiredPackageList, qw("fancyhdr geometry ragged2e"))
+      requiredPackageList <- c(requiredPackageList, qw("fancyhdr footmisc geometry ragged2e"))
     }
     if (tablesAreLandscaped) {
       requiredPackageList <- c(requiredPackageList, qw("afterpage pdflscape"))
@@ -368,6 +381,7 @@ latexTablePDF <- function(
   writeLines(newTable, tmpFilename)
   if (writePDF) {  
     if (container && verbose) {
+      # browser()
       system2(
         command = 'pdflatex', 
         args    = c(

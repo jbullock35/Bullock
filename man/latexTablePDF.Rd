@@ -110,7 +110,7 @@ every LaTeX installation.) The \verb{array,} \verb{booktabs,} \verb{caption,} an
 \code{numprint} packages must also be installed. In addition:
 \itemize{
 \item If \code{writePDF} is \code{TRUE} and \code{containerFilename} is
-"tableContainer.tex" (the default), the \verb{fancyhdr,} \verb{geometry,}
+"tableContainer.tex" (the default), the \verb{fancyhdr,} \code{footmisc}, \verb{geometry,}
 and \code{ragged2e} packages must be installed.
 \item If \code{writePDF} is \code{TRUE} and you are producing a landscaped
 table, the \code{afterpage} and \code{pdflscape} packages must be
