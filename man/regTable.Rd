@@ -9,7 +9,6 @@ regTable(
   colNames = NULL,
   rowsToRemove = NULL,
   rowsToKeep = NULL,
-  clusterSEs = FALSE,
   clusterVar = NULL
 )
 }
@@ -29,15 +28,13 @@ expressions. Variables in the regressions whose names match the strings will
 be kept in the \code{regTable} output. All other variables will be omitted.
 If \code{rowsToRemove} is specified, this argument has no effect.}
 
-\item{clusterSEs}{A logical scalar. If \code{TRUE}, the reported standard 
-errors will be clustered at the level specified by \code{clusterVar}.}
-
-\item{clusterVar}{A list of length \code{length(objList)}. Each element in 
+\item{clusterVar}{A list of length{\NB}1 or \code{length(objList)}. Each element in 
 the list indicates the clusters for the corresponding regression object in
 \code{objList}. If the regressions in \code{objList} are of class \code{lm},
 \code{clusterVar} is passed to \code{multiwayvcov::cluster.vcov}. If the 
  regressions in \code{objList} are instead of class \code{ivreg},
-\code{clustervar} is passed to \code{ivpack::cluster.robust.se}.}
+\code{clustervar} is passed to \code{ivpack::cluster.robust.se}. Can be 
+\code{NULL} (the default), in which case standard errors won't be clustered.}
 }
 \value{
 A matrix in which the columns are estimates and 
@@ -49,8 +46,8 @@ regression -- AKA \eqn{\sigma} or the "residual standard error" --- for
 each model.)
 }
 \description{
-\code{regTable} takes a list of regression objects, such as those created 
-by \code{lm}. It returns a matrix in which the columns are estimates and 
+\code{regTable()} takes a list of regression objects, such as those created 
+by \code{lm()}. It returns a matrix in which the columns are estimates and 
 standard errors -- two columns for each model.
 }
 \note{
@@ -67,10 +64,10 @@ regTable(list(lm1, lm2))
 regTable(list(lm1, lm2), colNames = c("Sepal length", "Sepal width"))
 regTable(list(lm1, lm2), rowsToKeep = 'Length')
 regTable(list(lm1, lm2), rowsToKeep = c('Intercept', 'Length'))
+regTable(list(lm1, lm2), clusterVar = list(iris$Species))
 }
 \seealso{
-Other functions for making tables: 
-\code{\link{latexTablePDF}()},
-\code{\link{latexTable}()}
+Other functions for making tables: \linkInt{latexTable}, 
+\linkInt{latexTablePDF}. See also the \href{../doc/tables.html}{Building better tables in less time} 
+vignette.
 }
-\concept{functions for making tables}

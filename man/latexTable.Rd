@@ -242,19 +242,17 @@ Useful if you want to paste the output directly into a \code{.tex} file.
 Works only on Windows.}
 }
 \value{
-An object of class \code{latexTable} and \code{character}. The
+An object of classes \code{latexTable} and \code{character}. The
 returned object is a vector of strings of LaTeX code; each string is a line
 in a LaTeX macro that can create a table. (There is one small exception. If
 \code{callCommand} is \code{TRUE}, the last line is not part of the macro;
 instead, it calls the macro, thereby telling LaTeX to display the table).
 }
 \description{
-\code{latexTable} takes a single matrix, \code{mat}. By default, it returns
+\code{latexTable()} takes a single matrix, \code{mat}. By default, it returns
 a LaTeX macro that creates a well-formatted LaTeX table.
 }
 \note{
-\emph{Creating PDF tables.} \code{latexTable} tables can be transformed to
-PDF with \linkInt{latexTablePDF}.\cr\cr
 \emph{Required LaTeX packages.} The LaTeX code produced by the
 \code{latexTable} makes use of capabilities provided by the \code{array},
 \code{booktabs}, \code{caption}, and \code{numprint}{\NB}LaTeX packages---and,
@@ -289,7 +287,11 @@ lt2 <- latexTable(
 lt3 <- latexTable(
   mat         = rT1, 
   colNames    = lt_colNumbers(),
-  rowNames    = c("Intercept", "Petal length", "Petal width", "Petal length $\\\\times$ petal width"),
+  rowNames    = c(
+    "Intercept", 
+    "Petal length", 
+    "Petal width", 
+    "Petal length $\\\\times$ petal width"),
   footerRows  = list(lt_nobsRow(), lt_rSquaredRow()),
   commandName = 'mainEstimates',
   caption     = "Each entry is an estimate or a standard error from a separate OLS regression.")
@@ -299,11 +301,10 @@ lt4 <- update(
   spacerRows  = 1)              # add vertical space after intercept row
 }
 \seealso{
-Other functions for making tables: 
-\code{\link{latexTablePDF}()},
-\code{\link{regTable}()}
+Other functions for making tables: \linkInt{regTable},
+\linkInt{latexTablePDF}. See also the \href{../doc/tables.html}{Building better tables in less time}
+vignette.
 }
 \concept{Tufte}
-\concept{functions for making tables}
 \concept{table}
 \concept{tables}

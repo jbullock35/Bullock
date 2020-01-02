@@ -212,10 +212,11 @@ formatting requirements that cannot be satisfied by the `latexTable()` options.
 
 
 ## Cutting and pasting with `headerFooter = FALSE`
-You may prefer not to generate standalone .tex or PDF files. Instead, you may 
-already have the skeleton of a LaTeX table set up, and you may just want to 
-copy the table rows (specified as LaTeX code) from R into that skeleton table. 
-This is easy to do with the `headerFooter` argument to `latexTable()`:
+You may prefer not to generate standalone .tex or PDF files. Instead, you may
+already have the skeleton of a LaTeX table set up in your master LaTeX
+document, and you may just want to copy the table rows (specified as LaTeX
+code) from R into that skeleton table. This is easy to do with the
+`headerFooter` argument to `latexTable()`:
 ```{r cutPaste}
 latexTable(
   headerFooter  = FALSE,

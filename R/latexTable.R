@@ -1,10 +1,10 @@
 #' Create a LaTeX table from a matrix.
 #' 
-#' \code{latexTable} takes a single matrix, \code{mat}. By default, it returns 
+#' \code{latexTable()} takes a single matrix, \code{mat}. By default, it returns 
 #' a LaTeX macro that creates a well-formatted LaTeX table. 
 
 
-#' @return An object of class \code{latexTable} and \code{character}. The 
+#' @return An object of classes \code{latexTable} and \code{character}. The 
 #' returned object is a vector of strings of LaTeX code; each string is a line
 #' in a LaTeX macro that can create a table. (There is one small exception. If
 #' \code{callCommand} is \code{TRUE}, the last line is not part of the macro; 
@@ -12,9 +12,6 @@
 
 
 #' @note
-#' \emph{Creating PDF tables.} \code{latexTable} tables can be transformed to  
-#' PDF with \linkInt{latexTablePDF}.\cr\cr
-
 #' \emph{Required LaTeX packages.} The LaTeX code produced by the  
 #'  \code{latexTable} makes use of capabilities provided by the \code{array}, 
 #'  \code{booktabs}, \code{caption}, and \code{numprint}{\NB}LaTeX packages---and,
@@ -38,7 +35,9 @@
 #' @concept Tufte
 #' @concept table
 #' @concept tables
-#' @family functions for making tables
+#' @seealso Other functions for making tables: \linkInt{regTable}, 
+#' \linkInt{latexTablePDF}. See also the \href{../doc/tables.html}{Building better tables in less time} 
+#' vignette. 
 
 
 #' @examples
@@ -55,7 +54,11 @@
 #' lt3 <- latexTable(
 #'   mat         = rT1, 
 #'   colNames    = lt_colNumbers(),
-#'   rowNames    = c("Intercept", "Petal length", "Petal width", "Petal length $\\times$ petal width"),
+#'   rowNames    = c(
+#'     "Intercept", 
+#'     "Petal length", 
+#'     "Petal width", 
+#'     "Petal length $\\times$ petal width"),
 #'   footerRows  = list(lt_nobsRow(), lt_rSquaredRow()),
 #'   commandName = 'mainEstimates',
 #'   caption     = "Each entry is an estimate or a standard error from a separate OLS regression.")

@@ -22,7 +22,7 @@ latexTablePDF(
 }
 \arguments{
 \item{latexTable}{Object of class \code{latexTable} (typically produced by
-\code{latexTable()} or a list of such objects.}
+\code{latexTable()}) or a list of such objects.}
 
 \item{container}{Logical variable. Should the LaTeX code in \code{latexTable}
 be inserted into a LaTeX file that contains a complete LaTeX preamble and
@@ -89,7 +89,7 @@ by \code{latexTablePDF}? This argument has an effect only on Windows, and
 only if \code{writePDF} is \code{TRUE}.}
 }
 \description{
-\code{latexTablePDF} takes an object produced by \code{latexTable} and
+\code{latexTablePDF()} takes an object produced by \linkInt{latexTable} and
 writes a PDF file. It can also write the corresponding .tex file.
 }
 \details{
@@ -131,7 +131,11 @@ LaTeX installation.
   lT1 <- latexTable(
     mat        = rT1,
     colNames   = lt_colNumbers(),
-    rowNames   = c("Intercept", "Petal length", "Petal width", "Petal length $\\\\times$ petal width"),
+    rowNames   = c(
+      "Intercept", 
+      "Petal length", 
+      "Petal width", 
+      "Petal length $\\\\times$ petal width"),
     footerRows = list(lt_nobsRow(), lt_rSquaredRow()),
     spacerRows = 1,  # insert white space between Intercept row and other rows
     caption    = paste0(
@@ -159,8 +163,5 @@ LaTeX installation.
 }  
 }
 \seealso{
-Other functions for making tables: 
-\code{\link{latexTable}()},
-\code{\link{regTable}()}
+Other functions for making tables: \linkInt{regTable}, \linkInt{latexTable}
 }
-\concept{functions for making tables}

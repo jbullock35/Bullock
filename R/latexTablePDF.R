@@ -1,6 +1,6 @@
 #' Renders a LaTeX table as a PDF file.
 #' 
-#' \code{latexTablePDF} takes an object produced by \code{latexTable} and 
+#' \code{latexTablePDF()} takes an object produced by \linkInt{latexTable} and 
 #' writes a PDF file. It can also write the corresponding .tex file.
 #' 
 #' Although \code{latexTablePDF} produces PDF files by default, it is also 
@@ -29,8 +29,7 @@
 #' @md
 
 
-#' @family functions for making tables
-
+#' @seealso Other functions for making tables: \linkInt{regTable}, \linkInt{latexTable}
 
 #' @examples
 #' \dontrun{
@@ -43,7 +42,11 @@
 #'   lT1 <- latexTable(
 #'     mat        = rT1,
 #'     colNames   = lt_colNumbers(),
-#'     rowNames   = c("Intercept", "Petal length", "Petal width", "Petal length $\\times$ petal width"),
+#'     rowNames   = c(
+#'       "Intercept", 
+#'       "Petal length", 
+#'       "Petal width", 
+#'       "Petal length $\\times$ petal width"),
 #'     footerRows = list(lt_nobsRow(), lt_rSquaredRow()),
 #'     spacerRows = 1,  # insert white space between Intercept row and other rows
 #'     caption    = paste0(
@@ -73,7 +76,7 @@
 
 
 #' @param latexTable Object of class \code{latexTable} (typically produced by 
-#'   \code{latexTable()} or a list of such objects.
+#'   \code{latexTable()}) or a list of such objects.
 #' @param container Logical variable. Should the LaTeX code in \code{latexTable}
 #'   be inserted into a LaTeX file that contains a complete LaTeX preamble and
 #'   the \code{\\begin{document}} and \code{\\end{document}} tags? If you want 
@@ -129,12 +132,6 @@
 #'   by \code{latexTablePDF}? This argument has an effect only on Windows, and
 #'   only if \code{writePDF} is \code{TRUE}.     
 
-
-
-# TODO:
-# --Test this function on systems that don't have fontcommands.sty or 
-#   mathcommands.sty installed. What does the PDF look like in those cases?
-#   [2019 12 16]
 
 
 #' @export

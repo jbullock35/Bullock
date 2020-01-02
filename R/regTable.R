@@ -1,7 +1,7 @@
 #' Create a matrix of regression output from a list of regression models.
 #' 
-#' \code{regTable} takes a list of regression objects, such as those created 
-#' by \code{lm}. It returns a matrix in which the columns are estimates and 
+#' \code{regTable()} takes a list of regression objects, such as those created 
+#' by \code{lm()}. It returns a matrix in which the columns are estimates and 
 #' standard errors -- two columns for each model. 
 
 #' @importFrom magrittr %>%
@@ -21,7 +21,7 @@
 #' be kept in the \code{regTable} output. All other variables will be omitted.
 #' If \code{rowsToRemove} is specified, this argument has no effect.
 #' 
-#' @param clusterVar A list of length \code{length(objList)}. Each element in 
+#' @param clusterVar A list of length{\NB}1 or \code{length(objList)}. Each element in 
 #' the list indicates the clusters for the corresponding regression object in
 #' \code{objList}. If the regressions in \code{objList} are of class \code{lm},
 #' \code{clusterVar} is passed to \code{multiwayvcov::cluster.vcov}. If the 
@@ -44,7 +44,9 @@
 #' \code{rowsToKeep}.
 
 
-#' @family functions for making tables 
+#' @seealso Other functions for making tables: \linkInt{latexTable}, 
+#' \linkInt{latexTablePDF}. See also the \href{../doc/tables.html}{Building better tables in less time} 
+#' vignette. 
 
 
 #' @examples
@@ -55,9 +57,8 @@
 #' regTable(list(lm1, lm2), colNames = c("Sepal length", "Sepal width"))
 #' regTable(list(lm1, lm2), rowsToKeep = 'Length')
 #' regTable(list(lm1, lm2), rowsToKeep = c('Intercept', 'Length'))
+#' regTable(list(lm1, lm2), clusterVar = list(iris$Species))
 
-
-# TODO: add an example that involves clusterVar.  [2019 12 17]
 
 
 #' @export
