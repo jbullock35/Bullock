@@ -132,23 +132,6 @@
 
 
 # TODO:
-# --Get the tests working in Ubuntu:
-#   --In Ubuntu, don't start R with root permissions.  [2020 01 01]
-#   --In Ubuntu, it seems that I can write the .tex files to disk -- this is 
-#     done straight from R. But system2() doesn't create the PDF files.
-#     Perhaps the problem lies with system2() trying to run pdflatex in 
-#     /tmp. Perhaps it should simply be run in the user's working directory.
-#     After all, there is no need to create temporary files in a special 
-#     directory: tempfile() ensures a unique filename, and I unlink() the 
-#     temporary files almost as soon as they're created. So *start by 
-#     writing the temporary files to the user's working directory.* This will 
-#     simplify the code, and it may also get the tests working on Ubuntu.
-#     [2020 01 01]
-#     --OR is the problem that system2() is writing the PDF to the 
-#       tests/testthat directory? THIS MAY BE THE PROBLEM -- CHECK IT FIRST!
-#       (Even if it is the problem, the key may still be to stop futzing with
-#       temporary directories.)  [2020 01 01]
-#
 # --Test this function on systems that don't have fontcommands.sty or 
 #   mathcommands.sty installed. What does the PDF look like in those cases?
 #   [2019 12 16]
@@ -376,7 +359,11 @@ latexTablePDF <- function(
   }
   
   
-  # CREATE FILES IN THE NEW TEMPORARY DIRECTORY
+  # CREATE FILES IN A TEMPORARY DIRECTORY
+  # We create files in a temporary directory so that we don't have to clean up
+  # the files created by pdflatex: .aux, .log, etc. Also so that we don't 
+  # clutter the user's directory if the function aborts for any reason.
+  # [2020 01 02]
   tmpFilename <- tempfile(fileext = '.tex')  # includes path to tempdir()
   writeLines(newTable, tmpFilename)
   if (writePDF) {  
@@ -385,8 +372,8 @@ latexTablePDF <- function(
       system2(
         command = 'pdflatex', 
         args    = c(
-          shQuote(tmpFilename), 
-          paste("-output-directory", shQuote(tempdir()))
+          paste("-output-directory", shQuote(tempdir())),
+          shQuote(tmpFilename) 
         )
       )
     } 
@@ -394,8 +381,8 @@ latexTablePDF <- function(
       system2(
         command = 'pdflatex', 
         args    = c(
-          shQuote(tmpFilename), 
-          paste("-output-directory", shQuote(tempdir()))
+          paste("-output-directory", shQuote(tempdir())),
+          shQuote(tmpFilename) 
         ),
         stdout  = FALSE,
         stderr  = FALSE        
