@@ -1,4 +1,4 @@
-# latexTable_tests.R
+# test_latexTable.R
 # Created on 2019-12-14
 # Created by John Bullock
 
@@ -13,8 +13,6 @@ mat1 <- matrix(c(-3:12, 0.0, 0.0000, -1.0000008, NA, 1.555, 9:11), nrow = 4)
 lt1_default  <- latexTable(mat1) 
 lt1_dp1      <- latexTable(mat1, decimalPlaces = 1) 
 lt1_noSC     <- latexTable(mat1, spacerColumns = NULL)
-  # TODO: figure out how to run something like
-  # update(lt1, spacerColumns = spacerColumns_default())
 lt1_noSC_dp3 <- update(lt1_noSC, decimalPlaces = 3)
 lt1_mat2col  <- update(lt1_default, mat = matrix(1:16, nrow = 8)) 
 
