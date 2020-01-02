@@ -21,15 +21,13 @@
 #' be kept in the \code{regTable} output. All other variables will be omitted.
 #' If \code{rowsToRemove} is specified, this argument has no effect.
 #' 
-#' @param clusterSEs A logical scalar. If \code{TRUE}, the reported standard 
-#' errors will be clustered at the level specified by \code{clusterVar}.
-#' 
 #' @param clusterVar A list of length \code{length(objList)}. Each element in 
 #' the list indicates the clusters for the corresponding regression object in
 #' \code{objList}. If the regressions in \code{objList} are of class \code{lm},
 #' \code{clusterVar} is passed to \code{multiwayvcov::cluster.vcov}. If the 
 #'  regressions in \code{objList} are instead of class \code{ivreg},
-#' \code{clustervar} is passed to \code{ivpack::cluster.robust.se}.
+#' \code{clustervar} is passed to \code{ivpack::cluster.robust.se}. Can be 
+#' \code{NULL} (the default), in which case standard errors won't be clustered.
 
 #' @return A matrix in which the columns are estimates and 
 #' standard errors -- two columns for each model. The matrix has an "N"
@@ -68,7 +66,6 @@ regTable <- function (
   colNames     = NULL, 
   rowsToRemove = NULL, 
   rowsToKeep   = NULL,
-  clusterSEs   = FALSE,
   clusterVar   = NULL) {
 
   if (! class(objList) %in% 'list') {
@@ -84,15 +81,27 @@ regTable <- function (
   if (! all(classVec %in% c('lm', 'plm', 'ivreg'))) {
     warning("regTable() has only been designed to work with models of class 'lm', 'plm', and 'ivreg'.")
   }
-  if (clusterSEs & all(classVec == 'lm') & !requireNamespace('multiwayvcov', quietly = TRUE)) {
+  if (!is.null(clusterVar) & any(classVec == 'lm') & !requireNamespace('multiwayvcov', quietly = TRUE)) {
     stop("To calculate clustered standard errors for regressions of class \"lm\", the \"multiwayvcov\" package must be installed.")
   }
-  if (clusterSEs & all(classVec == 'ivreg') & !requireNamespace('ivpack', quietly = TRUE)) {
+  if (!is.null(clusterVar) & any(classVec == 'ivreg') & !requireNamespace('ivpack', quietly = TRUE)) {
     stop("To calculate clustered standard errors for regressions of class \"ivreg\", the \"ivpack\" package must be installed.")
   }
-  if (clusterSEs & !all(classVec == 'lm') & !all(classVec == 'ivreg')) {
-    stop("clusterSEs is TRUE, but regTable() can only cluster SEs only when all objects in objList are 'lm' objects or when all objects in objList are 'ivreg' objects.")
+  if (!is.null(clusterVar) & !all(classVec == 'lm') & !all(classVec == 'ivreg')) {
+    stop("clusterVar isn't NULL, but regTable() can only cluster SEs only when all objects in objList are 'lm' objects or when all objects in objList are 'ivreg' objects.")
   }
+  
+  # Check for misspecified cluster name, e.g., "iris$species" instead of 
+  # "iris$Species". The former will become NULL, and in turn, users will think
+  # that they're getting clustered SEs when they're really getting unclustered
+  # SEs -- unless we check for this problem.  [2020 01 02]
+  if (!missing(clusterVar)) {  # clusterVar was specified by user
+    clusterVarName <- deparse(match.call()$clusterVar)
+    if (clusterVarName != 'NULL' && is.null(clusterVar)) {
+      stop("your clusterVar variable doesn't exist.")      
+    }
+  }
+
   if (!is.null(clusterVar) && class(clusterVar) != 'list') {
     stop("clusterVar must be an object of class 'list'")
   }
@@ -122,7 +131,7 @@ regTable <- function (
   
   # Get names of predictors, including intercept.  Eliminate names of 
   # unwanted rows.
-  tmp      <- sapply(objList, function (x) { names(x$coefficients) } )
+  tmp      <- sapply(objList, function (x) { names(x$coefficients) }, simplify = FALSE)
   rowNames <- unique(unlist(tmp)) 
   if (! is.null(rowsToRemove)) { 
     for (pat in rowsToRemove) {
@@ -148,22 +157,28 @@ regTable <- function (
   # matrix that this function will return.  Use coeftest(x) here because it is 
   # more robust than summary(x)$coefficients, which sometimes gives problems 
   # when I apply it to ivreg objects.  [2012 08 01]
-  if (clusterSEs == TRUE & all(classVec == 'lm')) {
+  if (!is.null(clusterVar) & all(classVec == 'lm')) {
     vcovs.clustered <- mapply(
-      FUN     = multiwayvcov::cluster.vcov,
-      model   = objList,
-      cluster = clusterVar)
+      FUN      = multiwayvcov::cluster.vcov,
+      model    = objList,
+      cluster  = clusterVar,
+      SIMPLIFY = FALSE)  # required when objList is length 1
     coefsAndSEs <- mapply(
-      FUN   = lmtest::coeftest,
-      x     = objList,
-      vcov. = vcovs.clustered) 
-    coefsAndSEs <- sapply(coefsAndSEs, function (x) x[, c('Estimate', 'Std. Error')])
+      FUN      = lmtest::coeftest,
+      x        = objList,
+      vcov.    = vcovs.clustered,
+      SIMPLIFY = FALSE)  # required when objList is length 1
+    coefsAndSEs <- sapply(
+      X        = coefsAndSEs, 
+      FUN      = function (x) x[, c('Estimate', 'Std. Error')],
+      simplify = FALSE)  # required when objList is length 1
   }
-  else if (clusterSEs == TRUE & all(classVec == 'ivreg')) {
+  else if (!is.null(clusterVar) & all(classVec == 'ivreg')) {
     coefsAndSEs <- mapply(
       FUN = ivpack::cluster.robust.se,
       objList,
-      clusterVar)
+      clusterVar, 
+      SIMPLIFY = FALSE)
     coefsAndSEs <- lapply(coefsAndSEs, function (x) x[, c('Estimate', 'Std. Error')])    
   }
   else {  
@@ -190,8 +205,8 @@ regTable <- function (
 
   
   # ADD CLASS AND ATTRIBUTES TO THE TO-BE-RETURNED OBJECT
-  class(out) <- c('regTable', class(out))  
-  attr(out, "N")    <- sapply(objList, nobs)
+  class(out)     <- c('regTable', class(out))  
+  attr(out, "N") <- sapply(objList, nobs)
   if ( all('lm' %in% sapply(objList, class)) ) {  # if every model is an lm() model 
     objListSum <- sapply(objList, function (x) summary(x)[c('r.squared', 'sigma')] )
     attr(out, "r.squared") <- as.numeric( objListSum['r.squared', ] )
