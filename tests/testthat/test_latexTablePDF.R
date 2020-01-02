@@ -7,8 +7,8 @@ context("Check that latexTablePDF() can write files.")
 
 # Check default behavior
 lT1 <- latexTable(matrix(1:16, nrow=4))
-lT1_filenameStem <- tempfile(tmpdir = '') 
-lT1_filenameStem <- gsub('^(\\\\*)', '', lT1_filenameStem)  # eliminate initial slashes
+lT1_filenameStem <- tempfile(tmpdir = '')  
+lT1_filenameStem <- gsub('^([/|\\\\]*)', '', lT1_filenameStem)  # eliminate initial slashes
 latexTablePDF(
   lT1, 
   outputFilenameStem = lT1_filenameStem,
@@ -24,7 +24,7 @@ latexTablePDF(
 # just one table.
 lT2 <- latexTable(matrix(1:16, nrow=4), commandName = 'secondTable')
 lT2_filenameStem <- tempfile(tmpdir = '')
-lT2_filenameStem <- gsub('^(\\\\*)', '', lT2_filenameStem)  # eliminate initial slashes
+lT2_filenameStem <- gsub('^([/|\\\\]*)', '', lT2_filenameStem)  # eliminate initial slashes
 latexTablePDF(
   list(lT1, lT2), 
   outputFilenameStem = lT2_filenameStem,
