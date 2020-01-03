@@ -2,6 +2,7 @@
 
 language: R
 cache: packages
+warnings_are_errors: false
 
 before_install:
   - tlmgr install booktabs caption fancyhdr footmisc geometry numprint pdflscape ragged2e 
