@@ -122,9 +122,12 @@ render the table directly to a PDF file by calling `latexTablePDF()`:
 ```{r quickstart-latexTablePDF, eval = FALSE}
 latexTablePDF(lT1, outputFilenameStem = 'irisTable')
 ```
-<img src = "lt1_screenshot.png">
-<!-- ![](lt1_screenshot.png)  -->
+<!-- img src = "lt1_screenshot.png" -->
+<!-- ![](lt1_screenshot.png) -->
 
+```{r quickstart-latexTablePDF-png, echo = FALSE}
+knitr::include_graphics('lt1_screenshot.png')
+```
 
 
 Or you can write the macro to a .tex file:
