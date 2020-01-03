@@ -4,4 +4,4 @@ language: R
 cache: packages
 
 before_install:
-  - tlmgr install afterpage array booktabs caption fancyhdr footmisc geometry numprint pdflscape ragged2e 
+  - tlmgr install booktabs caption fancyhdr footmisc geometry numprint pdflscape ragged2e 
