@@ -122,7 +122,8 @@ render the table directly to a PDF file by calling `latexTablePDF()`:
 ```{r quickstart-latexTablePDF, eval = FALSE}
 latexTablePDF(lT1, outputFilenameStem = 'irisTable')
 ```
-![](lt1_screenshot.png)
+<img src = "lt1_screenshot.png">
+<!-- ![](lt1_screenshot.png)  -->
 
 
 
