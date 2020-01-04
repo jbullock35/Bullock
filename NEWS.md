@@ -4,6 +4,8 @@
   default. The new `lNAv()` behaves like the previous version of `lNA()`.
 * Renamed `merge_fac()` to `mergeFac()` and adopted camelCase for function 
   names and arguments throughout the package.
+* Removed `factorToDummyMatrix()`. See `caret::dummyVars` or 
+  `makedummies::makedummies` for a replacement.
 * Removed ancient functions: `latable()`, `noNAmatrix()`, `split_fac()`. 
 
 
