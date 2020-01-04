@@ -1,15 +1,30 @@
-rescale <- function(x, newrange = c(0, 1)) {
-  # stopifnot(any(class(x) %in% c('integer', 'numeric', 'tbl')))
+#' Rescale a vector to have a specified minimum and maximum.
+#' 
+#' Rescale a vector to have a specified minimum and maximum.
+#'
+#' @param x Numeric object.
+#' @param newRange Numeric vector of length{\NB}2.
+#' 
+#' @examples 
+#' vec <- 1:10
+#' rescale(vec, c(2, 5))
+#' 
+#' @author 
+#' Simon D. Jackman
+#' 
+#' @seealso
+#'  \linkInt{scale} and \code{\link[scales:rescale]{scales::rescale()}}
+rescale <- function(x, newRange = c(0, 1)) {
 
   # if newrange has max first, reverse it
-  if(newrange[1] > newrange[2]) {
-    newmin <- newrange[2]
-    newrange[2] <- newrange[1]
-    newrange[1] <- newmin
+  if(newRange[1] > newRange[2]) {
+    newMin      <- newRange[2]
+    newRange[2] <- newRange[1]
+    newRange[1] <- newMin
   }
 
-  xrange <- range(x, na.rm = TRUE)
-  if(xrange[1] == xrange[2]) stop("can't rescale a constant vector!")
-  mfac <- (newrange[2] - newrange[1]) / (xrange[2] - xrange[1])
-  invisible(newrange[1] + (x-xrange[1])*mfac)
+  xRange <- range(x, na.rm = TRUE)
+  if(xRange[1] == xRange[2]) stop("can't rescale a constant vector!")
+  mfac <- (newRange[2] - newRange[1]) / (xRange[2] - xRange[1])
+  newRange[1] + (x-xRange[1])*mfac
 }
