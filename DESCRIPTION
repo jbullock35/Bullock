@@ -8,7 +8,8 @@ Authors@R: c(
   person("Jeffrey", "Ryan", role = "aut"),
   person("Florent", "Delmotte", role = "ctb"),
   person("Dirk", "Edelbuettel", role = "ctb"),
-  person("JD", "Long", role = "ctb")) 
+  person("JD", "Long", role = "ctb"),
+  person("Ken", "Williams", role = "ctb")) 
 Imports: lmtest, magrittr, rlang, stringr
 Suggests: 
     ivpack,

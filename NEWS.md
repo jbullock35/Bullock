@@ -2,11 +2,13 @@
 * Added `regTable()`, `latexTable()`, and `latexTablePDF()`.
 * Modified behavior of `lNA()` so that it no longer prints any output by 
   default. The new `lNAv()` behaves like the previous version of `lNA()`.
-* Renamed `merge_fac()` to `mergeFac()` and adopted camelCase for function 
-  names and arguments throughout the package.
+* Adopted camelCase for function names and arguments throughout the package.
+  `modal_value()` is now `modalValue()`, and so on.
+* Rewrote `moveToDF()` (formerly `move.to.df()`) from scratch. 
 * Removed `factorToDummyMatrix()`. See `caret::dummyVars` or 
   `makedummies::makedummies` for a replacement.
-* Removed ancient functions: `latable()`, `noNAmatrix()`, `split_fac()`. 
+* Removed ancient functions: `latable()`, `noNAmatrix()`, `split_fac()`.
+* Converted to roxygen for documentation of most functions.  
 
 
 # Pre-release versions.

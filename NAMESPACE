@@ -4,7 +4,7 @@ importFrom("stats", "logLik", "model.matrix", "nobs", "sd", "var")
 export(
   "%IN%", latexTable, latexTablePDF, lNA, lNAv, lsos,   
   lt_colNumbers, lt_nobsRow, lt_rSquaredRow, 
-  meanNA, mergeFac, modal_value, move.to.df, new_stack, pop, push, qw, 
+  meanNA, mergeFac, modalValue, moveToDF, new_stack, pop, push, qw, 
   regTable, reliability, rescale, sdNA, shift, unshift, sumNA, varNA)
 S3method(`[`, latexTable)
 S3method(print, latexTable)
