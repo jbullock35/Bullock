@@ -7,6 +7,7 @@ Authors@R: c(
   person("John", "Bullock", email = "john@johnbullock.org", role = c("aut", "cre")),
   person("Jeffrey", "Ryan", role = "aut"),
   person("Florent", "Delmotte", role = "ctb"),
+  person("Simon", "Jackman", role = "ctb"),
   person("Dirk", "Edelbuettel", role = "ctb"),
   person("JD", "Long", role = "ctb"),
   person("Ken", "Williams", role = "ctb")) 

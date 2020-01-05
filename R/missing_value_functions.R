@@ -28,6 +28,7 @@
 #' @name missingValueFunctions
 
 #' @rdname missingValueFunctions
+#' @export
 lNA <- function(x, verbose = FALSE) {   
   y <- length(x[!is.na(x)])
   if (verbose) print(noquote(paste0(y, " (length with NA=",length(x), ")")))
@@ -35,12 +36,15 @@ lNA <- function(x, verbose = FALSE) {
 }
 
 #' @rdname missingValueFunctions
+#' @export
 lNAv <- function (x) lNA(x, verbose = TRUE)
 
 #' @rdname missingValueFunctions
+#' @export
 meanNA <- function(x) mean(x, na.rm = TRUE)
 
 #' @rdname missingValueFunctions
+#' @export
 sdNA <- function(x)  sd(x, na.rm = TRUE)
     
 #' @rdname missingValueFunctions

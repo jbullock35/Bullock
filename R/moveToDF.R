@@ -17,7 +17,8 @@
 #' 
 #' @return Data frame containing all one-dimensional variables that have names 
 #' matching \code{pattern} and that have the modal length of those variables. 
-
+#' 
+#' @export
 moveToDF <- function(pattern = NULL, move = TRUE) {
 
   # GET ALL VARIABLE NAMES

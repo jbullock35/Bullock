@@ -25,7 +25,7 @@
 #' mergeFac(fac1, fac2)        # [1] a    y    b    <NA> <NA>
 #' mergeFac(fac1, fac2, fac3)  # [1] a    y    b    z    <NA>
 
-
+#' @export 
 mergeFac <- function(x, ...) {
   stopifnot('factor' %in% class(x))
   otherFactors <- list(...)

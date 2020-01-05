@@ -13,7 +13,9 @@
 #' Simon D. Jackman
 #' 
 #' @seealso
-#'  \linkInt{scale} and \code{\link[scales:rescale]{scales::rescale()}}
+#' \linkInt{scale} and \code{\link[scales:rescale]{scales::rescale()}}
+#' 
+#' @export 
 rescale <- function(x, newRange = c(0, 1)) {
 
   # if newrange has max first, reverse it

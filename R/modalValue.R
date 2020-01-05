@@ -16,7 +16,8 @@
 #' 
 #' @author 
 #' Ken Williams. See \url{http://stackoverflow.com/a/8189441/697473}.
-
+#' 
+#' @export 
 modalValue <- function(x, na.rm = FALSE) {
   if (na.rm) {
     ux <- unique(x[!is.na(x)])
