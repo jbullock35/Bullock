@@ -60,12 +60,6 @@
 
 
 # TODO: 
-# --Point out that the methods can modify in place, without assignment. Show 
-#   how push() and pop() work together and how shift() and unshift() work 
-#   together.  [2020 01 07]
-#   tmp2 <- tmp
-#   push(tmp, 4:5)
-#   tmp$.Data
 # --Write an appropriate print method for "stack" objects.  [2019 12 18]
 
 
