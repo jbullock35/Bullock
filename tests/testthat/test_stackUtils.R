@@ -5,7 +5,7 @@
 context("Check output from the stack utilities: push(), pop(), shift(), and unshift()")
 
 test_that("push() and pop() work as expected", {
-  x <- newStack()
+  x <- new_stack()
   push(x, 1:5)
   y <- pop(x)
   z <- pop(x)
@@ -15,7 +15,7 @@ test_that("push() and pop() work as expected", {
 })
 
 test_that("shift() and unshift() work as expected", {
-  x <- newStack()
+  x <- new_stack()
   shift(x, 1:5)
   y <- unshift(x)
   z <- unshift(x)
@@ -25,7 +25,7 @@ test_that("shift() and unshift() work as expected", {
 })
 
 test_that("copies of a stack object don't inherit subsequent changes to that object", {
-  x <- newStack(1:5)
+  x <- new_stack(1:5)
   xCopy <- x
   push(x, 6)
   expect_equal(x$data, 1:6)

@@ -519,13 +519,13 @@ latexTable <- function(
     
     # leadingDigits is used for the numprint column specifications.  [2012 07 24]
     leadingDigits <- apply(tmp, 2, function (x) max(nchar(x)))  # get # of digits before decimal point in each data column 
-    leadingDigits <- newStack(leadingDigits)                   # make leadingDigits work with unshift()
+    leadingDigits <- new_stack(leadingDigits)                   # make leadingDigits work with unshift()
     
     # Process spacerColumnsWidth.  If a different spacer column width was 
     # specified for each column, make spacerColumnsWidth into a stack from 
     # which I can unshift values.  [2012 08 05]
     spacerColumnsWidth <- rep(spacerColumnsWidth, length(spacerColumns))      # no effect if spacerColumnsWidth already has correct length.    
-    spacerColumnsWidth <- newStack(spacerColumnsWidth)
+    spacerColumnsWidth <- new_stack(spacerColumnsWidth)
     
     # Start to write the header.
     outputStrings <- c(outputStrings, paste0('\\newcommand\\', commandName, '[1]{'))
@@ -767,7 +767,7 @@ latexTable <- function(
     if (! is.null(footerRows)) {
       outputStrings <- c(outputStrings, '        \\addlinespace[.15in]')
       for (i in footerRows) {
-        footerRow <- newStack(unlist(i))
+        footerRow <- new_stack(unlist(i))
         
         # Break off the rowname.  [2012 07 25]
         if (! is.null(footerRow)) {

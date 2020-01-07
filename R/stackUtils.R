@@ -31,7 +31,7 @@
 #' 
 #' 
 #' @examples
-#' myStack <- newStack(1:3)
+#' myStack <- new_stack(1:3)
 #' push(myStack, 4)
 #' myStack$data
 #' 
@@ -72,7 +72,9 @@
 
 
 # S3 CONSTRUCTOR FUNCTION
-newStack <- function(x = NULL) { 
+# Per Hadley at https://adv-r.hadley.nz/s3.html, the constructor name should 
+# be new_stack, not newStack.  [2020 01 07]
+new_stack <- function(x = NULL) { 
   stack      <- new.env()
   stack$data <- vector()
 
