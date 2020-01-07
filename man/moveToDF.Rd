@@ -24,7 +24,15 @@ The modal length of all variables in the calling environment that match
 frame (or copied to a data frame if \code{move} is \code{FALSE}). 
 \code{pattern} may be \code{NULL}, in which case all variables in the 
 calling environment will be examined.
-  Variables that have the "dim" attribute -- for example, arrays and 
+}
+\details{
+If there are multiple modal lengths of the objects in the calling 
+environment, all modes will be used. For example, if the calling 
+environment has 20 objects of length{\NB}1, 20 objects of length{\NB}2, and
+one object of length{\NB}3, the returned data frame may have as many as 40
+columns.
+
+Variables that have the "dim" attribute -- for example, arrays and 
 matrices -- will not be moved into the new data frame. Functions will 
 never be moved into the new data frame, either.
 }
