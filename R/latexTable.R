@@ -518,14 +518,14 @@ latexTable <- function(
     }
     
     # leadingDigits is used for the numprint column specifications.  [2012 07 24]
-    leadingDigits <- apply(tmp, 2, function (x) max(nchar(x)))                # get number of digits before decimal point in each data column 
-    leadingDigits <- new_stack(leadingDigits)                                 # make leadingDigits work with unshift()
+    leadingDigits <- apply(tmp, 2, function (x) max(nchar(x)))  # get # of digits before decimal point in each data column 
+    leadingDigits <- newStack(leadingDigits)                   # make leadingDigits work with unshift()
     
     # Process spacerColumnsWidth.  If a different spacer column width was 
     # specified for each column, make spacerColumnsWidth into a stack from 
     # which I can unshift values.  [2012 08 05]
     spacerColumnsWidth <- rep(spacerColumnsWidth, length(spacerColumns))      # no effect if spacerColumnsWidth already has correct length.    
-    spacerColumnsWidth <- new_stack(spacerColumnsWidth)
+    spacerColumnsWidth <- newStack(spacerColumnsWidth)
     
     # Start to write the header.
     outputStrings <- c(outputStrings, paste0('\\newcommand\\', commandName, '[1]{'))
@@ -767,7 +767,7 @@ latexTable <- function(
     if (! is.null(footerRows)) {
       outputStrings <- c(outputStrings, '        \\addlinespace[.15in]')
       for (i in footerRows) {
-        footerRow <- new_stack(unlist(i))
+        footerRow <- newStack(unlist(i))
         
         # Break off the rowname.  [2012 07 25]
         if (! is.null(footerRow)) {
@@ -784,18 +784,18 @@ latexTable <- function(
         
         # Eliminate leading zeroes for R^2.  [2013 03 14]
         if (footerRowName %in% c('$R^2$', 'R$^2$')) {
-          footerRow$.Data <- gsub('^0(\\.\\d+)$', '\\1', footerRow$.Data)
+          footerRow$data <- gsub('^0(\\.\\d+)$', '\\1', footerRow$data)
         }
         
         # Add trailing zeroes for R^2 and SER, e.g., change "1.9" to "1.90" or
         # 1.9000 as needed.  [2019 12 30]
         if (footerRowName %in% c('$R^2$', 'R$^2$', 'SER', 'Std. error of regression', 'Standard error of regression')) {
-          for (i in 1:length(footerRow$.Data)) {
-            ncharAfterDecimal  <- gsub('\\d*\\.', '', footerRow$.Data[i]) %>% nchar
+          for (i in 1:length(footerRow$data)) {
+            ncharAfterDecimal  <- gsub('\\d*\\.', '', footerRow$data[i]) %>% nchar
             decimalPlacesToAdd <- decimalPlaces - ncharAfterDecimal
-            footerRow$.Data[i] <- stringr::str_pad(
-              string = footerRow$.Data[i], 
-              width  = nchar(footerRow$.Data[i]) + decimalPlacesToAdd,
+            footerRow$data[i] <- stringr::str_pad(
+              string = footerRow$data[i], 
+              width  = nchar(footerRow$data[i]) + decimalPlacesToAdd,
               side   = 'right',
               pad    = '0')
           }
@@ -803,7 +803,7 @@ latexTable <- function(
         
         if (!footerRowIsSpacer) { 
           # Construct the \multicolumn statements for footerRow.  [2012 07 25]
-          footerRow           <- paste0('          \\multicolumn{2}{c}{', footerRow$.Data, '} &')
+          footerRow           <- paste0('          \\multicolumn{2}{c}{', footerRow$data, '} &')
           footerRow[ncol / 2] <- sub('\\s*&\\s*', '', footerRow[ncol / 2])
           footerRow[ncol / 2] <- paste0(footerRow[ncol / 2], '\\tabularnewline')
           
