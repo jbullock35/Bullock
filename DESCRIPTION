@@ -5,13 +5,13 @@ Version: 1.19.1.9000
 Date: 2019-12-04
 Authors@R: c(
   person("John", "Bullock", email = "john@johnbullock.org", role = c("aut", "cre")),
-  person("Jeffrey", "Ryan", role = "aut"),
   person("Florent", "Delmotte", role = "ctb"),
+  person("Dirk", "Edelbuettel", role = "ctb"),
   person("Peter", "Ellis", role = "ctb"),
   person("Simon", "Jackman", role = "ctb"),
-  person("Dirk", "Edelbuettel", role = "ctb"),
   person("JD", "Long", role = "ctb"),
   person("Joseph", "Lucke", role = "ctb"),
+  person("Matt", "Pettis", role = "ctb"),
   person("Ken", "Williams", role = "ctb")) 
 Imports: lmtest, magrittr, rlang, stringr
 Suggests: 

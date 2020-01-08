@@ -2,66 +2,79 @@
 % Please edit documentation in R/stackUtils.R
 \name{stackUtilities}
 \alias{stackUtilities}
-\alias{newStack}
 \alias{push}
 \alias{pop}
-\alias{shift}
 \alias{unshift}
+\alias{shift}
 \title{Perl-like stack utilities for R.}
 \usage{
-newStack(x = NULL)
+push(x, values)
 
-push(stack, x)
+pop(x)
 
-pop(stack)
+unshift(x, values)
 
-shift(stack, x)
-
-unshift(stack)
+shift(x)
 }
 \arguments{
-\item{x}{Vector.}
+\item{x}{Object, typically a vector or a list.}
 
-\item{stack}{Stack object.}
+\item{values}{Object to be added to \code{x}.}
 }
 \value{
-For \code{new_stack()}, a stack object. For \code{pop()}, the last element
-of the stack object (which will also be removed from the stack object). For
-\code{unshift()}, the first element of the stack object (which will also 
-be removed from the stack object).
+\code{pop()} and \code{shift()} will return a scalar, that is, an object of 
+length{\NB}1. \code{push()} and \code{unshift()} don't return anything.
 }
 \description{
-\code{newStack()} constructs a "stack"---a vector---of data. You can "push"  
-new data onto the end of the vector with \code{push()} or "pop" data off 
-the end of it, one at a time, with \code{pop()}. You can also \code{shift()}
-data onto beginning of the vector or \code{unshift()} values from the 
-beginning of the vector---that is, remove them from the vector---one at a 
-time.
+You can "pop" data off the end of a vector, one element at a time, with 
+\code{pop()}. You can also "push" new data onto the end of the vector with 
+\code{push()}. The analogous functions for working at the start of a
+vector are \code{shift()} and \code{unshift()}: \code{shift()} removes the
+first element of your vector, and \code{unshift()} prepends new elements to
+your vector.
 }
 \details{
 An important and unusual feature of \code{push(), pop(), shift(),} and 
-\code{unshift()} is that they modify \code{stack} objects "in place"---that 
-is, even when no explicit assignment is done. For example, \code{pop(x)} 
-will return the last value of \code{x}, but it will also remove the last 
-value from the \code{x} object. The examples illustrate this point.
+\code{unshift()} is that they modify objects "in place"---that is, even  
+when no explicit assignment is done. For example, \code{pop(x)} will return 
+the last value of \code{x}, but it will also remove the last value from the 
+\code{x} object. The examples illustrate this point.
 
-Adapted from Jeffrey A. Ryan's code at \url{http://www.lemnica.com/esotericR/Introducing-Closures/}.
+These functions are adapted from Matt Pettis's code at 
+\url{https://gist.github.com/mpettis/b7bfeff282e3b052684f}.
+
+Previous versions of these functions were adapted from Jeffrey A. Ryan's 
+code at \url{http://www.lemnica.com/esotericR/Introducing-Closures/}. That
+code works but is based on the creation of "stack" objects that contain 
+their own environments. One consequence is that changing a copy of a stack
+object changes the original stack object, and vice versa. Note too that, 
+in Ryan's code, the traditional meanings of \code{shift()} and 
+\code{unshift()} are reversed: he uses \code{shift()} to concatenate 
+objects, \code{unshift()} to remove a value from an object.
 }
 \examples{
-myStack <- newStack(1:3)
+myStack <- 1:3
 push(myStack, 4)
-myStack$data
+myStack  # [1] 1 2 3 4
 
-pop(myStack)      # remove last element
-unshift(myStack)  # remove first element
-myStack$data
+pop(myStack)    # [1] 4
+shift(myStack)  # [1] 1
+myStack         # [1] 2 3
 
-shift(myStack, 'hello')
-myStack$data
+unshift(myStack, "hello")
+myStack         # [1] "hello" "2" "3"
 
 
 }
+\seealso{
+\href{https://gist.github.com/leeper/d6d085ac86d1e006167e#file-pushpop-r-L25}{Thomas Leeper's Gist}
+describes his own implementation of \code{pop()} and \code{push()} and 
+includes links to six other implementations. Some of these implementations
+of \code{pop()} and \code{push()} do not have the modify-in-place 
+characteristic of the corresponding Perl functions. This quality is also 
+absent from the constructor function at \url{https://stackoverflow.com/a/14489296/697473}.
+}
 \author{
-Jeffrey A. Ryan
+Matt Pettis
 John G. Bullock
 }
