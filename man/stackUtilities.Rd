@@ -76,5 +76,6 @@ absent from the constructor function at \url{https://stackoverflow.com/a/1448929
 }
 \author{
 Matt Pettis
+
 John G. Bullock
 }

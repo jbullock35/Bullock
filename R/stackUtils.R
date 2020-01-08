@@ -41,9 +41,8 @@
 #' length{\NB}1. \code{push()} and \code{unshift()} don't return anything.
 #' 
 #' 
-#' @author 
-#' Matt Pettis
-#' John G. Bullock
+#' @author Matt Pettis
+#' @author John G. Bullock
 #' 
 #' 
 #' @examples
