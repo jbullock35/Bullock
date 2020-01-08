@@ -2,6 +2,8 @@ doc
 inst/doc
 latexTable.pdf
 Meta
+.RData
+.Rhistory
 .Rproj.user
 /irisTable.pdf
 /texput.log

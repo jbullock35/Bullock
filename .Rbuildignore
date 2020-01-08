@@ -7,5 +7,6 @@
 ^\.Rproj\.user$
 ^.settings$
 ^doc$
+^docs$
 ^Meta$
 ^\.travis\.yml$
