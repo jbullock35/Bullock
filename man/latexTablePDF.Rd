@@ -163,5 +163,7 @@ LaTeX installation.
 }  
 }
 \seealso{
-Other functions for making tables: \linkInt{regTable}, \linkInt{latexTable}
+Other functions for making tables: \linkInt{latexTable},
+\linkInt{latexTablePDF}. See also the \href{../doc/tables.html}{Building better tables in less time}
+vignette.
 }

@@ -27,11 +27,16 @@ Useful links:
 }
 \author{
   \itemize{
-    \item Maintainer: John Bullock \email{john@johnbullock.org}
-    \item Jeffrey Ryan
+    \item Maintainer: John Bullock (\email{john@johnbullock.org})
     \item Florent Delmotte [contributor]
     \item Dirk Edelbuettel [contributor]
+    \item Peter Ellis [contributor]
+    \item Simon Jackman [contributor]
     \item JD Long [contributor]
+    \item Joseph Lucke [contributor]
+    \item Matt Pettis [contributor]
+    \item Ken Williams [contributor]
   }
 }
+
 \keyword{internal}

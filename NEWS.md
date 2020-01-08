@@ -1,10 +1,11 @@
-# Version 2.0
+# Version 2.0.0
 * Added `regTable()`, `latexTable()`, and `latexTablePDF()`.
 * Modified behavior of `lNA()` so that it no longer prints any output by 
   default. The new `lNAv()` behaves like the previous version of `lNA()`.
 * Adopted camelCase for function names and arguments throughout the package.
   `modal_value()` is now `modalValue()`, and so on.
-* Rewrote `moveToDF()` (formerly `move.to.df()`) from scratch. 
+* Rewrote `moveToDF()` (formerly `move.to.df()`) from scratch.
+* Rewrote the stack utilities: `pop()`, `push()`, `shift()`, and `unshift()`. 
 * Removed `factorToDummyMatrix()`. See `caret::dummyVars` or 
   `makedummies::makedummies` for a replacement.
 * Removed ancient functions: `latable()`, `noNAmatrix()`, `split_fac()`.

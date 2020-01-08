@@ -6,6 +6,7 @@ body {
 a:link {
     background: white;
     color: blue;
+    text-decoration: none;
 }
 
 a:visited {
