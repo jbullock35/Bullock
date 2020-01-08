@@ -18,7 +18,7 @@ vignette: >
     margin-right: 0
   }
   h1 {
-    margin-top: 1.75ex;
+    margin-top: 3ex;
   }
   h2 { 
     border-bottom: unset; 
