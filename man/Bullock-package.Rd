@@ -38,5 +38,3 @@ Useful links:
     \item Ken Williams [contributor]
   }
 }
-
-\keyword{internal}

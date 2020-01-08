@@ -1,3 +1,7 @@
+## Version 2.0.0.9000
+* If one goes to `help.start()` and then clicks on the "Bullock" entry, 
+  "Bullock-package" is now the first entry in the help index.
+
 # Version 2.0.0 (2020-01-08)
 * Added `regTable()`, `latexTable()`, and `latexTablePDF()`.
 * Modified behavior of `lNA()` so that it no longer prints any output by 
