@@ -130,12 +130,12 @@ appear in the next row of the column label, and so{\NB}on.\cr
 If \code{colnames(mat)} is \code{NULL}, columns will be numbered "(1)",
 "(2)", etc. See \linkInt{lt_colNames_default} for more information.}
 
-\item{colNameExpand}{Logical variable. By default, an entry of '' in a
+\item{colNameExpand}{Logical variable. By default, an entry of \code{\out{''}} in a
 \code{colNames} list element---that is, an empty entry---indicates that a
 column should have no column heading. But if \code{colNameExpand} is
 \code{TRUE} and a text entry in a \code{colNames} list element is
-followed by one or more '' entries, the column name specified by the text
-entry will bridge the columns that have '' entries.\cr
+followed by one or more \code{\out{''}} entries, the column name specified by the text
+entry will bridge the columns that have \code{\out{''}} entries.\cr
 \indent \code{colNameExpand} and \code{spacerColumns} do not play well
 together. If you run \code{latexTable} with \code{colNameExpand == TRUE}
 and a non-NULL \code{spacerColumns} argument, you will get LaTeX output,
