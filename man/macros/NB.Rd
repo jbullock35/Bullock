@@ -3,5 +3,5 @@
 % correctly in PDF and in Windows browsers. 
 
 
-
-\newcommand{\NB}{\ifelse{html}{\out{&nbsp;}}{\out{ }}}
+\newcommand{\latexNB}{\out{~}}
+\newcommand{\NB}{\ifelse{html}{\out{&nbsp;}}{\latexNB}}
