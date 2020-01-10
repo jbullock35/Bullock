@@ -151,12 +151,12 @@
 #'     \indent By default, column names will be taken from \code{colnames(mat)}.
 #'   If \code{colnames(mat)} is \code{NULL}, columns will be numbered "(1)", 
 #'   "(2)", etc. See \linkInt{lt_colNames_default} for more information. 
-#' @param colNameExpand Logical variable. By default, an entry of \code{\out{''}} in a
+#' @param colNameExpand Logical variable. By default, an entry of \out{''} in a
 #'   \code{colNames} list element---that is, an empty entry---indicates that a 
 #'   column should have no column heading. But if \code{colNameExpand} is 
 #'   \code{TRUE} and a text entry in a \code{colNames} list element is 
-#'   followed by one or more \code{\out{''}} entries, the column name specified by the text
-#'   entry will bridge the columns that have \code{\out{''}} entries.\cr
+#'   followed by one or more \out{''} entries, the column name specified by the text
+#'   entry will bridge the columns that have \out{''} entries.\cr
 #'     \indent \code{colNameExpand} and \code{spacerColumns} do not play well 
 #'   together. If you run \code{latexTable} with \code{colNameExpand == TRUE}
 #'   and a non-NULL \code{spacerColumns} argument, you will get LaTeX output,
