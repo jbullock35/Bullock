@@ -12,7 +12,7 @@
   `modal_value()` is now `modalValue()`, and so on.
 * Rewrote `moveToDF()` (formerly `move.to.df()`) from scratch.
 * Rewrote the stack utilities: `pop()`, `push()`, `shift()`, and `unshift()`. 
-* Removed `factorToDummyMatrix()`. See `caret::dummyVars` or 
+* Removed `factorToDummyMatrix()`. See `caret::class2ind` or 
   `makedummies::makedummies` for a replacement.
 * Removed ancient functions: `latable()`, `noNAmatrix()`, `split_fac()`.
 * Converted to roxygen for documentation of most functions.  
