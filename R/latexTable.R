@@ -849,7 +849,7 @@ latexTable <- function(
         outputStrings <- c(outputStrings, '\\afterpage{')
         outputStrings <- c(outputStrings, '  \\begin{landscape}')
         outputStrings <- c(outputStrings, '    \\thispagestyle{empty}')
-        outputStrings <- c(outputStrings, paste0('    \\', commandName, '{t}'))
+        outputStrings <- c(outputStrings, paste0('    \\', commandName, '{', floatPlacement, '}'))
         outputStrings <- c(outputStrings, '  \\end{landscape}')
         outputStrings <- c(outputStrings, '  \\clearpage')
         outputStrings <- c(outputStrings, '}')
