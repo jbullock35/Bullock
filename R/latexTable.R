@@ -363,7 +363,7 @@ latexTable <- function(
     stop('floatPlacement can contain only these characters: "p", "h", "H", "t", "b", and "!".')
   }
   if (SE_table && !is.null(colNames) && length(colNames[[1]]) != ncol/2) {
-    stop("length of colNames[[1]], ", length(colNames), ", is not half of ncol(mat).")
+    stop("SE_table is TRUE but length of colNames[[1]], ", length(colNames), ", is not half of ncol(mat).")
   }
   if (grepl('&', columnTierSeparator)) {
     warning(stringr::str_wrap("columnTierSeparator includes an ampersand. This is likely to screw up the layout of your table.", 72, exdent = 2))
