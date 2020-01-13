@@ -1,4 +1,5 @@
 ## Version 2.0.0.9000
+* In `regTable()`, improved checking of classes of `objList` elements.
 * If one goes to `help.start()` and then clicks on the "Bullock" entry, 
   "Bullock-package" is now the first entry in the help index.
 * Small improvements to documentation formatting.
