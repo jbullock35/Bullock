@@ -1,4 +1,5 @@
 ## Version 2.0.0.9000
+* Fixed bug in latexTable() calls for which `decimalPlaces` is 0.
 * In `regTable()`, improved checking of classes of `objList` elements.
 * Better `latexTable()` warning message when `colNames[[1]]` has the wrong length.
 * If one goes to `help.start()` and then clicks on the "Bullock" entry, 

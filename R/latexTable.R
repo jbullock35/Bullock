@@ -413,9 +413,14 @@ latexTable <- function(
       # NEW ATTEMPT TO PAD OUT ENTRIES WITH TRAILING ZEROES.  This "first 
       # strike" attempt uses str_pad().  [2014 06 21]  
       matChar <- as.character(mat[i,])                       # get row "i" of "mat"
-      matChar <- gsub('^0$', paste0('0.', z), matChar)       # take care of entries that are simply "0"
-      matChar <- gsub('^(-?\\d+)$', '\\1.', matChar)         # add decimal point to entries that contain only digits
-      matCharAfterDecimal <- gsub('-?\\d+\\.', '', matChar)  # get characters after the decimal place, e.g., "12" in "-3.12"
+      if (decimalPlaces > 0) {
+        matChar <- gsub('^0$', paste0('0.', z), matChar)       # take care of entries that are simply "0"
+        matChar <- gsub('^(-?\\d+)$', '\\1.', matChar)         # add decimal point to entries that contain only digits
+        matCharAfterDecimal <- gsub('-?\\d+\\.', '', matChar)  # vector of characters after decimal place in each entry, e.g., "12" in "-3.12"
+      } 
+      else {
+        matCharAfterDecimal <- rep('', length(matChar))
+      }
       
       decimalPlacesToAdd <- decimalPlaces - nchar(matCharAfterDecimal)  # e.g., add two zeroes to one entry, zero zeroes to another
       for (ind in 1:length(matChar)) {     # for each entry in row "i" of "mat"
@@ -437,7 +442,7 @@ latexTable <- function(
       # This is a much older attempt to pad out entries with trailing zeroes and
       # to process the entries in other ways.  It replaces '0' with '0.00', '123' 
       # with '123.00', etc.  [2011 02 17]     
-      if (SE_table) {
+      if (SE_table && decimalPlaces > 0) {
         matLine <- sub('^(-?\\d+)\\s',    paste0('\\1.',  z, ' '), matLine)  # If the first entry in a row is X, this changes it to, e.g., X.00
         matLine <- gsub('\\s(-?\\d+)\\s', paste0(' \\1.', z, ' '), matLine)  # For subsequent entries, replace ' 1 ' with ' 1.00 ', ' -1 ' with ' -1.00 ', etc.
         matLine <- gsub('\\s(\\d+)$',     paste0(' \\1.', z),      matLine)

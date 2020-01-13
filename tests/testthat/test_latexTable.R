@@ -11,6 +11,7 @@ regex_SER <- '(SER|Standard error of regression|Std. error of regression)'
 
 mat1 <- matrix(c(-3:12, 0.0, 0.0000, -1.0000008, NA, 1.555, 9:11), nrow = 4)
 lt1_default  <- latexTable(mat1) 
+lt1_dp0      <- latexTable(mat1, decimalPlaces = 0)
 lt1_dp1      <- latexTable(mat1, decimalPlaces = 1) 
 lt1_noSC     <- latexTable(mat1, spacerColumns = NULL)
 lt1_noSC_dp3 <- update(lt1_noSC, decimalPlaces = 3)
@@ -56,6 +57,28 @@ test_that("numbers are formatted correctly when no arguments except 'mat' are gi
     all = FALSE)
 })
 
+
+
+# Note that "0" entries are kept as "0", rather than eliminated, when 
+# decimalPlaces == 0.  [2020 01 13]
+test_that("numbers are formatted correctly when decimalPlaces == 0", {
+  expect_match(
+    lt1_dp0,
+    '-3\\s*&\\s*1\\s*&&\\s*5\\s*&\\s*9\\s*&&\\s*0\\s*&\\s*2',
+    all = FALSE)
+  expect_match(
+    lt1_dp0,
+    '-2\\s*&\\s*2\\s*&&\\s*6\\s*&\\s*10\\s*&&\\s*0\\s&\\s*9',
+    all = FALSE)
+  expect_match(
+    lt1_dp0,
+    '-1\\s*&\\s*3\\s*&&\\s*7\\s*&\\s*11\\s*&&\\s*-1\\s*&\\s*10',
+    all = FALSE)
+  expect_match(
+    lt1_dp0,
+    '\\s*&\\s*4\\s*&&\\s*8\\s*&\\s*12\\s*&&\\s+&\\s*11',
+    all = FALSE)
+})
 
 
 test_that("numbers are formatted correctly when decimalPlaces == 1", {
