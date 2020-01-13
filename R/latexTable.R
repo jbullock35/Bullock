@@ -26,6 +26,7 @@
 #' and every acronym is followed by an underscore (_) character. We thus have  
 #' \code{SE_table} instead of \code{SEtable}, \code{tabColSep} instead of 
 #' \code{tabcolsep}, and so{\NB}on.
+#' * The `hspace` argument has been renamed to `horizOffset`.
 #' * Some default arguments have changed. In particular, the default 
 #' \code{spacerColumns} argument is no longer \code{NULL}. Instead, the 
 #' default is to insert spacer columns in appropriate places. See documentation
