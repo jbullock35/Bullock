@@ -10,7 +10,12 @@ regex_R2  <- 'R?\\$\\^2\\$'
 regex_SER <- '(SER|Standard error of regression|Std. error of regression)'
 
 mat1 <- matrix(c(-3:12, 0.0, 0.0000, -1.0000008, NA, 1.555, 9:11), nrow = 4)
-lt1_default  <- latexTable(mat1) 
+lt1_default  <- latexTable(mat1)
+mat_char <- matrix(as.character(mat1), nrow(mat1), ncol(mat1))
+mat_char[is.na(mat_char)]
+
+lt1_noFormat      <- latexTable(mat1, formatNumbers = FALSE)
+lt1_noFormat_dp10 <- latexTable(mat1, formatNumbers = FALSE, decimalPlaces = 10)
 lt1_dp0      <- latexTable(mat1, decimalPlaces = 0)
 lt1_dp1      <- latexTable(mat1, decimalPlaces = 1) 
 lt1_noSC     <- latexTable(mat1, spacerColumns = NULL)
@@ -55,6 +60,33 @@ test_that("numbers are formatted correctly when no arguments except 'mat' are gi
     lt1_default,
     '\\.00\\s*&\\s*4\\.00\\s*&&\\s*8\\.00\\s*&\\s*12\\.00\\s*&&\\s+&\\s*11\\.00',
     all = FALSE)
+})
+
+
+test_that("data rows are correct when formatNumbers is FALSE", {
+  expect_match(
+    lt1_noFormat,
+    '-3\\s*&\\s*1\\s*&&\\s*5\\s*&\\s*9\\s*&&\\s*0\\s*&\\s*1.555',
+    all = FALSE)
+  expect_match(
+    lt1_noFormat,
+    '-2\\s*&\\s*2\\s*&&\\s*6\\s*&\\s*10\\s*&&\\s*0\\s&\\s*9',
+    all = FALSE)
+  expect_match(
+    lt1_noFormat,
+    '-1\\s*&\\s*3\\s*&&\\s*7\\s*&\\s*11\\s*&&\\s*-1.0000008\\s*&\\s*10',
+    all = FALSE)
+  expect_match(
+    lt1_noFormat,
+    '0\\s*&\\s*4\\s*&&\\s*8\\s*&\\s*12\\s*&&\\s+&\\s*11',
+    all = FALSE)
+})
+
+
+test_that("numprint column widths are correct when formatNumbers is FALSE and decimalPlaces == 10", {
+  expect_equal(
+    sum( grepl('N\\{[12]\\}\\{10\\}', lt1_noFormat_dp10) ),
+    6)
 })
 
 

@@ -225,9 +225,11 @@ e.g., by adjusting the number of digits after the decimal place.}
 \item{decimalPlaces}{Integer. If \code{formatNumbers} is \code{TRUE}, table
 entries will be shown to this decimal place. For example, if
 \code{decimalPlaces==2}, both "3.0035" and "3" will become "3.00."\cr
-\indent If \code{formatNumbers} is \code{FALSE}, entries will not be adjusted,
-but \code{decimalPlaces} will still be used to determine the widths of
-columns and some aspects of column spacing.}
+\indent If \code{formatNumbers} is \code{FALSE}, entries will not be
+adjusted, but \code{decimalPlaces} will still be used to determine the
+widths of columns and some aspects of column spacing. For example, even
+if \code{formatNumbers} is \code{FALSE}, data columns will be wider when
+\code{decimalPlaces} is \code{10} than when it is{\NB}\code{2}.}
 
 \item{SE_fontSizeString}{A string. Indicates how standard errors are to be
 formatted when \code{SE_table} is \code{TRUE}. Defaults to

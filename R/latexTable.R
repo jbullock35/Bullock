@@ -240,9 +240,11 @@
 #' @param decimalPlaces Integer. If \code{formatNumbers} is \code{TRUE}, table 
 #'   entries will be shown to this decimal place. For example, if 
 #'   \code{decimalPlaces==2}, both "3.0035" and "3" will become "3.00."\cr
-#'     \indent If \code{formatNumbers} is \code{FALSE}, entries will not be adjusted,
-#'   but \code{decimalPlaces} will still be used to determine the widths of 
-#'   columns and some aspects of column spacing.
+#'     \indent If \code{formatNumbers} is \code{FALSE}, entries will not be 
+#'   adjusted, but \code{decimalPlaces} will still be used to determine the  
+#'   widths of columns and some aspects of column spacing. For example, even 
+#'   if \code{formatNumbers} is \code{FALSE}, data columns will be wider when  
+#'   \code{decimalPlaces} is \code{10} than when it is{\NB}\code{2}.
 #' @param SE_fontSizeString A string. Indicates how standard errors are to be 
 #'   formatted when \code{SE_table} is \code{TRUE}. Defaults to 
 #'   \code{\\\\fontsize{10.3bp}{10.3bp}\\\\selectfont}, which renders standard
@@ -404,15 +406,26 @@ latexTable <- function(
   z <- paste(rep(0, decimalPlaces), collapse = '')  # zeroes to append
   
   
+  # CONVERT MATRIX ENTRIES TO STRINGS AND REPLACE NA ENTRIES  [2020 01 14]
+  mat[is.na(mat)] <- paste0(' ', NA_text)
+    # Replace NA values [2012 07 22]
+    #    if (! is.null(NA_text)) {
+    #      matLine <- gsub(' NA', paste0(' ', NA_text), matLine)
+    #      matLine <- gsub('NA',  paste0(' ', NA_text), matLine)
+    #      matLine <- gsub(' & $', ' &  ', matLine)  
+    #      # w/o this, strsplit will return vector of ncol - 1 (too short) 
+    #    }
+
+  
   # WORK ON THE MATRIX ROW BY ROW
   # First, convert each row to a string.  Then operate on the string.  
   # [2012 07 22]
   if (formatNumbers) {
     for (i in 1:nrow(mat)) {
-  
+      
       # NEW ATTEMPT TO PAD OUT ENTRIES WITH TRAILING ZEROES.  This "first 
       # strike" attempt uses str_pad().  [2014 06 21]  
-      matChar <- as.character(mat[i,])                       # get row "i" of "mat"
+      matChar <- mat[i,]                                       # get row "i" of "mat"
       if (decimalPlaces > 0) {
         matChar <- gsub('^0$', paste0('0.', z), matChar)       # take care of entries that are simply "0"
         matChar <- gsub('^(-?\\d+)$', '\\1.', matChar)         # add decimal point to entries that contain only digits
@@ -422,9 +435,10 @@ latexTable <- function(
         matCharAfterDecimal <- rep('', length(matChar))
       }
       
-      decimalPlacesToAdd <- decimalPlaces - nchar(matCharAfterDecimal)  # e.g., add two zeroes to one entry, zero zeroes to another
-      for (ind in 1:length(matChar)) {     # for each entry in row "i" of "mat"
-        if (is.na(matChar[ind])) { next }         # skip if NA
+      decimalPlacesToAdd <- decimalPlaces - nchar(matCharAfterDecimal)       # e.g., add two zeroes to one entry, zero zeroes to another
+      entriesToSkip_regex <- paste0('[\\s', NA_text, ']')
+      for (ind in 1:length(matChar)) {                                       # for each entry in row "i" of "mat"
+        if (grepl(entriesToSkip_regex, matChar[ind], perl = TRUE)) { next }  # skip if the entry is NA
         else if (decimalPlacesToAdd[ind] >= 0) {
           matChar[ind] <- stringr::str_pad(       # if entry is too short, pad the entries with trailing zeroes
             string = matChar[ind],
@@ -456,15 +470,7 @@ latexTable <- function(
       # Replace, e.g., '.1' with '.10' [2011 02 17]
       # matLine <- gsub('(\\.\\d)\\s', '\\10 ', matLine)  # ".1 " becomes ".10 "
       # matLine <- gsub('(\\.\\d)$',   '\\10',  matLine)  # ".1"  becomes ".10"
-      
-      # Replace NA values [2012 07 22]
-      if (! is.null(NA_text)) {
-        matLine <- gsub(' NA', paste0(' ', NA_text), matLine)
-        matLine <- gsub('NA',  paste0(' ', NA_text), matLine)
-        matLine <- gsub(' & $', ' &  ', matLine)  
-        # w/o this, strsplit will return vector of ncol - 1 (too short) 
-      }
-      
+            
       # Replace the values in mat[i, ] with the new text-processed values from 
       # matLine.  [2012 07 22]
       mat[i, ] <- strsplit(matLine, ' & ', fixed = TRUE)[[1]]
@@ -482,7 +488,8 @@ latexTable <- function(
   # column-wise.  This is why I transpose the matrix when passing it to 
   # mapply, then transpose it back again with the matrix() command.  
   # [2012 07 22]
-  colWidths <- apply(mat, 2, function (x) max(nchar(x))) 
+  #
+  colWidths <- apply(mat, 2, function (x) max(nchar(x), na.rm = TRUE))
   mat <- mapply(stringr::str_pad, t(mat), width = colWidths, SIMPLIFY = TRUE)
   mat <- matrix(t(mat), nrow, ncol, byrow = TRUE)
   
@@ -737,7 +744,7 @@ latexTable <- function(
     if (numberOfAmpersands %% 2 == 0) { 
       rownamePrefix <- sub('(?<=& ).*', '', matLine, perl = TRUE)
       matLine       <- sub('.*?& ', '', matLine)              # remove rownamePrefix
-      matLine       <- gsub('(.*?&.*?&)', subRegex, matLine)  # do substitution
+      matLine       <- gsub('(.*?&.*?&)', subRegex, matLine)  # do substitution -- that is, add columnTierSeparator
       matLine       <- paste0(rownamePrefix, matLine)         # recombine
     }
     else {
