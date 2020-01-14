@@ -679,7 +679,16 @@ latexTable <- function(
           mcRow[scPos] <- paste0(mcRow[scPos], '&')
         }
         else if (!colNameExpand && !is.null(spacerColumns) && !SE_table) {
-          scPos <- spacerColumns 
+          
+          # Cap the maximum value of scPos at length(mcRow)-1. We do this so 
+          # that spacer columns can't be inserted after the last entry in 
+          # mcRow. This capping of the maximum value solves a problem that
+          # arises when SE_table is FALSE and a row in colNames has length 
+          # less than ncol(mat). In such cases, we just want the row of 
+          # column-name entries to end "early" with \tabularnewline. We don't 
+          # want NA to be inserted in the column names, which would happen if 
+          # we didn't cap scPos here.  [2020 01 14]
+          scPos <- spacerColumns[spacerColumns < length(mcRow)]
           mcRow[scPos] <- paste0(mcRow[scPos], '&')
         }        
         outputStrings <- c(outputStrings, mcRow)

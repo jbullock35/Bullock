@@ -1,6 +1,8 @@
 ## Version 2.0.0.9000
 * Improved `latexTable()` output when `formatNumbers` is `FALSE`.
 * Fixed bug in `latexTable()` calls for which `decimalPlaces` is 0.
+* Fixed bug in `latexTable()` calls that arose when `SE_table` was `FALSE` and
+  an element of the `colNames` list had a length less than `ncol(mat)`.
 * Fixed bug in float placement of landscaped tables made by `latexTable()`. 
 * In `regTable()`, improved checking of classes of `objList` elements.
 * Better `latexTable()` warning message when `colNames[[1]]` has the wrong length.
