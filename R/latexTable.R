@@ -69,7 +69,7 @@
 #'   spacerRows  = 1)              # add vertical space after intercept row
 
 
-#' @param mat Matrix of information to be displayed in a LaTeX table.
+#' @param mat Matrix of numbers to be displayed in a LaTeX table.
 #' @param SE_table Logical variable that indicates whether \code{mat} contains
 #'   pairs of columns, with the first column in each pair containing estimates,
 #'   and the second column containing the corresponding standard errors. 
@@ -237,8 +237,17 @@
 #'   By default, \code{captionMargins} is \code{NULL}.\cr\cr\cr\cr
  
 
-#' @param formatNumbers Logical variable. Pretty-print the entries in mat, 
-#'   e.g., by adjusting the number of digits after the decimal place.
+#' @param formatNumbers Logical variable, `TRUE` by default. Pretty-print the 
+#' entries in `mat`{\NB}by:
+#'  * Rounding all entries to the `decimalPlaces` digit.
+#'  * Padding out entries with trailing zeroes. For example, `3` will become 
+#'    `3.00` if `decimalPlaces == 2`.
+#'  * Removing leading zeroes. For example, `0.12` will become `.12`.
+#' 
+#' If `formatNumbers` is `FALSE`, formatting of entries in `mat` will be
+#' handled by \code{\link[base:print.default]{print.default()}}.
+#' @md
+
 #' @param decimalPlaces Integer. If \code{formatNumbers} is \code{TRUE}, table 
 #'   entries will be shown to this decimal place. For example, if 
 #'   \code{decimalPlaces==2}, both "3.0035" and "3" will become "3.00."\cr

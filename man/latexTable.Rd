@@ -38,7 +38,7 @@ latexTable(
 )
 }
 \arguments{
-\item{mat}{Matrix of information to be displayed in a LaTeX table.}
+\item{mat}{Matrix of numbers to be displayed in a LaTeX table.}
 
 \item{SE_table}{Logical variable that indicates whether \code{mat} contains
 pairs of columns, with the first column in each pair containing estimates,
@@ -221,8 +221,17 @@ references to other labeled parts of your LaTeX document, e.g.,
 the caption. The strings should be LaTeX lengths, e.g., ".25in" or ".67em".
 By default, \code{captionMargins} is \code{NULL}.\cr\cr\cr\cr}
 
-\item{formatNumbers}{Logical variable. Pretty-print the entries in mat,
-e.g., by adjusting the number of digits after the decimal place.}
+\item{formatNumbers}{Logical variable, \code{TRUE} by default. Pretty-print the
+entries in \code{mat}{\NB}by:
+\itemize{
+\item Rounding all entries to the \code{decimalPlaces} digit.
+\item Padding out entries with trailing zeroes. For example, \code{3} will become
+\code{3.00} if \code{decimalPlaces == 2}.
+\item Removing leading zeroes. For example, \code{0.12} will become \code{.12}.
+}
+
+If \code{formatNumbers} is \code{FALSE}, formatting of entries in \code{mat} will be
+handled by \code{\link[base:print.default]{print.default()}}.}
 
 \item{decimalPlaces}{Integer. If \code{formatNumbers} is \code{TRUE}, table
 entries will be shown to this decimal place. For example, if

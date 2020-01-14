@@ -1,4 +1,5 @@
 ## Version 2.0.0.9000
+* Improved `latexTable()` output when `formatNumbers` is `FALSE`.
 * Fixed bug in `latexTable()` calls for which `decimalPlaces` is 0.
 * Fixed bug in float placement of landscaped tables made by `latexTable()`. 
 * In `regTable()`, improved checking of classes of `objList` elements.
