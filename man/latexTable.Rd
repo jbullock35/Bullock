@@ -168,7 +168,9 @@ together. If you run \code{latexTable} with \code{colNameExpand == TRUE}
 and a non-NULL \code{spacerColumns} argument, you will get LaTeX output,
 but you will probably need to edit the "\\multicolumn" and "\\cmidrule"
 commands in the output so that LaTeX can render the output.\cr
-\indent See below for a technical note on \code{spacerColumns} and column
+\indent See the end of the
+\href{../doc/tables.html}{Building better tables in less time} vignette
+for a technical note on \code{spacerColumns} and column
 spacing in LaTeX.
 }}
 
