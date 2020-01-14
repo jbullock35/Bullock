@@ -553,7 +553,7 @@ latexTable <- function(
     spacerColumnsWidth <- rep(spacerColumnsWidth, length(spacerColumns))      # no effect if spacerColumnsWidth already has correct length.    
     
     # Start to write the header.
-    outputStrings <- c(outputStrings, paste0('\\newcommand\\', commandName, '[1]{'))
+    outputStrings <- c(outputStrings, paste0('\\newcommand\\', commandName, '[1]{%'))
     if (starredFloat) { 
       outputStrings <- c(outputStrings, '  \\begin{table*}[#1]')
     } else {
