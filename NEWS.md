@@ -1,9 +1,9 @@
 ## Version 2.0.0.9000
 * Improved `latexTable()` output when `formatNumbers` is `FALSE`.
-* In `latexTable()`, changed `spaceBetweenColnameRows` argument from `TRUE` 
+* In `latexTable()`, changed `spaceBetweenColNameRows` argument from `TRUE` 
   to `-.025in`. Users can now arbitrarily adjust the vertical space between
   column-name rows by specifying any LaTeX length as the 
-  `spaceBetweenColnameRows` argument.   
+  `spaceBetweenColNameRows` argument.   
 * Fixed bug in `latexTable()` calls for which `decimalPlaces` is 0.
 * Fixed bug in `latexTable()` calls that arose when `SE_table` was `FALSE` and
   an element of the `colNames` list had a length less than `ncol(mat)`.
