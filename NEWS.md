@@ -5,6 +5,7 @@
   column-name rows by specifying any LaTeX length as the 
   `spaceBetweenColNameRows` argument.   
 * Added c.latexTable method (#12).
+* Adjusted print.regTable method so that row names are right-aligned (#11).
 * Fixed bug in `latexTable()` calls for which `decimalPlaces` is 0 (#8).
 * Fixed bug in `latexTable()` calls that arose when `SE_table` was `FALSE` and
   an element of the `colNames` list had a length less than `ncol(mat)`.

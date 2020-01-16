@@ -225,5 +225,12 @@ regTable <- function (
 
 # Set up print method for regTable, so that print(regTable) doesn't list 
 # attributes at the bottom.  [2012 08 01]
-# print.regTable <- prmatrix
-print.regTable <- print.table
+print.regTable <- function (x) {
+  if (! is.null(rownames(x))) {
+    rowNames <- rownames(x)
+    maxNchar <- max(nchar(rowNames))
+    rowNames <- stringr::str_pad(rowNames, width = maxNchar, "left")
+    rownames(x) <- rowNames
+  } 
+  print.table(x)
+}
