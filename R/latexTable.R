@@ -1302,9 +1302,6 @@ print.latexTable <- function (x, ...) {
     cat(lineNumbers[i], "\"", x[i], "\"", "\n", sep = "", ...)
   }
 }
-  #print.latexTable <- function (x, ...) {
-  #  writeLines(x, ...)
-  #}
 
 
 
