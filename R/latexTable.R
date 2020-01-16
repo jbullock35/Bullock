@@ -1304,9 +1304,8 @@ print.latexTable <- function (x, ...) {
 }
 
 
-
 # The subsetting method here is lightly adapted from `[.noquote`. If we didn't 
-# specify this method, any subset latexTable (for example, "myLatexTable[1:5]") 
+# specify these methods, any subset latexTable (for example, "myLatexTable[1:5]") 
 # would print messily. Because this method is specified, head() and tail() are 
 # adjusted as well.  [2019 12 19]
 `[.latexTable` <- function (x, ...) {
@@ -1316,6 +1315,15 @@ print.latexTable <- function (x, ...) {
   x
 }
 
+
+# Without this method, any object like c(lT, "new LaTeX line") would lose the 
+# "latexTable" class -- the returned object would have only the "character" 
+# class. In turn, print.latexTable() wouldn't work on the returned object, 
+# making printed output messier than I would like.  [2020 01 16]
+c.latexTable <- function (x, ...) {
+  outputList <- list(x, ...)
+  structure(unlist(outputList), class = class(x))
+}
 
 
 # Adapted from update.default()  [2019 12 20]

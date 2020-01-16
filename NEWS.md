@@ -4,7 +4,8 @@
   to `-.025in`. Users can now arbitrarily adjust the vertical space between
   column-name rows by specifying any LaTeX length as the 
   `spaceBetweenColnameRows` argument.   
-* Fixed bug in `latexTable()` calls for which `decimalPlaces` is 0.
+* Added c.latexTable method (#12).
+* Fixed bug in `latexTable()` calls for which `decimalPlaces` is 0 (#8).
 * Fixed bug in `latexTable()` calls that arose when `SE_table` was `FALSE` and
   an element of the `colNames` list had a length less than `ncol(mat)`.
 * Fixed bug in float placement of landscaped tables made by `latexTable()`. 
