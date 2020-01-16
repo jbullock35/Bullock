@@ -1305,7 +1305,7 @@ print.latexTable <- function (x, ...) {
 
 
 # The subsetting method here is lightly adapted from `[.noquote`. If we didn't 
-# specify these methods, any subset latexTable (for example, "myLatexTable[1:5]") 
+# specify this method, any subset latexTable (for example, "myLatexTable[1:5]") 
 # would print messily. Because this method is specified, head() and tail() are 
 # adjusted as well.  [2019 12 19]
 `[.latexTable` <- function (x, ...) {
