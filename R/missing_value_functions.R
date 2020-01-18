@@ -31,8 +31,17 @@
 #' @export
 lNA <- function(x, verbose = FALSE) {   
   y <- length(x[!is.na(x)])
-  if (verbose) print(noquote(paste0(y, " (length with NA=",length(x), ")")))
-  y
+  if (verbose) {
+    print(
+      noquote(
+        paste0(y, " (length with NA=", length(x), ")")
+      )
+    )
+    invisible(y)
+  }
+  else {
+    y
+  }
 }
 
 #' @rdname missingValueFunctions
