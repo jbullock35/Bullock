@@ -1,6 +1,6 @@
 Package: Bullock
 Type: Package
-Title: Miscellaneous helper utilities for use with John Bullock's code
+Title: Tools for table-making and miscellaneous helper utilities
 Version: 2.0.0.9000
 Date: 2019-12-04
 Authors@R: c(
