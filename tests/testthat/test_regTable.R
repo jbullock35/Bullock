@@ -19,12 +19,11 @@ test_that("regTable() checks appropriately for existence of clusterVar", {
 
 
 test_that("regTable() produces correct output with IV regressons", {
-  packageLoaded_AER <- require(AER)
-  if (!packageLoaded_AER) skip("AER package not available")
+  if (!require(AER)) skip("AER package not available")
   iv1 <- ivreg(Sepal.Length ~ Petal.Length | Petal.Width,  data = iris)
   iv2 <- ivreg(Sepal.Length ~ Petal.Width  | Petal.Length, data = iris)
   expect_is(regTable(list(iv1)),      "regTable")
   expect_is(regTable(list(iv1, iv2)), "regTable")
-  expect_equal(nrow(regTable(list(iv1))),      2)
-  expect_equal(nrow(regTable(list(iv1, iv2))), 3)  # Is regTable() eliminating the duplicate rowname?
+  expect_identical(nrow(regTable(list(iv1))),      2L)
+  expect_identical(nrow(regTable(list(iv1, iv2))), 3L)  # Is regTable() eliminating the duplicate rowname?
 })
