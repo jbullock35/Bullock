@@ -10,13 +10,18 @@
 
 
 #' @examples 
-#' x <- c(1:3, NA, 5)
-#' lNA(x)
-#' lNAv(x)
+#' lNA(NA)    # 0
 #' 
-#' sum(x)    # returns NA
-#' sumNA(x)  # returns 11
-#' meanNA(x)
+#' x <- c(1:3, NA, 5)
+#' lNA(x)     # 4
+#' lNAv(x)    # 4 (length with NA=5)
+#' 
+#' sum(NA)    # NA
+#' sumNA(NA)  # 0
+#' 
+#' sum(x)     # NA
+#' sumNA(x)   # 11
+#' meanNA(x)  # 2.75
 #' 
 #' sdNA(x)
 #' varNA(x)
