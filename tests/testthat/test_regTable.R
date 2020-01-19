@@ -81,7 +81,7 @@ test_that("regTable() produces correct estimates and SEs with \"ivreg\" objects 
   
   expect_equal(rT2_iv_cluster[1, 2], 0.1360, tol = 0.0001)
   expect_equal(rT2_iv_cluster[2, 2], 0.0274, tol = 0.0001)
-  expect_equal(rT2_iv_cluster[1, 4], 0.1546,  tol = 0.0001)
-  expect_equal(rT2_iv_cluster[3, 4], 0.0862,  tol = 0.0005)
+  expect_equal(rT2_iv_cluster[1, 4], 0.1546, tol = 0.0001)
+  expect_equal(rT2_iv_cluster[3, 4], 0.0862, tol = 0.0005)
 })
 
