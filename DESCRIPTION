@@ -15,6 +15,7 @@ Authors@R: c(
   person("Ken", "Williams", role = "ctb")) 
 Imports: lmtest, magrittr, rlang, stringr
 Suggests: 
+  AER,
   ivpack,
   multiwayvcov,
   testthat,
