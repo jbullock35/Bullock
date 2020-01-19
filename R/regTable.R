@@ -93,7 +93,7 @@ regTable <- function (
     stop("To calculate clustered standard errors for regressions of class \"ivreg\", the \"ivpack\" package must be installed.")
   }
   if (!is.null(clusterVar) & any(!classVec_lm & !classVec_ivreg)) {
-    stop(string::str_wrap("clusterVar isn't NULL, but regTable() can only cluster SEs only when objects in objList are of class 'lm' or 'ivreg'."))
+    stop(stringr::str_wrap("clusterVar isn't NULL, but regTable() can only cluster SEs only when objects in objList are of class 'lm' or 'ivreg'."))
   }
   
   # Check for misspecified cluster name, e.g., "iris$species" instead of 
@@ -158,47 +158,60 @@ regTable <- function (
     dimnames = list(rowNames, colNames))
   
   
-  # Get clustered vcov matrices for OLS estimates.  Then fill the output 
-  # matrix that this function will return.  Use coeftest(x) here because it is 
-  # more robust than summary(x)$coefficients, which sometimes gives problems 
-  # when I apply it to ivreg objects.  [2012 08 01]
-  
-  #  if (!is.null(clusterVar)) {
-  #    classMatrix <- sapply(objlist, class)  # objects may have more than one class
-  #    for (i in seq_along(ncol(classMatrix))) {
-  #      if (any(classMatrix[, i] == 'lm')) {
-  #        vcov.clustered <- multiwayvcov::cluster.vcov(objList[[i]], clusterVar[[i]])
-  #      }
-  #    }
+  # Get list of regression output when using clustered SEs. Each element of 
+  # the list is a mastrix with two columns: one for estimates, the other for 
+  # clustered SEs.  We use coeftest(x) here because it is more robust than 
+  # summary(x)$coefficients, which sometimes gives problems when I apply it to 
+  # "ivreg" objects.  [2012 08 01]
+  if (!is.null(clusterVar)) {
+    coefsAndSEs <- vector("list", length(objList))    # initialize empty list
+    if (length(clusterVar)==1 & length(objList)>1) {
+      clusterVar <- rep(clusterVar, length(objList))  # make clusterVar same length as objList
+    }
+    classMatrix <- sapply(objList, class)             # regression objs. may have >1 class
+    if (class(classMatrix) == 'character') {
+      classMatrix <- t(matrix(classMatrix))  
+    }
+    for (i in 1:ncol(classMatrix)) {
+      if (any(classMatrix[, i] == 'lm')) {
+        vcov.clustered   <- multiwayvcov::cluster.vcov(objList[[i]], clusterVar[[i]])
+        coef_SE_mat      <- lmtest::coeftest(objList[[i]], vcov. = vcov.clustered)
+      }
+      else if (any(classMatrix[, i] == 'ivreg')) {
+        coef_SE_mat <- ivpack::cluster.robust.se(objList[[i]], clusterVar[[i]])        
+      }
+      coefsAndSEs[[i]] <- coef_SE_mat[, c('Estimate', 'Std. Error')]
+    }
+  }
+
+  #  if (!is.null(clusterVar) & all(classVec_lm)) {
+  #    vcovs.clustered <- mapply(  # returns list of covariance matrices
+  #      FUN      = multiwayvcov::cluster.vcov,
+  #      model    = objList,
+  #      cluster  = clusterVar,
+  #      SIMPLIFY = FALSE)  # required when objList is length 1
+  #    
+  #    coefsAndSEs <- mapply(      # returns list of reg. output
+  #      FUN      = lmtest::coeftest,
+  #      x        = objList,
+  #      vcov.    = vcovs.clustered,
+  #      SIMPLIFY = FALSE)  # required when objList is length 1
+  #    
+  #    coefsAndSEs <- sapply(      # returns list of reg. output with only desired columns
+  #      X        = coefsAndSEs, 
+  #      FUN      = function (x) x[, c('Estimate', 'Std. Error')],
+  #      simplify = FALSE)  # required when objList is length 1
+  #  }
+  #  else if (!is.null(clusterVar) & all(classVec_ivreg)) {
+  #    coefsAndSEs <- mapply(
+  #      FUN = ivpack::cluster.robust.se,
+  #      objList,
+  #      clusterVar, 
+  #      SIMPLIFY = FALSE)
+  #    coefsAndSEs <- lapply(coefsAndSEs, function (x) x[, c('Estimate', 'Std. Error')])    
   #  }
 
-  if (!is.null(clusterVar) & all(classVec_lm)) {
-    vcovs.clustered <- mapply(  # returns covariance matrices
-      FUN      = multiwayvcov::cluster.vcov,
-      model    = objList,
-      cluster  = clusterVar,
-      SIMPLIFY = FALSE)  # required when objList is length 1
-    
-    coefsAndSEs <- mapply(      # returns regression output
-      FUN      = lmtest::coeftest,
-      x        = objList,
-      vcov.    = vcovs.clustered,
-      SIMPLIFY = FALSE)  # required when objList is length 1
-    
-    coefsAndSEs <- sapply(      # take desired columns from regression output
-      X        = coefsAndSEs, 
-      FUN      = function (x) x[, c('Estimate', 'Std. Error')],
-      simplify = FALSE)  # required when objList is length 1
-  }
-  else if (!is.null(clusterVar) & all(classVec_ivreg)) {
-    coefsAndSEs <- mapply(
-      FUN = ivpack::cluster.robust.se,
-      objList,
-      clusterVar, 
-      SIMPLIFY = FALSE)
-    coefsAndSEs <- lapply(coefsAndSEs, function (x) x[, c('Estimate', 'Std. Error')])    
-  }
-  else {  
+  else {  # if no clustering
     coefsAndSEs <- lapply(objList, function (x) {
       tmp <- lmtest::coeftest(x)[, c('Estimate', 'Std. Error')]
 
