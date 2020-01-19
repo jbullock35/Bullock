@@ -92,8 +92,8 @@ regTable <- function (
   if (!is.null(clusterVar) & any(classVec_ivreg) & !requireNamespace('ivpack', quietly = TRUE)) {
     stop("To calculate clustered standard errors for regressions of class \"ivreg\", the \"ivpack\" package must be installed.")
   }
-  if (!is.null(clusterVar) & !all(classVec_lm) & !all(classVec_ivreg)) {
-    stop("clusterVar isn't NULL, but regTable() can only cluster SEs only when all objects in objList are 'lm' objects or when all objects in objList are 'ivreg' objects.")
+  if (!is.null(clusterVar) & any(!classVec_lm & !classVec_ivreg)) {
+    stop(string::str_wrap("clusterVar isn't NULL, but regTable() can only cluster SEs only when objects in objList are of class 'lm' or 'ivreg'."))
   }
   
   # Check for misspecified cluster name, e.g., "iris$species" instead of 
@@ -162,6 +162,15 @@ regTable <- function (
   # matrix that this function will return.  Use coeftest(x) here because it is 
   # more robust than summary(x)$coefficients, which sometimes gives problems 
   # when I apply it to ivreg objects.  [2012 08 01]
+  if (!is.null(clusterVar)) {
+    classMatrix <- sapply(objlist, class)  # objects may have more than one class
+    for (i in seq_along(ncol(classMatrix))) {
+      if (any(classMatrix[, i] == 'lm')) {
+        vcov.clustered <- multiwayvcov::cluster.vcov(objList[[i]], clusterVar[[i]])
+      }
+    }
+  }
+
   if (!is.null(clusterVar) & all(classVec_lm)) {
     vcovs.clustered <- mapply(
       FUN      = multiwayvcov::cluster.vcov,
