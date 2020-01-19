@@ -1,4 +1,6 @@
 ## Version 2.0.0.9000
+* Allowed `regTable()` to work with regressions of different classes (i.e., 
+  "lm" and "ivreg") when clustering SEs.
 * Improved `latexTable()` output when `formatNumbers` is `FALSE`.
 * In `latexTable()`, changed `spaceBetweenColNameRows` argument from `TRUE` 
   to `-.025in`. Users can now arbitrarily adjust the vertical space between
