@@ -162,27 +162,30 @@ regTable <- function (
   # matrix that this function will return.  Use coeftest(x) here because it is 
   # more robust than summary(x)$coefficients, which sometimes gives problems 
   # when I apply it to ivreg objects.  [2012 08 01]
-  if (!is.null(clusterVar)) {
-    classMatrix <- sapply(objlist, class)  # objects may have more than one class
-    for (i in seq_along(ncol(classMatrix))) {
-      if (any(classMatrix[, i] == 'lm')) {
-        vcov.clustered <- multiwayvcov::cluster.vcov(objList[[i]], clusterVar[[i]])
-      }
-    }
-  }
+  
+  #  if (!is.null(clusterVar)) {
+  #    classMatrix <- sapply(objlist, class)  # objects may have more than one class
+  #    for (i in seq_along(ncol(classMatrix))) {
+  #      if (any(classMatrix[, i] == 'lm')) {
+  #        vcov.clustered <- multiwayvcov::cluster.vcov(objList[[i]], clusterVar[[i]])
+  #      }
+  #    }
+  #  }
 
   if (!is.null(clusterVar) & all(classVec_lm)) {
-    vcovs.clustered <- mapply(
+    vcovs.clustered <- mapply(  # returns covariance matrices
       FUN      = multiwayvcov::cluster.vcov,
       model    = objList,
       cluster  = clusterVar,
       SIMPLIFY = FALSE)  # required when objList is length 1
-    coefsAndSEs <- mapply(
+    
+    coefsAndSEs <- mapply(      # returns regression output
       FUN      = lmtest::coeftest,
       x        = objList,
       vcov.    = vcovs.clustered,
       SIMPLIFY = FALSE)  # required when objList is length 1
-    coefsAndSEs <- sapply(
+    
+    coefsAndSEs <- sapply(      # take desired columns from regression output
       X        = coefsAndSEs, 
       FUN      = function (x) x[, c('Estimate', 'Std. Error')],
       simplify = FALSE)  # required when objList is length 1
