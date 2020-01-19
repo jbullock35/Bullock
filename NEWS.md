@@ -17,6 +17,8 @@
 * Better `latexTable()` warning message when `colNames[[1]]` has the wrong length.
 * If one goes to `help.start()` and then clicks on the "Bullock" entry, 
   "Bullock-package" is now the first entry in the help index.
+* Added examples to documentation of stack utilities (#5) and missing-value 
+  utilities.
 * Small improvements to documentation formatting.
 
 

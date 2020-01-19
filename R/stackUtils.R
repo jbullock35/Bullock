@@ -57,6 +57,12 @@
 #' unshift(myStack, "hello")
 #' myStack         # [1] "hello" "2" "3"
 #' 
+#' myList <- list(1, 2, 3)  # list with three elements
+#' push(myList, 4)
+#' myList                   # list with 4 elements
+#' shift(myList)            # returns 1
+#' myList[[1]]              # first element of myList is now 2
+#' 
 #' 
 #' @name stackUtilities
 #' @rdname stackUtilities
