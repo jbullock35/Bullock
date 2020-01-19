@@ -80,13 +80,12 @@ regTable <- function (
   # for this purpose. inherits(x, c("ivreg", "lm")) returns TRUE if x has 
   # either of those classes, FALSE otherwise. Note that ivreg and plm objects
   # don't inherit the "lm" class.  [2020 01 13]
-  #   classVec_ok, classVec_lm, etc. are logical variables.  [2020 01 13]
-  classVec_ok <- sapply(objList, inherits, qw("ivreg lm plm"))    
+  classVec_ok <- sapply(objList, inherits, qw("ivreg lm plm"))  # boolean
   if (! all(classVec_ok)) {
     warning("regTable() has only been designed to work with models of class 'lm', 'plm', and 'ivreg'.")
   }  
-  classVec_ivreg <- sapply(objList, inherits, qw("ivreg"))
-  classVec_lm    <- sapply(objList, inherits, qw("lm"))
+  classVec_ivreg <- sapply(objList, inherits, qw("ivreg"))      # boolean
+  classVec_lm    <- sapply(objList, inherits, qw("lm"))         # boolean
   if (!is.null(clusterVar) & any(classVec_lm) & !requireNamespace('multiwayvcov', quietly = TRUE)) {
     stop("To calculate clustered standard errors for regressions of class \"lm\", the \"multiwayvcov\" package must be installed.")
   }
