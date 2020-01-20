@@ -1295,6 +1295,7 @@ lt_spacerColumns_default <- function (
 ##############################################################################
 # METHODS FOR THE latexTable CLASS
 ##############################################################################
+#' @export
 print.latexTable <- function (x, ...) { 
   lineNumbers <- paste0("[", 1:length(x), "] "  )
   lineNumbers <- stringr::str_pad(lineNumbers, max(nchar(lineNumbers)))
@@ -1308,6 +1309,7 @@ print.latexTable <- function (x, ...) {
 # specify this method, any subset latexTable (for example, "myLatexTable[1:5]") 
 # would print messily. Because this method is specified, head() and tail() are 
 # adjusted as well.  [2019 12 19]
+#' @export
 `[.latexTable` <- function (x, ...) {
   classX <- class(x)
   x <- unclass(x)[...]
@@ -1320,6 +1322,7 @@ print.latexTable <- function (x, ...) {
 # "latexTable" class -- the returned object would have only the "character" 
 # class. In turn, print.latexTable() wouldn't work on the returned object, 
 # making printed output messier than I would like.  [2020 01 16]
+#' @export 
 c.latexTable <- function (x, ...) {
   outputList <- list(x, ...)
   structure(unlist(outputList), class = class(x))
@@ -1346,6 +1349,7 @@ c.latexTable <- function (x, ...) {
 #' @examples
 #' lT1 <- latexTable(matrix(1:16, nrow = 4))
 #' lT2 <- update(lT1, mat = matrix(2:17, nrow = 8), commandName = "intTable")
+#' @export 
 update.latexTable <- function (object, ...) {
   oldCall <- attr(object, "call")  
   if (is.null(oldCall)) 

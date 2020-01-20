@@ -10,6 +10,9 @@
 * Added `c.latexTable()` method (#12).
 * Adjusted `print.regTable()` method so that row names are right-aligned (#11).
 * Reduced `lNAv()` output from two lines to 1 (#16).
+* Fix failure to export `print.regTable()`. Printing of "regTable" objects to 
+  screen will now look better. Also updated vignette with new regTable output 
+  (#21).
 * Fixed bug in `latexTable()` calls for which `decimalPlaces` is 0 (#8).
 * Fixed bug in `latexTable()` calls that arose when `SE_table` was `FALSE` and
   an element of the `colNames` list had a length less than `ncol(mat)`.

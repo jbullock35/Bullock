@@ -353,18 +353,10 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb1-6" title="6">rT1    &lt;-<span class="st"> </span><span class="kw">regTable</span>(lmList)</a>
 <a class="sourceLine" id="cb1-7" title="7">rT1</a>
 <a class="sourceLine" id="cb1-8" title="8"><span class="co">#&gt;                          Sepal.Length Sepal.Length.se Sepal.Length Sepal.Length.se Sepal.Length Sepal.Length.se</span></a>
-<a class="sourceLine" id="cb1-9" title="9"><span class="co">#&gt; (Intercept)                 4.3066034      0.07838896    4.1905824      0.09704587    4.5771709      0.11195206</span></a>
-<a class="sourceLine" id="cb1-10" title="10"><span class="co">#&gt; Petal.Length                0.4089223      0.01889134    0.5417772      0.06928179    0.4416762      0.06550938</span></a>
-<a class="sourceLine" id="cb1-11" title="11"><span class="co">#&gt; Petal.Width                        NA              NA   -0.3195506      0.16045262   -1.2393154      0.21937022</span></a>
-<a class="sourceLine" id="cb1-12" title="12"><span class="co">#&gt; Petal.Length:Petal.Width           NA              NA           NA              NA    0.1885887      0.03357199</span></a>
-<a class="sourceLine" id="cb1-13" title="13"><span class="co">#&gt; attr(,&quot;class&quot;)</span></a>
-<a class="sourceLine" id="cb1-14" title="14"><span class="co">#&gt; [1] &quot;regTable&quot; &quot;matrix&quot;  </span></a>
-<a class="sourceLine" id="cb1-15" title="15"><span class="co">#&gt; attr(,&quot;N&quot;)</span></a>
-<a class="sourceLine" id="cb1-16" title="16"><span class="co">#&gt; [1] 150 150 150</span></a>
-<a class="sourceLine" id="cb1-17" title="17"><span class="co">#&gt; attr(,&quot;r.squared&quot;)</span></a>
-<a class="sourceLine" id="cb1-18" title="18"><span class="co">#&gt; [1] 0.7599546 0.7662613 0.8078020</span></a>
-<a class="sourceLine" id="cb1-19" title="19"><span class="co">#&gt; attr(,&quot;SER&quot;)</span></a>
-<a class="sourceLine" id="cb1-20" title="20"><span class="co">#&gt; [1] 0.4070745 0.4030555 0.3667382</span></a></code></pre></div>
+<a class="sourceLine" id="cb1-9" title="9"><span class="co">#&gt;              (Intercept)   4.30660342      0.07838896   4.19058243      0.09704587   4.57717092      0.11195206</span></a>
+<a class="sourceLine" id="cb1-10" title="10"><span class="co">#&gt;             Petal.Length   0.40892228      0.01889134   0.54177715      0.06928179   0.44167616      0.06550938</span></a>
+<a class="sourceLine" id="cb1-11" title="11"><span class="co">#&gt;              Petal.Width                               -0.31955056      0.16045262  -1.23931538      0.21937022</span></a>
+<a class="sourceLine" id="cb1-12" title="12"><span class="co">#&gt; Petal.Length:Petal.Width                                                             0.18858873      0.03357199</span></a></code></pre></div>
 <p>Then use <code>latexTable()</code> convert the matrix into LaTeX code:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">lT1 &lt;-<span class="st"> </span><span class="kw">latexTable</span>(</a>
 <a class="sourceLine" id="cb2-2" title="2">  <span class="dt">mat      =</span> rT1,</a>
@@ -374,7 +366,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb2-6" title="6">)</a>
 <a class="sourceLine" id="cb2-7" title="7"></a>
 <a class="sourceLine" id="cb2-8" title="8"><span class="kw">head</span>(lT1)</a>
-<a class="sourceLine" id="cb2-9" title="9"><span class="co">#&gt; [1] &quot;\newcommand\myTable[1]{&quot;</span></a>
+<a class="sourceLine" id="cb2-9" title="9"><span class="co">#&gt; [1] &quot;\newcommand\myTable[1]{%&quot;</span></a>
 <a class="sourceLine" id="cb2-10" title="10"><span class="co">#&gt; [2] &quot;  \begin{table}[#1]&quot;</span></a>
 <a class="sourceLine" id="cb2-11" title="11"><span class="co">#&gt; [3] &quot;    \setlength{\extrarowheight}{2pt}&quot;</span></a>
 <a class="sourceLine" id="cb2-12" title="12"><span class="co">#&gt; [4] &quot;    \begin{center}&quot;</span></a>
