@@ -206,7 +206,13 @@ regTable <- function (
         coef_SE_mat      <- lmtest::coeftest(objList[[i]], vcov. = vcov.clustered)
       }
       else if (any(classMatrix[, i] == 'ivreg')) {
-        coef_SE_mat <- ivpack::cluster.robust.se(objList[[i]], clusterVar[[i]])        
+        # Use sink() to prevent cluster.robust.se() from printing "Cluster  
+        # Robust Standard Errors" to the screen once for every object. 
+        # [2020 01 20]
+        tmp <- tempfile()
+        sink(tmp)
+          coef_SE_mat <- ivpack::cluster.robust.se(objList[[i]], clusterVar[[i]])
+        sink()
       }
       coefsAndSEs[[i]] <- coef_SE_mat[, c('Estimate', 'Std. Error')]
     }
