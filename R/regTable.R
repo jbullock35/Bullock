@@ -298,12 +298,116 @@ regTable <- function (
 # Set up print method for regTable, so that print(regTable) doesn't list 
 # attributes at the bottom.  [2012 08 01]
 #' @export 
-print.regTable <- function (x, ...) {
+print.regTable <- function (x, decimalPlaces = 2, ...) {
+
+  # We are right-aligning the data columns. Each column-tier has a 
+  # "column-tier name," and we are right-aligning this name, too. In some 
+  # cases, we need to "push" the tier to the right so that it lines up with 
+  # its name. In other cases -- when the width of the name is less than the 
+  # width of the column -- we push the name right to line up with the 
+  # right edge of the column.  [2020 01 20]
+  
+  
+  # RIGHT-ALIGN THE ROW NAMES
   if (! is.null(rownames(x))) {
     rowNames <- rownames(x)
     maxNchar <- max(nchar(rowNames))
     rowNames <- stringr::str_pad(rowNames, width = maxNchar, "left")
     rownames(x) <- rowNames
   } 
-  print.table(x, ...)
+  
+    
+  # ROUND MATRIX AND CONVERT TO CHARACTER
+  x <- round(x, decimalPlaces)
+  x <- matrix(
+    as.character(x), 
+    nrow = nrow(x), 
+    dimnames = list(rownames(x), colnames(x)))
+  
+  
+  # ADD TRAILING ZEROES TO ENTRIES THAT ARE TOO SHORT
+  # For example, if decimalPlaces == 3 and an entry is .320, the entry will be
+  # shortened to "0.32", which will wreak havoc with alignment. We need it to 
+  # be "0.320".  [2020 01 20]
+  if (decimalPlaces > 0) {
+    for (i in 1:ncol(x)) x[, i] <- gsub('^0$', '0.', x[, i])                   # replace "0" with "0."
+    xAfterDecimal       <- apply(x, 2, function (x) gsub('-?\\d+\\.', '', x))  # strip everything before the decimal point
+    xAfterDecimalDigits <- nchar(xAfterDecimal)                 # matrix
+    zeroesToAdd         <- decimalPlaces - xAfterDecimalDigits  # matrix
+    for (i in 1:ncol(x)) {
+      x[, i] <- stringr::str_pad(
+        string = x[, i], 
+        width  = nchar(x[, i]) + zeroesToAdd[, i],
+        side   = 'right',
+        pad    = '0')
+    }
+  }
+
+    
+  # 1) INSERT ONE SPACE AT LEFT OF EACH ESTIMATE STRING (AFTER THE FIRST COLUMN)
+  # We want the column tiers to be separated by two spaces, not one. It turns 
+  # out that this is the easiest way.  [2020 01 20]
+  if (ncol(x) > 2) {
+    for (i in seq(3, ncol(x), by = 2)) {
+      x[, i] <- paste0(' ', x[, i])
+    }
+  }
+  
+  
+  # 2) GET COLUMN-TIER NAMES AND PAD THEM
+  # It turns out to be easiest to insert an extra space to the left of each
+  # column-tier name (save the first) here rather than later.  [2020 01 20]
+  colTierNames <- colnames(x)[seq(1, ncol(x), by = 2)]  # Sepal.Length, etc.
+  colTierNames[2:length(colTierNames)] <- paste0(' ', colTierNames[2:length(colTierNames)])
+  
+  
+  # 3) GET WIDTHS FOR COLUMNS, COLUMN TIERS, AND GUTTERS BETWEEN TIERS
+  # * columnTierWidth is the width, in characters, of the "Est" and "SE" 
+  #   columns in a tier -- plus the space that separstes them. Recall that 
+  # most "Est" columns were widened by one space in step 1.  [2020 01 20]
+  columnNcharMax  <- apply(x, 2, function (x) max(nchar(x, keepNA = FALSE)))
+  columnTierWidth <- rep(NA, ncol(x)/2) 
+  for (i in seq_along(columnTierWidth)) {
+    columnTierWidth[i] <- columnNcharMax[i] + columnNcharMax[i*2-1] + 1
+  }
+  # leftGutterWidth <- c(0, rep(1, length(columnTierWidth)-1))
+  
+  
+  # SET COLUMN NAMES
+  # The column names are all "Est" or "SE". They will all be right-aligned by 
+  # the "right = TRUE" argument that we pass to print.table() at the end of 
+  # the function.  [2020 01 20]
+  colnames(x) <- rep(qw("Est SE"), ncol(x)/2)
+
+  
+  # 4) RIGHT-ALIGN COLUMN TIERS AND COLUMN-TIER NAMES
+  for (i in seq_along(columnTierWidth)) {
+    tierPad <- columnTierWidth[i] - nchar(colTierNames[i])
+    
+    if (tierPad < 0) {                 # if column name is wider than column tier...
+      x[, i*2-1] <- stringr::str_pad(  # ...add space to "Est" column in each tier
+        string = x[, i*2-1],           
+        width  = columnNcharMax[i*2-1] + abs(tierPad))
+    }
+    
+    else if (tierPad > 0) {            # if column name is narrower than column tier...
+      colTierNames[i] <- stringr::str_pad(
+        string = colTierNames[i],
+        width  = nchar(colTierNames[i]) + tierPad)
+    }
+    
+  }
+  
+  
+
+
+  # PRINT OUTPUT
+  rownameMarginNchar <- max(nchar(rownames(x))) + 1
+  rownameMarginSpace <- paste0(rep(' ', rownameMarginNchar), collapse = '')
+  colTierNameString <- paste0(colTierNames, collapse = ' ')
+  cat(
+    paste0(
+      rownameMarginSpace, colTierNameString, "\n")
+  )
+  print.table(x, right = TRUE, ...)
 }
