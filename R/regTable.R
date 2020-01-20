@@ -69,7 +69,7 @@ regTable <- function (
   rowsToKeep   = NULL,
   clusterVar   = NULL) {
 
-  if (! class(objList) %in% 'list') {
+  if (! 'list' %in% class(objList) ) {
     stop("objList must be of class 'list'.")
   }
   if (! is.null(colNames) && length(colNames) != length(objList)) {
