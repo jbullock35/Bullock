@@ -136,7 +136,10 @@ regTable <- function (
   
   # Get names of predictors, including intercept.  Eliminate names of 
   # unwanted rows.
-  tmp      <- sapply(objList, function (x) { names(x$coefficients) }, simplify = FALSE)
+  tmp      <- sapply(
+    objList, 
+    function (x) { names(x$coefficients) }, 
+    simplify = FALSE)
   rowNames <- unique(unlist(tmp)) 
   if (! is.null(rowsToRemove)) { 
     for (pat in rowsToRemove) {
@@ -157,7 +160,11 @@ regTable <- function (
     ncol     = length(objList)*2, 
     dimnames = list(rowNames, colNames))
   
+
   
+  ############################################################################
+  # GET LIST OF ESTIMATES AND CLUSTERED STANDARD ERRORS 
+  ############################################################################  
   # Get list of regression output when using clustered SEs. Each element of 
   # the list is a mastrix with two columns: one for estimates, the other for 
   # clustered SEs.  We use coeftest(x) here because it is more robust than 
@@ -211,6 +218,11 @@ regTable <- function (
   #    coefsAndSEs <- lapply(coefsAndSEs, function (x) x[, c('Estimate', 'Std. Error')])    
   #  }
 
+
+
+  ############################################################################
+  # GET LIST OF ESTIMATES AND STANDARD ERRORS WHEN THERE IS NO CLUSTERING
+  ############################################################################  
   else {  # if no clustering
     coefsAndSEs <- lapply(objList, function (x) {
       tmp <- lmtest::coeftest(x)[, c('Estimate', 'Std. Error')]
@@ -228,13 +240,20 @@ regTable <- function (
     })
   }
   
+  
+  ############################################################################
+  # POPULATE THE out MATRIX WITH ESTIMATES AND STANDARD ERRORS 
+  ############################################################################  
   for (i in 1:length(coefsAndSEs)) {
     rowNamesToUse <- rowNames[rowNames %in% rownames(coefsAndSEs[[i]])]
     out[rowNamesToUse, (i*2 -1):(i*2)] <- coefsAndSEs[[i]][rowNamesToUse, ]
   } 
 
   
-  # ADD CLASS AND ATTRIBUTES TO THE TO-BE-RETURNED OBJECT
+  
+  ############################################################################
+  # ADD CLASS AND ATTRIBUTES, THEN RETURN THE OBJECT 
+  ############################################################################  
   class(out)     <- c('regTable', class(out))  
   attr(out, "N") <- sapply(objList, nobs)
   if ( all('lm' %in% sapply(objList, class)) ) {  # if every model is an lm() model 
