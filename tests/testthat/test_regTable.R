@@ -9,15 +9,20 @@ lm1 <- lm(Sepal.Length ~ Petal.Length,               data = iris)
 lm2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data = iris)
 rT1_cluster <- regTable(list(lm1),      clusterVar = list(iris$Species))
 rT2_cluster <- regTable(list(lm1, lm2), clusterVar = list(iris$Species))
+iris$SepalMed <- iris$Sepal.Length > median(iris$Sepal.Length)
+glm1 <- glm(SepalMed ~ Petal.Length, data = iris, family = binomial(link = logit))
+glm2 <- glm(SepalMed ~ Petal.Length + Petal.Width, data = iris, family = binomial(link = logit))
 
 
 test_that("regTable() checks appropriately for existence of clusterVar", {
-  expect_is(regTable(list(lm1)), "regTable")
-  expect_is(regTable(list(lm1),      clusterVar = NULL), "regTable")
-  expect_error(regTable(list(lm1),   clusterVar = iris$species), "clusterVar variable doesn't exist")
-  expect_error(regTable(list(lm1),   clusterVar = iris$Species), "clusterVar must be an object of class 'list'")
-  expect_is(regTable(list(lm1),      clusterVar = list(iris$Species)), "regTable")
-  expect_is(regTable(list(lm1, lm2), clusterVar = list(iris$Species)), "regTable")  
+  expect_is(regTable(list(lm1)),       "regTable")
+  expect_is(regTable(list(lm1, glm2)), "regTable")
+  expect_is(regTable(list(lm1),          clusterVar = NULL), "regTable")
+  expect_is(regTable(list(lm1),          clusterVar = list(iris$Species)), "regTable")
+  expect_is(regTable(list(lm1, lm2),     clusterVar = list(iris$Species)), "regTable")  
+  expect_error(regTable(list(lm1),       clusterVar = iris$species),       "clusterVar variable doesn't exist")
+  expect_error(regTable(list(lm1),       clusterVar = iris$Species),       "clusterVar must be an object of class 'list'")
+  expect_error(regTable(list(lm1, glm2), clusterVar = list(iris$Species)), "cannot cluster SEs for glm objects.")  
 })
 
 

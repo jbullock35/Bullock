@@ -14,7 +14,8 @@ regTable(
 }
 \arguments{
 \item{objList}{list of regression objects. They may be of class \code{lm},
-\code{plm}, or \code{ivreg}. This is the only required argument.}
+\code{plm}, or \code{ivreg}. \code{glm} objects are OK because they are
+also of class \code{lm}. This is the only required argument.}
 
 \item{colNames}{A vector of strings as long as \code{length(objList)}.}
 
@@ -40,10 +41,10 @@ the list indicates the clusters for the corresponding regression object in
 A matrix in which the columns are estimates and 
 standard errors -- two columns for each model. The matrix has an "N"
 attribute that indicates the number of observations for each regression. If
-all regressions were of class \code{lm}, it also has the "r.squared" and 
-"SER" attributes. (The "SER" attribute indicates the standard error of 
-regression -- AKA \eqn{\sigma} or the "residual standard error" --- for 
-each model.)
+all regressions were of class \code{lm} (but not also class \code{glm}), it 
+also has the "r.squared" and "SER" attributes. (The "SER" attribute 
+indicates the standard error of regression -- AKA \eqn{\sigma} or the 
+"residual standard error" --- for each model.)
 }
 \description{
 \code{regTable()} takes a list of regression objects, such as those created 

@@ -7,7 +7,8 @@
 #' @importFrom magrittr %>%
 
 #' @param objList list of regression objects. They may be of class \code{lm},
-#' \code{plm}, or \code{ivreg}. This is the only required argument.
+#' \code{plm}, or \code{ivreg}. \code{glm} objects are OK because they are
+#' also of class \code{lm}. This is the only required argument.
 #' 
 #' @param colNames A vector of strings as long as \code{length(objList)}. 
 #' 
@@ -32,10 +33,10 @@
 #' @return A matrix in which the columns are estimates and 
 #' standard errors -- two columns for each model. The matrix has an "N"
 #' attribute that indicates the number of observations for each regression. If
-#' all regressions were of class \code{lm}, it also has the "r.squared" and 
-#' "SER" attributes. (The "SER" attribute indicates the standard error of 
-#' regression -- AKA \eqn{\sigma} or the "residual standard error" --- for 
-#' each model.)
+#' all regressions were of class \code{lm} (but not also class \code{glm}), it 
+#' also has the "r.squared" and "SER" attributes. (The "SER" attribute 
+#' indicates the standard error of regression -- AKA \eqn{\sigma} or the 
+#' "residual standard error" --- for each model.)
 
 
 #' @note Before \code{regTable} was incorporated into this package,
@@ -76,26 +77,42 @@ regTable <- function (
     stop("colNames must be NULL or the length of objList.")
   }
   
+  
+  
+  ##############################################################################
+  # CHECK CLASSES OF OBJECTS IN objList 
+  ##############################################################################  
   # Test classes of objects in objList. We use inherits() instead of class() 
   # for this purpose. inherits(x, c("ivreg", "lm")) returns TRUE if x has 
   # either of those classes, FALSE otherwise. Note that ivreg and plm objects
-  # don't inherit the "lm" class.  [2020 01 13]
+  # don't inherit the "lm" class. But glm objects -do- inherit the "lm" class.
+  # [2020 01 20]
   classVec_ok <- sapply(objList, inherits, qw("ivreg lm plm"))  # boolean
   if (! all(classVec_ok)) {
     warning("regTable() has only been designed to work with models of class 'lm', 'plm', and 'ivreg'.")
   }  
-  classVec_ivreg <- sapply(objList, inherits, qw("ivreg"))      # boolean
-  classVec_lm    <- sapply(objList, inherits, qw("lm"))         # boolean
+  classVec_ivreg <- sapply(objList, inherits, qw("ivreg"))  # boolean vector
+  classVec_lm    <- sapply(objList, inherits, qw("lm"))     # boolean vector
+  classVec_glm   <- sapply(objList, inherits, qw("glm"))    # boolean vector
   if (!is.null(clusterVar) & any(classVec_lm) & !requireNamespace('multiwayvcov', quietly = TRUE)) {
     stop("To calculate clustered standard errors for regressions of class \"lm\", the \"multiwayvcov\" package must be installed.")
   }
   if (!is.null(clusterVar) & any(classVec_ivreg) & !requireNamespace('ivpack', quietly = TRUE)) {
     stop("To calculate clustered standard errors for regressions of class \"ivreg\", the \"ivpack\" package must be installed.")
   }
-  if (!is.null(clusterVar) & any(!classVec_lm & !classVec_ivreg)) {
-    stop(stringr::str_wrap("clusterVar isn't NULL, but regTable() can only cluster SEs only when objects in objList are of class 'lm' or 'ivreg'."))
+  
+  classVec_okForCluster <- all(classVec_ivreg | (classVec_lm & !classVec_glm))
+  if (!is.null(clusterVar) && any(classVec_glm)) {
+    stop(stringr::str_wrap("clusterVar isn't NULL, but regTable() cannot cluster SEs for glm objects."))
+  }
+  else if (!is.null(clusterVar) && !classVec_okForCluster) {
+    stop(stringr::str_wrap("clusterVar isn't NULL, but regTable() can cluster SEs only for \"ivreg\" objects and for non-glm \"lm\" objects."))
   }
   
+  
+  ############################################################################
+  # CHECK CLUSTER VARIABLES
+  ############################################################################
   # Check for misspecified cluster name, e.g., "iris$species" instead of 
   # "iris$Species". The former will become NULL, and in turn, users will think
   # that they're getting clustered SEs when they're really getting unclustered
@@ -112,6 +129,10 @@ regTable <- function (
   }
   
   
+  
+  ############################################################################
+  # GET COLUMN AND ROW NAMES, AND SET UP OUTPUT MATRIX
+  ############################################################################
   # Get column names
   if (is.null(colNames)) {
     tmpNames <- NULL
@@ -256,13 +277,15 @@ regTable <- function (
   ############################################################################  
   class(out)     <- c('regTable', class(out))  
   attr(out, "N") <- sapply(objList, nobs)
-  if ( all('lm' %in% sapply(objList, class)) ) {  # if every model is an lm() model 
+  if ( all(classVec_lm) && !any(classVec_glm) ) {  # if every model is an lm() model 
     objListSum <- sapply(objList, function (x) summary(x)[c('r.squared', 'sigma')] )
     attr(out, "r.squared") <- as.numeric( objListSum['r.squared', ] )
     attr(out, "SER")       <- as.numeric( objListSum['sigma', ] )
   }
   out
 }
+
+
 
 
 
