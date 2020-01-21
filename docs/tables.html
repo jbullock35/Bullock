@@ -352,11 +352,12 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb1-5" title="5">lmList &lt;-<span class="st"> </span><span class="kw">list</span>(lm1, lm2, lm3)</a>
 <a class="sourceLine" id="cb1-6" title="6">rT1    &lt;-<span class="st"> </span><span class="kw">regTable</span>(lmList)</a>
 <a class="sourceLine" id="cb1-7" title="7">rT1</a>
-<a class="sourceLine" id="cb1-8" title="8"><span class="co">#&gt;                          Sepal.Length Sepal.Length.se Sepal.Length Sepal.Length.se Sepal.Length Sepal.Length.se</span></a>
-<a class="sourceLine" id="cb1-9" title="9"><span class="co">#&gt;              (Intercept)   4.30660342      0.07838896   4.19058243      0.09704587   4.57717092      0.11195206</span></a>
-<a class="sourceLine" id="cb1-10" title="10"><span class="co">#&gt;             Petal.Length   0.40892228      0.01889134   0.54177715      0.06928179   0.44167616      0.06550938</span></a>
-<a class="sourceLine" id="cb1-11" title="11"><span class="co">#&gt;              Petal.Width                               -0.31955056      0.16045262  -1.23931538      0.21937022</span></a>
-<a class="sourceLine" id="cb1-12" title="12"><span class="co">#&gt; Petal.Length:Petal.Width                                                             0.18858873      0.03357199</span></a></code></pre></div>
+<a class="sourceLine" id="cb1-8" title="8"><span class="co">#&gt;                          Sepal.Length  Sepal.Length  Sepal.Length</span></a>
+<a class="sourceLine" id="cb1-9" title="9"><span class="co">#&gt;                              Est   SE      Est   SE      Est   SE</span></a>
+<a class="sourceLine" id="cb1-10" title="10"><span class="co">#&gt;              (Intercept)    4.31 0.08     4.19 0.10     4.58 0.11</span></a>
+<a class="sourceLine" id="cb1-11" title="11"><span class="co">#&gt;             Petal.Length    0.41 0.02     0.54 0.07     0.44 0.07</span></a>
+<a class="sourceLine" id="cb1-12" title="12"><span class="co">#&gt;              Petal.Width                 -0.32 0.16    -1.24 0.22</span></a>
+<a class="sourceLine" id="cb1-13" title="13"><span class="co">#&gt; Petal.Length:Petal.Width                                0.19 0.03</span></a></code></pre></div>
 <p>Then use <code>latexTable()</code> convert the matrix into LaTeX code:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">lT1 &lt;-<span class="st"> </span><span class="kw">latexTable</span>(</a>
 <a class="sourceLine" id="cb2-2" title="2">  <span class="dt">mat      =</span> rT1,</a>

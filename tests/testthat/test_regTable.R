@@ -110,3 +110,39 @@ test_that("regTable() produces correct estimates and SEs with both \"lm\" and \"
   expect_equal(rT_mixed[3, 8], 0.0862, tol = 0.0005)
 
 })
+
+
+rT1_cluster_output     <- capture.output(rT1_cluster)
+rT2_cluster_output     <- capture.output(rT2_cluster)
+rT2_dp0_cluster_output <- capture.output(print(rT2_cluster, 0))
+rT2_dp9_cluster_output <- capture.output(print(rT2_cluster, 9))
+rT_oneRow_output       <- capture.output(regTable(list(lm1, lm2), rowsToKeep = 'Length'))
+test_that("print.regTable() output is formatted correctly", {
+  expect_output(print(rT1_cluster_output[1]), "             Sepal.Length")  
+  expect_output(print(rT1_cluster_output[2]), "                 Est   SE")
+  expect_output(print(rT1_cluster_output[3]), " \\(Intercept\\)    4.31 0.19")
+  expect_output(print(rT1_cluster_output[4]), "Petal.Length    0.41 0.04")
+  
+  expect_output(print(rT2_cluster_output[1]), "             Sepal.Length  Sepal.Length")  
+  expect_output(print(rT2_cluster_output[2]), "                 Est   SE      Est   SE")
+  expect_output(print(rT2_cluster_output[3]), " \\(Intercept\\)    4.31 0.19     4.19 0.24")
+  expect_output(print(rT2_cluster_output[4]), "Petal.Length    0.41 0.04     0.54 0.11")
+  expect_output(print(rT2_cluster_output[5]), " Petal.Width                 -0.32 0.17")
+  
+  expect_output(print(rT2_dp0_cluster_output[1]), "             Sepal.Length  Sepal.Length")  
+  expect_output(print(rT2_dp0_cluster_output[2]), "                   Est SE        Est SE")
+  expect_output(print(rT2_dp0_cluster_output[3]), " \\(Intercept\\)         4  0          4  0")
+  expect_output(print(rT2_dp0_cluster_output[4]), "Petal.Length         0  0          1  0")
+  expect_output(print(rT2_dp0_cluster_output[5]), " Petal.Width                       0  0")
+  
+  expect_output(print(rT2_dp9_cluster_output[1]), "                         Sepal.Length              Sepal.Length")  
+  expect_output(print(rT2_dp9_cluster_output[2]), "                      Est          SE           Est          SE")
+  expect_output(print(rT2_dp9_cluster_output[3]), " \\(Intercept\\)  4.306603415 0.191679472   4.190582429 0.244328907")
+  expect_output(print(rT2_dp9_cluster_output[4]), "Petal.Length  0.408922277 0.040080702   0.541777154 0.111515660")
+  expect_output(print(rT2_dp9_cluster_output[5]), " Petal.Width                           -0.319550561 0.170671950")
+  
+  expect_output(print(rT_oneRow_output[1]), "             Sepal.Length  Sepal.Length")  
+  expect_output(print(rT_oneRow_output[2]), "                 Est   SE      Est   SE")
+  expect_output(print(rT_oneRow_output[3]), "Petal.Length    0.41 0.02     0.54 0.07")
+})
+

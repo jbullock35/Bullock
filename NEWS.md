@@ -2,13 +2,13 @@
 * Allowed `regTable()` to work with regressions of different classes (i.e., 
   "lm" and "ivreg") when clustering SEs.
 * Added support for glm objects to `regTable()`.  
+* Improved `print.regTable()` output (#11, #18).
 * Improved `latexTable()` output when `formatNumbers` is `FALSE`.
 * In `latexTable()`, changed `spaceBetweenColNameRows` argument from `TRUE` 
   to `-.025in`. Users can now arbitrarily adjust the vertical space between
   column-name rows by specifying any LaTeX length as the 
   `spaceBetweenColNameRows` argument.   
 * Added `c.latexTable()` method (#12).
-* Adjusted `print.regTable()` method so that row names are right-aligned (#11).
 * Reduced `lNAv()` output from two lines to 1 (#16).
 * Fix failure to export `print.regTable()`. Printing of "regTable" objects to 
   screen will now look better. Also updated vignette with new regTable output 
