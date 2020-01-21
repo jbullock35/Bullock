@@ -295,10 +295,28 @@ regTable <- function (
 
 
 
-# Set up print method for regTable, so that print(regTable) doesn't list 
-# attributes at the bottom.  [2012 08 01]
+#' Print regTable objects.
+#' 
+#' \code{print.regTable()} is the default \code{print} method for objects 
+#' produced by \linkInt{regTable}. The output that it produces differs from 
+#' \code{print.table()} output because \code{print.regTable()}
+#' * right-aligns row names;
+#' * inserts one space between each estimate and SE column, but two spaces 
+#'   between estimate-SE column tiers, thereby making it easier to distinguish
+#'   between results from different regressions;
+#' * uses two rows of column headings: one to show the outcome for each 
+#'   regression, and another to distinguish columns of coefficient estimates 
+#'   from columns of SE estimates;
+#' * does not print attributes (e.g.,  "N", "r.squared").
+#' @md
+
+#' @param x regTable object.
+#' @param decimalPlaces Integer. Table entries will be rounded to this number
+#' of digits after the decimal point.
+#' @param ... Arguments passed to \code{print.table()}.
+#' @importFrom rlang .data
 #' @export 
-print.regTable <- function (x, decimalPlaces = 2, ...) {
+print.regTable <- function (x, decimalPlaces = 2L, ...) {
 
   # We are right-aligning the data columns. Each column-tier has a 
   # "column-tier name," and we are right-aligning this name, too. In some 
@@ -330,10 +348,14 @@ print.regTable <- function (x, decimalPlaces = 2, ...) {
   # shortened to "0.32", which will wreak havoc with alignment. We need it to 
   # be "0.320".  [2020 01 20]
   if (decimalPlaces > 0) {
-    for (i in 1:ncol(x)) x[, i] <- gsub('^0$', '0.', x[, i])                   # replace "0" with "0."
-    xAfterDecimal       <- apply(x, 2, function (x) gsub('-?\\d+\\.', '', x))  # strip everything before the decimal point
-    xAfterDecimalDigits <- nchar(xAfterDecimal)                 # matrix
-    zeroesToAdd         <- decimalPlaces - xAfterDecimalDigits  # matrix
+    for (i in 1:ncol(x)) x[, i] <- gsub('^0$', '0.', x[, i])  # replace "0" with "0."
+    xAfterDecimal <- apply(                                      # strip everything before the decimal point
+        X      = x, 
+        MARGIN = 2, 
+        FUN    = function (x) gsub('-?\\d+\\.', '', x))   
+    xAfterDecimal <- matrix(xAfterDecimal, nrow = nrow(x))       # necessary if x has only one row
+    xAfterDecimalDigits <- nchar(xAfterDecimal)                  # matrix
+    zeroesToAdd         <- decimalPlaces - xAfterDecimalDigits   # matrix
     for (i in 1:ncol(x)) {
       x[, i] <- stringr::str_pad(
         string = x[, i], 
@@ -343,34 +365,28 @@ print.regTable <- function (x, decimalPlaces = 2, ...) {
     }
   }
 
-    
+  # CONVERT NA TO ''
+  # Protects cells from being written as "NA"
+  x[is.na(x)] <- ''  
+
+  
   # 1) INSERT ONE SPACE AT LEFT OF EACH ESTIMATE STRING (AFTER THE FIRST COLUMN)
   # We want the column tiers to be separated by two spaces, not one. It turns 
   # out that this is the easiest way.  [2020 01 20]
   if (ncol(x) > 2) {
-    for (i in seq(3, ncol(x), by = 2)) {
+    for (i in seq(1, ncol(x), by = 2)) {  # for all "Est" columns
       x[, i] <- paste0(' ', x[, i])
     }
-  }
+  }  
   
   
   # 2) GET COLUMN-TIER NAMES AND PAD THEM
   # It turns out to be easiest to insert an extra space to the left of each
   # column-tier name (save the first) here rather than later.  [2020 01 20]
   colTierNames <- colnames(x)[seq(1, ncol(x), by = 2)]  # Sepal.Length, etc.
-  colTierNames[2:length(colTierNames)] <- paste0(' ', colTierNames[2:length(colTierNames)])
-  
-  
-  # 3) GET WIDTHS FOR COLUMNS, COLUMN TIERS, AND GUTTERS BETWEEN TIERS
-  # * columnTierWidth is the width, in characters, of the "Est" and "SE" 
-  #   columns in a tier -- plus the space that separstes them. Recall that 
-  # most "Est" columns were widened by one space in step 1.  [2020 01 20]
-  columnNcharMax  <- apply(x, 2, function (x) max(nchar(x, keepNA = FALSE)))
-  columnTierWidth <- rep(NA, ncol(x)/2) 
-  for (i in seq_along(columnTierWidth)) {
-    columnTierWidth[i] <- columnNcharMax[i] + columnNcharMax[i*2-1] + 1
+  if (length(colTierNames) > 1) {
+    colTierNames[2:length(colTierNames)] <- paste0(' ', colTierNames[2:length(colTierNames)])
   }
-  # leftGutterWidth <- c(0, rep(1, length(columnTierWidth)-1))
   
   
   # SET COLUMN NAMES
@@ -380,10 +396,26 @@ print.regTable <- function (x, decimalPlaces = 2, ...) {
   colnames(x) <- rep(qw("Est SE"), ncol(x)/2)
 
   
-  # 4) RIGHT-ALIGN COLUMN TIERS AND COLUMN-TIER NAMES
+  # 3) GET WIDTHS FOR COLUMNS, COLUMN TIERS, AND GUTTERS BETWEEN TIERS
+  # * columnTierWidth is the width, in characters, of the "Est" and "SE" 
+  #   columns in a tier -- plus the space that separates them. Recall that 
+  #   most "Est" columns were widened by one space in step 1.  [2020 01 20]
+  columnNcharMax  <- apply(x, 2, function (x) max(nchar(x, keepNA = FALSE)))
+  columnTierWidth <- rep(NA, ncol(x)/2) 
   for (i in seq_along(columnTierWidth)) {
-    tierPad <- columnTierWidth[i] - nchar(colTierNames[i])
-    
+    columnTierWidth[i] <- columnNcharMax[i*2-1] + columnNcharMax[i*2] + 1
+  }
+  
+  
+  # 4) RIGHT-ALIGN COLUMN TIERS AND COLUMN-TIER NAMES
+  # If decimalPlaces == 0, columnTierWidth will be 4 for each tier: one space 
+  # at the start of the tier, one digit, one space, and then one concluding 
+  # digit. But the width that counts is 5, not 4: because the second column is 
+  # "SE", it takes up two spaces, even though it contains only one digit. Tbis
+  # is why we use max(columnTierWidth[i], 5) when calculating tier widths.
+  # [2020 01 21]  
+  for (i in seq_along(columnTierWidth)) {
+    tierPad <- max(columnTierWidth[i], 5) - nchar(colTierNames[i])
     if (tierPad < 0) {                 # if column name is wider than column tier...
       x[, i*2-1] <- stringr::str_pad(  # ...add space to "Est" column in each tier
         string = x[, i*2-1],           
