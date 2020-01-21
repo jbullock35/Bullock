@@ -1,29 +1,38 @@
-## Version 2.0.0.9000
+# Version 2.1.0 (2020-01-21)
+
+## `regTable()` changes
+* Added support for glm objects to `regTable()`.  
 * Allowed `regTable()` to work with regressions of different classes (i.e., 
   "lm" and "ivreg") when clustering SEs.
-* Added support for glm objects to `regTable()`.  
 * Improved `print.regTable()` output (#11, #18).
-* Improved `latexTable()` output when `formatNumbers` is `FALSE`.
+* Improved checking of classes of `objList` elements.
+
+## `latexTable()` changes
 * In `latexTable()`, changed `spaceBetweenColNameRows` argument from `TRUE` 
   to `-.025in`. Users can now arbitrarily adjust the vertical space between
   column-name rows by specifying any LaTeX length as the 
   `spaceBetweenColNameRows` argument.   
+* Improved `latexTable()` output when `formatNumbers` is `FALSE`.
 * Added `c.latexTable()` method (#12).
-* Reduced `lNAv()` output from two lines to 1 (#16).
-* Fix failure to export `print.regTable()`. Printing of "regTable" objects to 
-  screen will now look better. Also updated vignette with new regTable output 
-  (#21).
-* Fixed bug in `latexTable()` calls for which `decimalPlaces` is 0 (#8).
-* Fixed bug in `latexTable()` calls that arose when `SE_table` was `FALSE` and
-  an element of the `colNames` list had a length less than `ncol(mat)`.
-* Fixed bug in float placement of landscaped tables made by `latexTable()`. 
-* In `regTable()`, improved checking of classes of `objList` elements.
 * Better `latexTable()` warning message when `colNames[[1]]` has the wrong length.
+
+## Other enhancements
+* Reduced `lNAv()` output from two lines to 1 (#16).
 * If one goes to `help.start()` and then clicks on the "Bullock" entry, 
   "Bullock-package" is now the first entry in the help index.
 * Added examples to documentation of stack utilities (#5) and missing-value 
   utilities.
 * Small improvements to documentation formatting.
+
+## Bug fixes
+* Fixed failure to export `print.regTable()`. Printing of "regTable" objects  
+  to screen will now look better. Also updated vignette with new regTable output 
+  (#21).
+* Fixed `latexTable()` calls for which `decimalPlaces` is 0 (#8).
+* Fixed bug in `latexTable()` calls that arose when `SE_table` was `FALSE` and
+  an element of the `colNames` list had a length less than `ncol(mat)`.
+* Fixed float placement of landscaped tables made by `latexTable()`. 
+
 
 
 # Version 2.0.0 (2020-01-08)
@@ -38,6 +47,7 @@
   `makedummies::makedummies` for a replacement.
 * Removed ancient functions: `latable()`, `noNAmatrix()`, `split_fac()`.
 * Converted to roxygen for documentation of most functions.  
+
 
 
 # Pre-release versions.
