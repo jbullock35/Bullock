@@ -31,7 +31,10 @@
 * Fixed `latexTable()` calls for which `decimalPlaces` is 0 (#8).
 * Fixed bug in `latexTable()` calls that arose when `SE_table` was `FALSE` and
   an element of the `colNames` list had a length less than `ncol(mat)`.
-* Fixed float placement of landscaped tables made by `latexTable()`. 
+* Fixed float placement of landscaped tables made by `latexTable()`.
+&nbsp;  
+&nbsp;  
+&nbsp;  
 
 
 
@@ -46,7 +49,10 @@
 * Removed `factorToDummyMatrix()`. See `caret::class2ind` or 
   `makedummies::makedummies` for a replacement.
 * Removed ancient functions: `latable()`, `noNAmatrix()`, `split_fac()`.
-* Converted to roxygen for documentation of most functions.  
+* Converted to roxygen for documentation of most functions.
+&nbsp;  
+&nbsp;  
+&nbsp;  
 
 
 
