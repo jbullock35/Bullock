@@ -1,3 +1,13 @@
+# Version 2.1.0.9000
+* Added global option `Bullock.print.regTable.dp` on package load so that 
+  users can change default number of digits that are displayed when they
+  `print` a regTable object. 
+&nbsp;  
+&nbsp;  
+&nbsp;  
+
+
+
 # Version 2.1.0 (2020-01-21)
 
 ## `regTable()` changes

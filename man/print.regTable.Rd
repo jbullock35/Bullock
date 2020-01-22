@@ -4,13 +4,17 @@
 \alias{print.regTable}
 \title{Print regTable objects.}
 \usage{
-\method{print}{regTable}(x, decimalPlaces = 2L, ...)
+\method{print}{regTable}(x, decimalPlaces = getOption("Bullock.print.regTable.dp"), ...)
 }
 \arguments{
 \item{x}{regTable object.}
 
 \item{decimalPlaces}{Integer. Table entries will be rounded to this number
-of digits after the decimal point.}
+of digits after the decimal point. By default, it is the value of
+\code{getOption("Bullock.print.regTable.dp")}, which is set to{\NB}2 when
+the Bullock package is loaded. You can change the default by running
+\code{options("Bullock.print.regTable.dp") <- N} at any time, where
+\code{N} is your preferred number of digits after the decimal place.}
 
 \item{...}{Arguments passed to \code{print.table()}.}
 }
