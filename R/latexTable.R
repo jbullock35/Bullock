@@ -1061,11 +1061,10 @@ lt_footer <- function (
 #' @export 
 lt_colNumbers <- function (
   
-
   # If arguments are not supplied, we look to the calling frame --
   # parent.frame() -- for the arguments. This strategy is appropriate because
-  # this function will typically be called from lt_footer(), which will supply
-  # the arguments.  [2019 12 29]
+  # this function will typically be called from latexTable() or 
+  # lt_colNames_default(), which will supply the arguments.  [2019 12 29]
   mat      = parent.frame()$mat,
   SE_table = parent.frame()$SE_table) {
 
