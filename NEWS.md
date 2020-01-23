@@ -1,4 +1,6 @@
 # Version 2.1.0.9000
+* Removed class restrictions on objects passed to `regTable()`. `regTable()`
+  now works with almost every kind of regression object.
 * Added global option `Bullock.print.regTable.dp` on package load so that 
   users can change default number of digits that are displayed when they
   `print` a regTable object. 

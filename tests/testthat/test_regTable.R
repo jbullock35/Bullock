@@ -1,4 +1,4 @@
-# test_regTable.R
+# test_regTable.RT1_robust
 # Created on 2019-12-14
 # Created by John Bullock
 
@@ -92,8 +92,8 @@ test_that("regTable() produces correct estimates and SEs with \"ivreg\" objects 
 
 
 test_that("regTable() produces correct estimates and SEs with both \"lm\" and \"ivreg\" objects and clustering", {
-  if (!require(AER)) skip("AER package not available")
-  if (!require(AER)) skip("ivpack package not available")
+  if (!require(AER))    skip("AER package not available")
+  if (!require(ivpack)) skip("ivpack package not available")
   iv1 <- ivreg(Sepal.Length ~ Petal.Length | Petal.Width,  data = iris)
   iv2 <- ivreg(Sepal.Length ~ Petal.Width  | Petal.Length, data = iris)
   rT_mixed <- regTable(list(lm1, lm2, iv1, iv2), clusterVar = list(iris$Species))
@@ -112,12 +112,13 @@ test_that("regTable() produces correct estimates and SEs with both \"lm\" and \"
 })
 
 
-rT1_cluster_output     <- capture.output(rT1_cluster)
-rT2_cluster_output     <- capture.output(rT2_cluster)
-rT2_dp0_cluster_output <- capture.output(print(rT2_cluster, 0))
-rT2_dp9_cluster_output <- capture.output(print(rT2_cluster, 9))
-rT_oneRow_output       <- capture.output(regTable(list(lm1, lm2), rowsToKeep = 'Length'))
 test_that("print.regTable() output is formatted correctly", {
+  rT1_cluster_output     <- capture.output(rT1_cluster)
+  rT2_cluster_output     <- capture.output(rT2_cluster)
+  rT2_dp0_cluster_output <- capture.output(print(rT2_cluster, 0))
+  rT2_dp9_cluster_output <- capture.output(print(rT2_cluster, 9))
+  rT_oneRow_output       <- capture.output(regTable(list(lm1, lm2), rowsToKeep = 'Length'))
+
   expect_output(print(rT1_cluster_output[1]), "             Sepal.Length")  
   expect_output(print(rT1_cluster_output[2]), "                 Est   SE")
   expect_output(print(rT1_cluster_output[3]), " \\(Intercept\\)    4.31 0.19")
@@ -146,3 +147,28 @@ test_that("print.regTable() output is formatted correctly", {
   expect_output(print(rT_oneRow_output[3]), "Petal.Length    0.41 0.02     0.54 0.07")
 })
 
+
+test_that("print.regTable() output is formatted correctly when using lm_robust objects", {
+  if (!require(estimatr)) skip("estimatr package not available")
+  lm1_robust <- estimatr::lm_robust(Petal.Width ~ Petal.Length,               data = iris)
+  lm2_robust <- estimatr::lm_robust(Petal.Width ~ Petal.Length * Sepal.Width, data = iris)
+  rT1_robust <- regTable(list(lm1_robust, lm2_robust))
+  rT1_robust_output <- capture.output(rT1_robust)
+  
+  # We take this as the reference output:
+  #  
+  # > rT1_robust 
+  #                          Petal.Width  Petal.Width
+  #                             Est   SE     Est   SE
+  #              (Intercept)  -0.36 0.03   -0.20 0.30
+  #             Petal.Length   0.42 0.01    0.28 0.11
+  #              Sepal.Width               -0.05 0.09
+  # Petal.Length:Sepal.Width                0.05 0.04
+  
+  expect_output(print(rT1_robust_output[1]), "                         Petal.Width  Petal.Width")  
+  expect_output(print(rT1_robust_output[2]), "                            Est   SE     Est   SE")
+  expect_output(print(rT1_robust_output[3]), "             \\(Intercept\\)  -0.36 0.03   -0.20 0.30")
+  expect_output(print(rT1_robust_output[4]), "            Petal.Length   0.42 0.01    0.28 0.11")
+  expect_output(print(rT1_robust_output[5]), "             Sepal.Width               -0.05 0.09")
+  expect_output(print(rT1_robust_output[6]), "Petal.Length:Sepal.Width                0.05 0.04")
+})

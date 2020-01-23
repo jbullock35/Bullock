@@ -13,9 +13,12 @@ regTable(
 )
 }
 \arguments{
-\item{objList}{list of regression objects. They may be of class \code{lm},
-\code{plm}, or \code{ivreg}. \code{glm} objects are OK because they are
-also of class \code{lm}. This is the only required argument.}
+\item{objList}{list of regression objects. This is the only required 
+argument. \code{regTable()} has been tested with objects of classes 
+\code{ivreg, glm, lm,} and \code{plm,} and with the objects produced by the 
+\code{estimatr} package. It should work with other regression objects, too 
+-- that is, with any regression objects for which the \code{coef()} and
+\code{vcov()} functions can be used.}
 
 \item{colNames}{A vector of strings as long as \code{length(objList)}.}
 
@@ -29,13 +32,15 @@ expressions. Variables in the regressions whose names match the strings will
 be kept in the \code{regTable} output. All other variables will be omitted.
 If \code{rowsToRemove} is specified, this argument has no effect.}
 
-\item{clusterVar}{A list of length{\NB}1 or \code{length(objList)}. Each element in 
-the list indicates the clusters for the corresponding regression object in
-\code{objList}. If the regressions in \code{objList} are of class \code{lm},
-\code{clusterVar} is passed to \code{multiwayvcov::cluster.vcov}. If the 
- regressions in \code{objList} are instead of class \code{ivreg},
-\code{clustervar} is passed to \code{ivpack::cluster.robust.se}. Can be 
-\code{NULL} (the default), in which case standard errors won't be clustered.}
+\item{clusterVar}{Either \code{NULL}, a list of length{\NB}1, or a list of 
+length \code{length(objList)}. If \code{NULL} (the default), 
+\code{regTable()} will report the standard errors indicated by your 
+regression objects. Otherwise, the argument to \code{clusterVar} should 
+indicate the clusters for the corresponding regression objects in
+\code{objList}. Clustered SEs for "lm" objects will be produced by 
+\code{multiwayvcov::cluster.vcov}, and clustered SEs for "ivreg" objects 
+will be produced by \code{ivpack::cluster.robust.se}. \code{regTable()} 
+does not support clustering for other kinds of regression objects.}
 }
 \value{
 A matrix in which the columns are estimates and 
@@ -52,7 +57,7 @@ by \code{lm()}. It returns a matrix in which the columns are estimates and
 standard errors -- two columns for each model.
 }
 \note{
-Before \code{regTable} was incorporated into this package,
+Before \code{regTable()} was incorporated into this package,
 it used the \code{rowsToKeep} argument differently: variables were kept 
 only if the \emph{beginnings} of their names matched the strings in 
 \code{rowsToKeep}.

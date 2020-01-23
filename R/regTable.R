@@ -6,9 +6,12 @@
 
 #' @importFrom magrittr %>%
 
-#' @param objList list of regression objects. They may be of class \code{lm},
-#' \code{plm}, or \code{ivreg}. \code{glm} objects are OK because they are
-#' also of class \code{lm}. This is the only required argument.
+#' @param objList list of regression objects. This is the only required 
+#' argument. \code{regTable()} has been tested with objects of classes 
+#' \code{ivreg, glm, lm,} and \code{plm,} and with the objects produced by the 
+#' \code{estimatr} package. It should work with other regression objects, too 
+#' -- that is, with any regression objects for which the \code{coef()} and
+#' \code{vcov()} functions can be used.
 #' 
 #' @param colNames A vector of strings as long as \code{length(objList)}. 
 #' 
@@ -22,13 +25,15 @@
 #' be kept in the \code{regTable} output. All other variables will be omitted.
 #' If \code{rowsToRemove} is specified, this argument has no effect.
 #' 
-#' @param clusterVar A list of length{\NB}1 or \code{length(objList)}. Each element in 
-#' the list indicates the clusters for the corresponding regression object in
-#' \code{objList}. If the regressions in \code{objList} are of class \code{lm},
-#' \code{clusterVar} is passed to \code{multiwayvcov::cluster.vcov}. If the 
-#'  regressions in \code{objList} are instead of class \code{ivreg},
-#' \code{clustervar} is passed to \code{ivpack::cluster.robust.se}. Can be 
-#' \code{NULL} (the default), in which case standard errors won't be clustered.
+#' @param clusterVar Either \code{NULL}, a list of length{\NB}1, or a list of 
+#' length \code{length(objList)}. If \code{NULL} (the default), 
+#' \code{regTable()} will report the standard errors indicated by your 
+#' regression objects. Otherwise, the argument to \code{clusterVar} should 
+#' indicate the clusters for the corresponding regression objects in
+#' \code{objList}. Clustered SEs for "lm" objects will be produced by 
+#' \code{multiwayvcov::cluster.vcov}, and clustered SEs for "ivreg" objects 
+#' will be produced by \code{ivpack::cluster.robust.se}. \code{regTable()} 
+#' does not support clustering for other kinds of regression objects.
 
 #' @return A matrix in which the columns are estimates and 
 #' standard errors -- two columns for each model. The matrix has an "N"
@@ -39,7 +44,7 @@
 #' "residual standard error" --- for each model.)
 
 
-#' @note Before \code{regTable} was incorporated into this package,
+#' @note Before \code{regTable()} was incorporated into this package,
 #' it used the \code{rowsToKeep} argument differently: variables were kept 
 #' only if the \emph{beginnings} of their names matched the strings in 
 #' \code{rowsToKeep}.
@@ -87,10 +92,11 @@ regTable <- function (
   # either of those classes, FALSE otherwise. Note that ivreg and plm objects
   # don't inherit the "lm" class. But glm objects -do- inherit the "lm" class.
   # [2020 01 20]
-  classVec_ok <- sapply(objList, inherits, qw("ivreg lm plm"))  # boolean
-  if (! all(classVec_ok)) {
-    warning("regTable() has only been designed to work with models of class 'lm', 'plm', and 'ivreg'.")
-  }  
+  #
+  # classVec_ok <- sapply(objList, inherits, qw("ivreg lm plm"))  # boolean
+  # if (! all(classVec_ok)) {
+  #   warning("regTable() has only been designed to work with models of class 'lm', 'plm', and 'ivreg'.")
+  # }  
   classVec_ivreg <- sapply(objList, inherits, qw("ivreg"))  # boolean vector
   classVec_lm    <- sapply(objList, inherits, qw("lm"))     # boolean vector
   classVec_glm   <- sapply(objList, inherits, qw("glm"))    # boolean vector
@@ -108,6 +114,7 @@ regTable <- function (
   else if (!is.null(clusterVar) && !classVec_okForCluster) {
     stop(stringr::str_wrap("clusterVar isn't NULL, but regTable() can cluster SEs only for \"ivreg\" objects and for non-glm \"lm\" objects."))
   }
+  
   
   
   ############################################################################
@@ -136,26 +143,32 @@ regTable <- function (
   # Get column names
   if (is.null(colNames)) {
     tmpNames <- NULL
+    
     for (obj in objList) {
-      if (any(c('iv_robust', 'lm_robust') %in% class(obj))) {  # objects from the "estimatr" package
+      if (any(qw("iv_robust lm_lin lm_robust") %in% class(obj))) {  # Objects from the "estimatr" package.
         tmpNames <- c(tmpNames, obj$outcome)
       }
-      if ('ivreg' %in% class(obj)) {
-        tmpNames <- c(tmpNames, obj$formula[2])
+      else if ('ivreg' %in% class(obj)) {
+        tmpNames <- c(tmpNames, as.character(obj$formula[2]))
       }
-      else if ('lm' %in% class(obj)) {
+      else {                                                        # Default if all else fails. Works with "lm" objects. 
         tmpNames <- c(tmpNames, as.character(obj$terms[[2]])[1])
       }
     }
-    colNames <- tmpNames
+    
+    # If we were able to extract column names from objects...
+    if (is.character(tmpNames) && length(tmpNames)==length(objList)) {
+      colNames <- tmpNames
+    }
   }
+  
   if (! is.null(colNames)) {
     colNames <- paste0(rep(colNames, each = 2), c('', '.se'))
   }
 
   
   
-  # Get names of predictors, including intercept.  Eliminate names of 
+  # Get names of predictors, including intercept. Eliminate names of 
   # unwanted rows.
   tmp      <- sapply(
     objList, 
@@ -250,6 +263,8 @@ regTable <- function (
   ############################################################################
   # GET LIST OF ESTIMATES AND STANDARD ERRORS WHEN THERE IS NO CLUSTERING
   ############################################################################  
+  # If lmtest::coeftest doesn't work for some objects, I can try getting the 
+  # estimates and SEs from broom::tidy(regObj).  [2020 01 23]
   else {  # if no clustering
     coefsAndSEs <- lapply(objList, function (x) {
       tmp <- lmtest::coeftest(x)[, c('Estimate', 'Std. Error')]
@@ -390,7 +405,13 @@ print.regTable <- function (
   # 2) GET COLUMN-TIER NAMES AND PAD THEM
   # It turns out to be easiest to insert an extra space to the left of each
   # column-tier name (save the first) here rather than later.  [2020 01 20]
-  colTierNames <- colnames(x)[seq(1, ncol(x), by = 2)]  # Sepal.Length, etc.
+  if (is.null(colnames(x))) {
+    if (ncol(x) == 2) colTierNames <- NULL
+    else              colTierNames <- paste0("(", 1:(ncol(x)/2), ")")
+  }
+  else {
+    colTierNames <- colnames(x)[seq(1, ncol(x), by = 2)]  # Sepal.Length, etc.
+  }
   if (length(colTierNames) > 1) {
     colTierNames[2:length(colTierNames)] <- paste0(' ', colTierNames[2:length(colTierNames)])
   }
@@ -429,7 +450,7 @@ print.regTable <- function (
         width  = columnNcharMax[i*2-1] + abs(tierPad))
     }
     
-    else if (tierPad > 0) {            # if column name is narrower than column tier...
+    else if (tierPad > 0 && !is.null(colTierNames)) {  # if column name is narrower than column tier...
       colTierNames[i] <- stringr::str_pad(
         string = colTierNames[i],
         width  = nchar(colTierNames[i]) + tierPad)
@@ -439,14 +460,20 @@ print.regTable <- function (
   
   
 
-
   # PRINT OUTPUT
   rownameMarginNchar <- max(nchar(rownames(x))) + 1
   rownameMarginSpace <- paste0(rep(' ', rownameMarginNchar), collapse = '')
-  colTierNameString <- paste0(colTierNames, collapse = ' ')
-  cat(
-    paste0(
-      rownameMarginSpace, colTierNameString, "\n")
-  )
+  colTierNameString  <- paste0(colTierNames, collapse = ' ')
+  
+  # Print the colTierNameString that names the outcome for each regression. 
+  # But if colTierNameString is empty (because colTierNames is NULL, because
+  # the outcome names couldn't be recovered from the regression objects),
+  # don't print anything.  [2020 01 23]
+  if (colTierNameString != '') {   
+    cat(
+      paste0(
+        rownameMarginSpace, colTierNameString, "\n")
+    )
+  }
   print.table(x, right = TRUE, ...)
 }
