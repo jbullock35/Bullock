@@ -87,8 +87,8 @@ library(Bullock)
 
 
 ## Quick start
-Begin by generating a few regression objects with `lm()` and then putting the
-results into a matrix:
+Begin by generating a few regression objects and then putting the results into 
+a matrix:
 ```{r quickstart-regtable, R.options = list(width = 200)}
 data(iris)
 lm1    <- lm(Sepal.Length ~ Petal.Length,               data = iris)

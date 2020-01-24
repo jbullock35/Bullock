@@ -344,7 +344,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <p>This package makes tables easier to read by prioritizing the careful use of white space between different table elements. It also produces “Tufte tables,” in which standard errors are printed to the right of their estimates and in smaller type. Relative to conventional formatting—which places standard errors below the estimates and in parentheses—the formatting used here makes it easier for readers to instantly identify the information that they need. To my knowledge, the table design used here was first used in Edward Tufte’s essay on <a href="https://www.edwardtufte.com/tufte/powerpoint">The Cognitive Style of PowerPoint</a>.</p>
 <div id="quick-start" class="section level2">
 <h2>Quick start</h2>
-<p>Begin by generating a few regression objects with <code>lm()</code> and then putting the results into a matrix:</p>
+<p>Begin by generating a few regression objects and then putting the results into a matrix:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">data</span>(iris)</a>
 <a class="sourceLine" id="cb1-2" title="2">lm1    &lt;-<span class="st"> </span><span class="kw">lm</span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Length,               <span class="dt">data =</span> iris)</a>
 <a class="sourceLine" id="cb1-3" title="3">lm2    &lt;-<span class="st"> </span><span class="kw">lm</span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Length <span class="op">+</span><span class="st"> </span>Petal.Width, <span class="dt">data =</span> iris)</a>
