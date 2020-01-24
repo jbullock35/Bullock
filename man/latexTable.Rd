@@ -42,9 +42,8 @@ latexTable(
 
 \item{SE_table}{Logical variable that indicates whether \code{mat} contains
 pairs of columns, with the first column in each pair containing estimates,
-and the second column containing the corresponding standard errors.
-(Matrices returned by \linkInt{regTable} have this form.)
-Defaults to \code{TRUE}. If \code{TRUE}, the even-numbered columns of \code{mat}
+and the second column containing standard errors. Defaults to
+\code{TRUE}. If \code{TRUE}, the even-numbered columns of \code{mat}
 will be rendered in smaller type than the odd-numbered columns: that is,
 the standard errors will be rendered in smaller type than their
 corresponding estimates. This default type sizing can be overridden by
@@ -70,9 +69,9 @@ file that contains \code{latexTable} output---that is, by using
 \code{\\input} or \code{\\include} in your master LaTeX document---will
 produce a table when that master LaTeX document is rendered. If
 \code{callCommand} is \code{FALSE}, sourcing the file will make the macro
-available in your LaTeX document, but it will not call the macro. (You
-will need to call the macro yourself by adding a line like
-\code{\\myTable{p}} to your LaTeX document.)}
+available in your LaTeX document, but it won't call the macro. (You will
+need to call the macro yourself by adding a line like \code{\\myTable{p}}
+to your LaTeX document.)}
 
 \item{label}{A string. Specifies the LaTeX label for a table. It is not printed
 anywhere in the table, but references to the figure in
@@ -82,8 +81,7 @@ default \code{label} is the same as the \code{commandName} argument.\cr\cr\cr\cr
 
 \item{floatPlacement}{Character vector of length{\NB}1. Acceptable values
 are \code{p} (the default, which places each table on its own page),
-\code{h, H, t, b,} and \code{!}. Affects the output only if
-\code{landscape} is \code{FALSE}. See the
+\code{h, H, t, b,} and \code{!}. See the
 \href{https://bit.ly/LaTeX-floats}{LaTeX wikibook} for more on float
 placement in LaTeX.}
 
@@ -106,14 +104,15 @@ is negative, e.g., "-.25in").\cr\cr\cr\cr}
 labels will be printed to the left of each row in \code{mat}.
 \code{rowNames} can be \code{NULL}.}
 
-\item{footerRows}{List, or object that can be coerced to a list, of footer
-rows. Information about N and \ifelse{html}{\out{R<sup>2</sup>}}{\eqn{R^2}}
-is typically included in \code{footerRows}. Each element in the list
-corresponds to a row in the footer. The first entry in each
-\code{footerRows} list-element should be the row name for the corresponding
-footer row (e.g., '$F$', '$R^2$').\cr
-\indent By default, the only footer row indicates the number of
-observations for each model in \code{mat}.}
+\item{footerRows}{List, object that can be coerced to a list, or a function
+that creates a list. Each element in the list is a character vector that
+specifies entries for a row of the footer. The default is
+\linkInt{lt_footer}, which typically provides a "Number of observations"
+row. If a model is of class "lm," it will also provide an
+\ifelse{html}{\out{R<sup>2</sup>}}{\eqn{R^2}} and
+"Std. error of regression" row.\cr
+The first entry in each \code{footerRows} list-element should be the
+row name for the corresponding footer row (e.g., '$F$', '$R^2$').\cr}
 
 \item{colNames}{List, or object that can be coerced to a list, of column
 headings. Typically, each element in the list is a character vector, and
@@ -257,9 +256,13 @@ Works only on Windows.}
 \value{
 An object of classes \code{latexTable} and \code{character}. The
 returned object is a vector of strings of LaTeX code; each string is a line
-in a LaTeX macro that can create a table. (There is one small exception. If
-\code{callCommand} is \code{TRUE}, the last line is not part of the macro;
-instead, it calls the macro, thereby telling LaTeX to display the table).
+in a LaTeX macro that can create a table.\cr
+\indent There is one small exception. If \code{callCommand} is
+\code{TRUE}, the last line is not part of the macro; instead, it calls the
+macro, thereby telling LaTeX to display the table. For example, if
+\code{commandName} and \code{label} are \code{myTable}, and if
+\code{callCommand} is \code{TRUE}, the last line of the returned object is
+\code{\\mytable{p}}.
 }
 \description{
 \code{latexTable()} takes a single matrix, \code{mat}. By default, it returns
@@ -312,7 +315,11 @@ lt3 <- latexTable(
 lt4 <- update(
   lt3,
   commandName = 'myEstimates',  # change name of LaTeX macro
-  spacerRows  = 1)              # add vertical space after intercept row
+  spacerRows  = 1,              # add vertical space after intercept row
+  footerRows  = list(
+    c("My first footer row",  "a",     "b",     "c"),
+    c("My second footer row", "Lorem", "ipsum", "dolor")
+  ))
 }
 \seealso{
 Other functions for making tables: \linkInt{regTable},
