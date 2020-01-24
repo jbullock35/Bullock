@@ -820,13 +820,15 @@ latexTable <- function(
         if (! is.null(footerRow)) {
           footerRowName <- shift(footerRow)
           footerRowIsSpacer <- grepl('^\\\\addlinespace', footerRowName)
-          outputStrings <- c(outputStrings, paste0('        ', footerRowName))
+          footerRowNameString <- paste0('        ', footerRowName)
           if (0 %in% spacerColumns & !footerRowIsSpacer) {
-            outputStrings <- c(outputStrings, ' && ')      
+            footerRowNameString <- paste0(footerRowNameString, ' && ')      
           }
           else if (!footerRowIsSpacer) {
-            outputStrings <- c(outputStrings, ' & ')            
+            footerRowNameString <- paste0(footerRowNameString, ' & ')            
           }
+          
+          outputStrings <- c(outputStrings, footerRowNameString)
         }
         
         # Eliminate leading zeroes for R^2.  [2013 03 14]
