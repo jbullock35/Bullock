@@ -79,11 +79,11 @@
 
 #' @param mat Matrix of numbers to be displayed in a LaTeX table.
 #' @param SE_table Logical variable that indicates whether \code{mat} contains
-#'   pairs of columns, with the first column in each pair containing estimates,
-#'   and the second column containing standard errors. Defaults to 
-#'   \code{TRUE}. If \code{TRUE}, the even-numbered columns of \code{mat}
-#'   will be rendered in smaller type than the odd-numbered columns: that is,
-#'   the standard errors will be rendered in smaller type than their 
+#'   pairs (or "tiers") of columns, with the first column in each pair 
+#'   containing estimates, and the second column containing standard errors. 
+#'   Defaults to \code{TRUE}. If \code{TRUE}, the even-numbered columns of 
+#'   \code{mat} will be rendered in smaller type than the odd-numbered columns. 
+#'   That is, the standard errors will be rendered in smaller type than their 
 #'   corresponding estimates. This default type sizing can be overridden by 
 #'   the \code{SE_fontSizeString} argument. 
 #' @param headerFooter Logical variable. If \code{TRUE}, which is the default,
@@ -98,7 +98,7 @@
 #'   "myTable"; you can change it to something more descriptive, e.g., 
 #'   "mainEstimates". 
 #' @param callCommand Logical variable. Should the last line of the
-#'   \code{latexTable} object be a a call to the macro that creates the table?
+#'   \code{latexTable} object be a call to the macro that creates the table?
 #'   If \code{callCommand} is \code{TRUE}, which is the default, sourcing a 
 #'   file that contains \code{latexTable} output---that is, by using
 #'   \code{\\input} or \code{\\include} in your master LaTeX document---will 
@@ -145,6 +145,11 @@
 #'   "Std. error of regression" row.\cr
 #'     The first entry in each \code{footerRows} list-element should be the 
 #'   row name for the corresponding footer row (e.g., '$F$', '$R^2$').\cr
+#'     If \code{SE_table} is \code{FALSE}, each entry after the footer row 
+#'   name will be centered in its column. If \code{SE_table} is \code{TRUE}
+#'   (the default), each entry after the footer row name will be horizontally 
+#'   centered in its column tier. See the documentation of the \code{SE_table}
+#'   parameter for more on column tiers.   
 #' @param colNames List, or object that can be coerced to a list, of column
 #'   headings. Typically, each element in the list is a character vector, and 
 #'   the elements of the character vector specify the names of the table's
@@ -359,7 +364,6 @@ latexTable <- function(
   # rowNames      <- rowNames
   # colNames      <- colNames 
   # decimalPlaces <- decimalPlaces  
-  
   if (! is.null(colNames)) {
     colNames <- if (is.list(colNames)) colNames else list(colNames)
   }
@@ -416,6 +420,15 @@ latexTable <- function(
   if (!is.null(spacerColumns) && (ncol %% 2 != 0) && headerFooter) {
     warning("spacerColumns is non-NULL, ncol(mat) is odd, and headerFooter == TRUE. This combination of options is unlikely to produce a table that will work in LaTeX.")
   }
+  
+  # FOOTER ROW LENGTHS
+  if (! is.null(footerRows)) {
+    if (SE_table && any(lengths(footerRows) > ncol(mat)/2 + 1))
+      stop(stringr::str_wrap("When SE_table is TRUE, no footer row can have a length greater than ncol(mat)/2 + 1."))
+    else if (!SE_table && any(lengths(footerRows) > ncol(mat) + 1))
+      stop(stringr::str_wrap("When SE_table is FALSE, no footer row can have a length greater than ncol(mat) + 1."))
+  }
+   
 
   
  
@@ -852,7 +865,10 @@ latexTable <- function(
         
         if (!footerRowIsSpacer) { 
           # Construct the \multicolumn statements for footerRow.  [2012 07 25]
-          footerRow           <- paste0('          \\multicolumn{2}{c}{', footerRow     , '} &')        
+          #   If SE_table is TRUE (the default), each entry in the footer row
+          # spans two columns. If SE_table is FALSE, each entry spans only one
+          # column.  [2020 01 25]
+          footerRow           <- paste0('          \\multicolumn{', 1+SE_table, '}{c}{', footerRow     , '} &')        
           footerRow[ncol / 2] <- sub('\\s*&\\s*', '', footerRow[ncol / 2])
           footerRow[ncol / 2] <- paste0(footerRow[ncol / 2], '\\tabularnewline')
           
@@ -1250,9 +1266,6 @@ lt_SER_row <- function (
      
   c("Std. error of regression", round(attr(mat, "SER"), decimalPlaces))
 }
-
-
-
 
 
 

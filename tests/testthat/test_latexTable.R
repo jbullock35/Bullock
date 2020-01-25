@@ -20,7 +20,14 @@ lt1_dp0      <- latexTable(mat1, decimalPlaces = 0)
 lt1_dp1      <- latexTable(mat1, decimalPlaces = 1) 
 lt1_noSC     <- latexTable(mat1, spacerColumns = NULL)
 lt1_noSC_dp3 <- update(lt1_noSC, decimalPlaces = 3)
-lt1_mat2col  <- update(lt1_default, mat = matrix(1:16, nrow = 8)) 
+lt1_mat2col  <- update(lt1_default, mat = matrix(1:16, nrow = 8))
+lt1_withFooter <- update(
+  lt1_default, 
+  footerRows = list(c("footer row 1", "a", "b", "c")))
+lt1_withFooter_noSE <- update(
+  lt1_withFooter, 
+  SE_table = FALSE)
+
 
 lt2 <- latexTable(
   mat = matrix(1:16, nrow=2), 
@@ -29,13 +36,14 @@ lt2 <- latexTable(
 lt2_colNameExpand <- update(lt2, colNameExpand = TRUE)
 lt2_spacerColumns <- update(lt2, spacerColumns = c(0,1,2))
 
+
 data(iris)
 lm1 <- lm(Sepal.Length ~ Petal.Length,               data = iris)
 lm2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data = iris)
 lm3 <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
 rT1 <- regTable(list(lm1, lm2, lm3))
 lT3 <- latexTable(rT1)
-lT3_collapsed <- paste0(lT3, collapse = '')
+lT3_collapsed <- paste0(lT3, collapse = '')  # could probably use capture.output() instead of collapsing
 lT3_dp3 <- update(lT3, decimalPlaces = 3)
 lT3_dp3_collapsed <- paste0(lT3_dp3, collapse = '')
 lT3_placement_t        <- update(lT3, floatPlacement = 't')
@@ -303,6 +311,21 @@ test_that("footer rows are correct when decimalPlaces == 3", {
 })
 
 
+test_that("footer rows are handled correctly when SE_table is FALSE", {
+  expect_match(lt1_withFooter_noSE[32], "        footer row 1 & ")
+  expect_match(lt1_withFooter_noSE[33], "          \\\\multicolumn\\{1\\}\\{c\\}\\{a\\} &&")
+  expect_match(lt1_withFooter_noSE[34], "          \\\\multicolumn\\{1\\}\\{c\\}\\{b\\} &&")
+  expect_match(lt1_withFooter_noSE[35], "          \\\\multicolumn\\{1\\}\\{c\\}\\{c\\}\\\\tabularnewline")
+})
+
+
+
+
+
+
+##############################################################################
+# FLOAT PLACEMENT
+##############################################################################
 test_that("floatPlacement argument is used correctly", {
   expect_equal(as.character(lT3[length(lT3)]), "\\myTable{p}")
   expect_equal(as.character(lT3_placement_t[length(lT3_placement_t)]), "\\myTable{t}")

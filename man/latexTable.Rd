@@ -41,11 +41,11 @@ latexTable(
 \item{mat}{Matrix of numbers to be displayed in a LaTeX table.}
 
 \item{SE_table}{Logical variable that indicates whether \code{mat} contains
-pairs of columns, with the first column in each pair containing estimates,
-and the second column containing standard errors. Defaults to
-\code{TRUE}. If \code{TRUE}, the even-numbered columns of \code{mat}
-will be rendered in smaller type than the odd-numbered columns: that is,
-the standard errors will be rendered in smaller type than their
+pairs (or "tiers") of columns, with the first column in each pair
+containing estimates, and the second column containing standard errors.
+Defaults to \code{TRUE}. If \code{TRUE}, the even-numbered columns of
+\code{mat} will be rendered in smaller type than the odd-numbered columns.
+That is, the standard errors will be rendered in smaller type than their
 corresponding estimates. This default type sizing can be overridden by
 the \code{SE_fontSizeString} argument.}
 
@@ -63,7 +63,7 @@ LaTeX table (if \code{headerFooter} is \code{TRUE}). By default, it is
 "mainEstimates".}
 
 \item{callCommand}{Logical variable. Should the last line of the
-\code{latexTable} object be a a call to the macro that creates the table?
+\code{latexTable} object be a call to the macro that creates the table?
 If \code{callCommand} is \code{TRUE}, which is the default, sourcing a
 file that contains \code{latexTable} output---that is, by using
 \code{\\input} or \code{\\include} in your master LaTeX document---will
@@ -112,7 +112,12 @@ row. If a model is of class "lm," it will also provide an
 \ifelse{html}{\out{R<sup>2</sup>}}{\eqn{R^2}} and
 "Std. error of regression" row.\cr
 The first entry in each \code{footerRows} list-element should be the
-row name for the corresponding footer row (e.g., '$F$', '$R^2$').\cr}
+row name for the corresponding footer row (e.g., '$F$', '$R^2$').\cr
+If \code{SE_table} is \code{FALSE}, each entry after the footer row
+name will be centered in its column. If \code{SE_table} is \code{TRUE}
+(the default), each entry after the footer row name will be horizontally
+centered in its column tier. See the documentation of the \code{SE_table}
+parameter for more on column tiers.}
 
 \item{colNames}{List, or object that can be coerced to a list, of column
 headings. Typically, each element in the list is a character vector, and
