@@ -60,21 +60,20 @@ matrix of regression results, `latexTable()` turns it into LaTeX code, and
 `latexTablePDF()` renders the LaTeX code as&nbsp;PDF.
 
 Many other packages will help you to make tables. The outstanding feature of
-this package is that it offers you *less.* For example, the functions in this
-package offer you no opportunity to change colors or fonts, to add rules and
-borders in inappropriate places, or to denote statistical significance with
-asterisks or other symbols. This package makes easy things easy, and it makes
-creating bad tables quite difficult.
+this package is that it offers you *less.* For example, this package offers
+you no opportunity to change colors or fonts, to add rules and borders in
+inappropriate places, or to create tables with baroque layouts. This package
+makes easy things easy, and it makes creating bad tables quite difficult.
 
-This package makes tables easier to read by prioritizing the careful use of
-white space between different table elements. It also produces "Tufte tables,"
-in which standard errors are printed to the right of their estimates and in
-smaller type. Relative to conventional formatting---which places standard
-errors below the estimates and in parentheses---the formatting used here makes
-it easier for readers to instantly identify the information that they need. To
-my knowledge, the table design used here was first used in Edward Tufte's
-essay on [The Cognitive Style of
-PowerPoint](https://www.edwardtufte.com/tufte/powerpoint).
+The other major feature of this package is that it makes tables easier to read
+by prioritizing the careful use of white space between different table
+elements. With that in mind, it produces "Tufte tables," in which standard
+errors are printed to the right of their estimates and in smaller type.
+Relative to conventional formatting---which places standard errors below the
+estimates and in parentheses---the formatting used here makes it easier for
+readers to instantly identify the information that they need. To my knowledge,
+the table design used here was first used in Edward Tufte's essay on [The
+Cognitive Style of PowerPoint](https://www.edwardtufte.com/tufte/powerpoint).
 
 
 
