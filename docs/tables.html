@@ -304,8 +304,15 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 
 <style>
+  <!--
+
   a, a[href^="https:"] {
     text-decoration: none;
+  }
+  body {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 1.05em;
+    line-height: 1.7;
   }
   div.sourceCode {
     margin-top: -1ex;
@@ -318,13 +325,14 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
   }
   h2 { 
     border-bottom: unset; 
-    margin-block-end: unset;
+    /* margin-block-end: unset; */
     margin-bottom: 0.5ex;
     padding-top: 2.75ex;
   }
   p {
     margin: unset;
     margin-bottom: 2ex;
+    max-width: 60ch;
   }
   
   /* For images immediately preceded by code chunks */
@@ -337,7 +345,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
   .marginBottom2ex   { margin-bottom:  2.0ex; }
   .marginBottom4ex   { margin-bottom:  4.0ex; }
   .marginTopN4p5ex   { margin-top:    -4.5ex; }
-  
+
+  -->
 </style>
 <p>The <code>Bullock</code> package provides three functions to help you make tables: <code>regTable()</code>, <code>latexTable()</code>, and <code>latexTablePDF()</code>. The functions can be used separately but are designed to be used together. <code>regTable()</code> generates a matrix of regression results, <code>latexTable()</code> turns it into LaTeX code, and <code>latexTablePDF()</code> renders the LaTeX code as PDF.</p>
 <p>Many other packages will help you to make tables. The outstanding feature of this package is that it offers you <em>less.</em> For example, this package offers you no opportunity to change colors or fonts, to add rules and borders in inappropriate places, or to create tables with baroque layouts. This package makes easy things easy, and it makes creating bad tables quite difficult.</p>
@@ -362,8 +371,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">lT1 &lt;-<span class="st"> </span><span class="kw">latexTable</span>(</a>
 <a class="sourceLine" id="cb2-2" title="2">  <span class="dt">mat      =</span> rT1,</a>
 <a class="sourceLine" id="cb2-3" title="3">  <span class="dt">rowNames =</span> <span class="kw">c</span>(<span class="st">&quot;Intercept&quot;</span>, <span class="st">&quot;Petal length&quot;</span>, <span class="st">&quot;Petal width&quot;</span>, <span class="st">&quot;Petal length $</span><span class="ch">\\</span><span class="st">times$ petal width&quot;</span>),</a>
-<a class="sourceLine" id="cb2-4" title="4">  <span class="dt">colNames   =</span> <span class="kw">lt_colNumbers</span>(),</a>
-<a class="sourceLine" id="cb2-5" title="5">  <span class="dt">caption    =</span> <span class="st">&#39;</span><span class="ch">\\</span><span class="st">textit{Sepal length as a function of petal length and petal width.}&#39;</span></a>
+<a class="sourceLine" id="cb2-4" title="4">  <span class="dt">colNames =</span> <span class="kw">lt_colNumbers</span>(),</a>
+<a class="sourceLine" id="cb2-5" title="5">  <span class="dt">caption  =</span> <span class="st">&#39;</span><span class="ch">\\</span><span class="st">textit{Sepal length as a function of petal length and petal width.}&#39;</span></a>
 <a class="sourceLine" id="cb2-6" title="6">)</a>
 <a class="sourceLine" id="cb2-7" title="7"></a>
 <a class="sourceLine" id="cb2-8" title="8"><span class="kw">head</span>(lT1)</a>
@@ -411,12 +420,11 @@ document.
 <a class="sourceLine" id="cb5-3" title="3">lm3v &lt;-<span class="st"> </span><span class="kw">update</span>(lm3, <span class="dt">subset =</span> (Species <span class="op">==</span><span class="st"> &#39;versicolor&#39;</span>))</a>
 <a class="sourceLine" id="cb5-4" title="4">rT2  &lt;-<span class="st"> </span><span class="kw">regTable</span>(<span class="kw">list</span>(lm1v, lm2v, lm3v))</a>
 <a class="sourceLine" id="cb5-5" title="5">lT2  &lt;-<span class="st"> </span><span class="kw">update</span>(lT1, <span class="dt">mat =</span> rT2)</a>
-<a class="sourceLine" id="cb5-6" title="6">lT2[<span class="dv">23</span><span class="op">:</span><span class="dv">27</span>]  <span class="co"># just showing the data rows</span></a>
+<a class="sourceLine" id="cb5-6" title="6">lT2[<span class="dv">23</span><span class="op">:</span><span class="dv">26</span>]  <span class="co"># just showing the data rows</span></a>
 <a class="sourceLine" id="cb5-7" title="7"><span class="co">#&gt; [1] &quot;                                Intercept &amp;&amp; 2.41 &amp; .45 &amp;&amp;   2.38 &amp; .45 &amp;&amp;    .99 &amp; 2.88\tabularnewline&quot;</span></a>
 <a class="sourceLine" id="cb5-8" title="8"><span class="co">#&gt; [2] &quot;                             Petal length &amp;&amp;  .83 &amp; .10 &amp;&amp;    .93 &amp; .17 &amp;&amp;   1.26 &amp;  .68\tabularnewline&quot;</span></a>
 <a class="sourceLine" id="cb5-9" title="9"><span class="co">#&gt; [3] &quot;                              Petal width &amp;&amp;      &amp;     &amp;&amp;   -.32 &amp; .40 &amp;&amp;    .84 &amp; 2.40\tabularnewline&quot;</span></a>
-<a class="sourceLine" id="cb5-10" title="10"><span class="co">#&gt; [4] &quot;        Petal length $\times$ petal width &amp;&amp;      &amp;     &amp;&amp;        &amp;     &amp;&amp;   -.26 &amp;  .54\tabularnewline&quot;</span></a>
-<a class="sourceLine" id="cb5-11" title="11"><span class="co">#&gt; [5] &quot;        \addlinespace[.15in]&quot;</span></a></code></pre></div>
+<a class="sourceLine" id="cb5-10" title="10"><span class="co">#&gt; [4] &quot;        Petal length $\times$ petal width &amp;&amp;      &amp;     &amp;&amp;        &amp;     &amp;&amp;   -.26 &amp;  .54\tabularnewline&quot;</span></a></code></pre></div>
 </div>
 <div id="tweaking-tables" class="section level2">
 <h2>Tweaking tables</h2>
