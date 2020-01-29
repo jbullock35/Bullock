@@ -112,6 +112,56 @@ test_that("regTable() produces correct estimates and SEs with both \"lm\" and \"
 })
 
 
+test_that("regTable() objects have correct class and attributes after subsetting", {
+  expect_s3_class(rT2_cluster[1:2,    ], qw("regTable matrix"), exact = TRUE)    
+  expect_s3_class(rT2_cluster[   , 1:2], qw("regTable matrix"), exact = TRUE)
+  expect_s3_class(rT2_cluster[   , 3:4], qw("regTable matrix"), exact = TRUE)
+  expect_s3_class(rT2_cluster[1:2, 3:4], qw("regTable matrix"), exact = TRUE)
+  expect_s3_class(rT2_cluster[  2,    ], qw("regTable matrix"), exact = TRUE)  # only one row
+  expect_s3_class(rT2_cluster[  2, 3:4], qw("regTable matrix"), exact = TRUE)  # only one row
+  expect_equal(class(rT2_cluster[   , 2:3]), "matrix")
+  expect_equal(class(rT2_cluster[   ,   2]), "matrix")
+  expect_equal(class(rT2_cluster[1:2,   2]), "matrix")
+  expect_equal(class(rT2_cluster[  1,   2]), "numeric")  
+
+  rT2_cluster_attrNames <- names(attributes(rT2_cluster))
+  expect_true(all(qw("N r.squared SER") %in% rT2_cluster_attrNames))
+  
+  rT2_cluster_attrNames_b <- names(attributes(rT2_cluster[1,]))
+  expect_true(all(qw("N r.squared SER") %in% rT2_cluster_attrNames_b))
+
+  rT2_cluster_attrNames_c <- names(attributes(rT2_cluster[2:3,]))
+  expect_true(all(qw("N r.squared SER") %in% rT2_cluster_attrNames_c))
+  
+  rT2_cluster_attrNames_d <- names(attributes(rT2_cluster[, 3:4]))
+  expect_true(all(qw("N r.squared SER") %in% rT2_cluster_attrNames_d))
+  
+  rT2_cluster_attrNames_e <- names(attributes(rT2_cluster[, 2:3]))
+  expect_false(all(qw("N r.squared SER") %in% rT2_cluster_attrNames_e))
+
+  rT2_cluster_attrNames_f <- names(attributes(rT2_cluster[, 3]))
+  expect_false(all(qw("N r.squared SER") %in% rT2_cluster_attrNames_f))
+
+  expect_message(
+    object = rT2_cluster[1:2, ], 
+    regexp = "Rows removed, but.*unchanged\\.")
+})
+
+
+test_that("regTable subsetting works even when it occurs within another function", {
+  rows <- 1
+  cols <- 1
+  myFunc <- function (rT, rows, cols) {
+    rT[rows, cols]
+  }
+  rT2_cluster_subset <- myFunc(rT2_cluster, 2:3, 2:4)
+  
+  expect_equal(class(rT2_cluster_subset), "matrix")
+  expect_equal(dim(rT2_cluster_subset), c(2, 3))
+})
+
+
+
 test_that("print.regTable() output is formatted correctly", {
   rT1_cluster_output     <- capture.output(rT1_cluster)
   rT2_cluster_output     <- capture.output(rT2_cluster)
@@ -172,3 +222,6 @@ test_that("print.regTable() output is formatted correctly when using lm_robust o
   expect_output(print(rT1_robust_output[5]), "             Sepal.Width               -0.05 0.09")
   expect_output(print(rT1_robust_output[6]), "Petal.Length:Sepal.Width                0.05 0.04")
 })
+
+
+

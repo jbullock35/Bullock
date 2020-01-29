@@ -441,14 +441,10 @@ latexTable <- function(
   
   
   # CONVERT MATRIX ENTRIES TO STRINGS AND REPLACE NA ENTRIES  [2020 01 14]
+  if (identical(class(mat), qw("regTable matrix"))) {
+    class(mat) <- 'matrix'  # Remove "regTable" class to avoid errors when we subset later on.  [2020 01 30]
+  }
   mat[is.na(mat)] <- paste0(' ', NA_text)
-    # Replace NA values [2012 07 22]
-    #    if (! is.null(NA_text)) {
-    #      matLine <- gsub(' NA', paste0(' ', NA_text), matLine)
-    #      matLine <- gsub('NA',  paste0(' ', NA_text), matLine)
-    #      matLine <- gsub(' & $', ' &  ', matLine)  
-    #      # w/o this, strsplit will return vector of ncol - 1 (too short) 
-    #    }
 
   
   # WORK ON THE MATRIX ROW BY ROW

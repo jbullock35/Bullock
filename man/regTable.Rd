@@ -13,55 +13,88 @@ regTable(
 )
 }
 \arguments{
-\item{objList}{list of regression objects. This is the only required 
-argument. \code{regTable()} has been tested with objects of classes 
-\code{ivreg, glm, lm,} and \code{plm,} and with the objects produced by the 
-\code{estimatr} package. It should work with other regression objects, too 
+\item{objList}{List of regression objects. This is the only required
+argument. \code{regTable()} has been tested with objects of classes
+\code{ivreg, glm, lm,} and \code{plm,} and with the objects produced by the
+\code{estimatr} package. It should work with other regression objects, too
 -- that is, with any regression objects for which the \code{coef()} and
 \code{vcov()} functions can be used.}
 
 \item{colNames}{A vector of strings as long as \code{length(objList)}.}
 
-\item{rowsToRemove}{A vector of strings, which may specify regular 
-expressions. Variables in the regressions whose names match the strings will 
-be omitted from the \code{regTable} output. This argument overrides 
+\item{rowsToRemove}{A vector of strings, which may specify regular
+expressions. Variables in the regressions whose names match the strings will
+be omitted from the \code{regTable} output. This argument overrides
 \code{rowsToKeep.}}
 
-\item{rowsToKeep}{A vector of strings, which may specify regular 
-expressions. Variables in the regressions whose names match the strings will 
+\item{rowsToKeep}{A vector of strings, which may specify regular
+expressions. Variables in the regressions whose names match the strings will
 be kept in the \code{regTable} output. All other variables will be omitted.
 If \code{rowsToRemove} is specified, this argument has no effect.}
 
-\item{clusterVar}{Either \code{NULL}, a list of length{\NB}1, or a list of 
-length \code{length(objList)}. If \code{NULL} (the default), 
-\code{regTable()} will report the standard errors indicated by your 
-regression objects. Otherwise, the argument to \code{clusterVar} should 
+\item{clusterVar}{Either \code{NULL}, a list of length{\NB}1, or a list of
+length \code{length(objList)}. If \code{NULL} (the default),
+\code{regTable()} will report the standard errors indicated by your
+regression objects. Otherwise, the argument to \code{clusterVar} should
 indicate the clusters for the corresponding regression objects in
-\code{objList}. Clustered SEs for "lm" objects will be produced by 
-\code{multiwayvcov::cluster.vcov}, and clustered SEs for "ivreg" objects 
-will be produced by \code{ivpack::cluster.robust.se}. \code{regTable()} 
+\code{objList}. Clustered SEs for "lm" objects will be produced by
+\code{multiwayvcov::cluster.vcov}, and clustered SEs for "ivreg" objects
+will be produced by \code{ivpack::cluster.robust.se}. \code{regTable()}
 does not support clustering for other kinds of regression objects.}
 }
 \value{
-A matrix in which the columns are estimates and 
+A matrix in which the columns are estimates and
 standard errors -- two columns for each model. The matrix has an "N"
 attribute that indicates the number of observations for each regression. If
-all regressions were of class \code{lm} (but not also class \code{glm}), it 
-also has the "r.squared" and "SER" attributes. (The "SER" attribute 
-indicates the standard error of regression -- AKA \eqn{\sigma} or the 
+all regressions were of class \code{lm} (but not also class \code{glm}), it
+also has the "r.squared" and "SER" attributes. (The "SER" attribute
+indicates the standard error of regression -- AKA \eqn{\sigma} or the
 "residual standard error" --- for each model.)
 }
 \description{
-\code{regTable()} takes a list of regression objects, such as those created 
-by \code{lm()}. It returns a matrix in which the columns are estimates and 
-standard errors -- two columns for each model.
+\code{regTable()} takes a list of regression objects, such as those created
+by \code{lm()}. It returns a matrix in which the columns are estimates and
+standard errors -- two columns for each model. Together, the two columns
+that represent a regression are a \emph{column-pair} or a
+\emph{column-tier.}
 }
-\note{
+\section{Subsetting regTable objects with the \code{[} operator}{
+
+You can take subsets of regTable objects with the \code{[} operator. It subsets
+intelligently. That is, it knows whether the subsetted object
+contains only intact column tiers, and it modifies the class and attributes
+of the subsetted object accordingly. To wit:
+\itemize{
+\item If you remove only certain column-pairs from your original regTable
+object, such that the remaining columns all form intact column-pairs, all
+attributes for the remaining column-tiers are preserved. For example, the
+\code{N} and \code{r.squared} attributes are preserved. In other words,
+the \code{[} operator knows which regressions you have removed from the table,
+and it removes attribute information for only those regressions.
+\item If you remove only rows from your original regTable object, all
+attributes are preserved. This result has the potential to be misleading:
+for example, you may remove a row that reports information for a given
+predictor, but the \code{N}, \code{r.squared}, and \code{SER} attributes were all
+computed from regressions that included that predictor. Consequently, a
+message will be printed to remind you that the attributes have been
+preserved.
+\item If you remove columns from your original regTable object such that the
+remaining columns do \emph{not} all form intact column-pairs, the \code{N},
+\code{r.squared}, and \code{SER} attributes are stripped, and the returned object is
+a matrix without the "regTable" class.\cr
+}
+
+See the examples for an illustration.
+}
+
+\section{Change from the pre-publication version}{
+
 Before \code{regTable()} was incorporated into this package,
-it used the \code{rowsToKeep} argument differently: variables were kept 
-only if the \emph{beginnings} of their names matched the strings in 
+it used the \code{rowsToKeep} argument differently: variables were kept
+only if the \emph{beginnings} of their names matched the strings in
 \code{rowsToKeep}.
 }
+
 \examples{
 data(iris)
 lm1 <- lm(Sepal.Length ~ Petal.Length,               data = iris)
@@ -71,9 +104,21 @@ regTable(list(lm1, lm2), colNames = c("Sepal length", "Sepal width"))
 regTable(list(lm1, lm2), rowsToKeep = 'Length')
 regTable(list(lm1, lm2), rowsToKeep = c('Intercept', 'Length'))
 regTable(list(lm1, lm2), clusterVar = list(iris$Species))
+
+# illustrate subsetting
+rT <- regTable(list(lm1, lm2))
+ncol(rT)           # 4
+attributes(rT)$N   # 150 150
+rT2 <- rT[1:2, ] 
+attributes(rT2)$N  # 150 150
+rT3 <- rT[, 3:4]
+attributes(rT3)$N  # 150
+rT4 <- rT[, 2:3]
+attributes(rT4)$N  # NULL
+class(rT4)         # "matrix"
 }
 \seealso{
-Other functions for making tables: \linkInt{latexTable}, 
-\linkInt{latexTablePDF}. See also the \href{../doc/tables.html}{Building better tables in less time} 
+Other functions for making tables: \linkInt{latexTable},
+\linkInt{latexTablePDF}. See also the \href{../doc/tables.html}{Building better tables in less time}
 vignette.
 }

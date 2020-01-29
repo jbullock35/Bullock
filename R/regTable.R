@@ -2,11 +2,13 @@
 #' 
 #' \code{regTable()} takes a list of regression objects, such as those created 
 #' by \code{lm()}. It returns a matrix in which the columns are estimates and 
-#' standard errors -- two columns for each model. 
+#' standard errors -- two columns for each model. Together, the two columns
+#' that represent a regression are a \emph{column-pair} or a
+#' \emph{column-tier.}
 
 #' @importFrom magrittr %>%
 
-#' @param objList list of regression objects. This is the only required 
+#' @param objList List of regression objects. This is the only required 
 #' argument. \code{regTable()} has been tested with objects of classes 
 #' \code{ivreg, glm, lm,} and \code{plm,} and with the objects produced by the 
 #' \code{estimatr} package. It should work with other regression objects, too 
@@ -43,8 +45,34 @@
 #' indicates the standard error of regression -- AKA \eqn{\sigma} or the 
 #' "residual standard error" --- for each model.)
 
+#' @section Subsetting regTable objects with the `[` operator:
+#' You can take subsets of regTable objects with the `[` operator. It subsets
+#' intelligently. That is, it knows whether the subsetted object 
+#' contains only intact column tiers, and it modifies the class and attributes
+#' of the subsetted object accordingly. To wit: 
+#' * If you remove only certain column-pairs from your original regTable 
+#' object, such that the remaining columns all form intact column-pairs, all
+#' attributes for the remaining column-tiers are preserved. For example, the 
+#' \code{N} and \code{r.squared} attributes are preserved. In other words, 
+#' the `[` operator knows which regressions you have removed from the table, 
+#' and it removes attribute information for only those regressions.
+#' * If you remove only rows from your original regTable object, all 
+#' attributes are preserved. This result has the potential to be misleading:
+#' for example, you may remove a row that reports information for a given 
+#' predictor, but the `N`, `r.squared`, and `SER` attributes were all 
+#' computed from regressions that included that predictor. Consequently, a 
+#' message will be printed to remind you that the attributes have been 
+#' preserved.
+#' * If you remove columns from your original regTable object such that the 
+#' remaining columns do *not* all form intact column-pairs, the `N`, 
+#' `r.squared`, and `SER` attributes are stripped, and the returned object is 
+#' a matrix without the "regTable" class.\cr
+#' 
+#' See the examples for an illustration.
+#' @md
 
-#' @note Before \code{regTable()} was incorporated into this package,
+#' @section Change from the pre-publication version:
+#' Before \code{regTable()} was incorporated into this package,
 #' it used the \code{rowsToKeep} argument differently: variables were kept 
 #' only if the \emph{beginnings} of their names matched the strings in 
 #' \code{rowsToKeep}.
@@ -64,6 +92,18 @@
 #' regTable(list(lm1, lm2), rowsToKeep = 'Length')
 #' regTable(list(lm1, lm2), rowsToKeep = c('Intercept', 'Length'))
 #' regTable(list(lm1, lm2), clusterVar = list(iris$Species))
+#' 
+#' # illustrate subsetting
+#' rT <- regTable(list(lm1, lm2))
+#' ncol(rT)           # 4
+#' attributes(rT)$N   # 150 150
+#' rT2 <- rT[1:2, ] 
+#' attributes(rT2)$N  # 150 150
+#' rT3 <- rT[, 3:4]
+#' attributes(rT3)$N  # 150
+#' rT4 <- rT[, 2:3]
+#' attributes(rT4)$N  # NULL
+#' class(rT4)         # "matrix"
 
 
 
@@ -307,6 +347,184 @@ regTable <- function (
 }
 
 
+##############################################################################
+# METHODS FOR regTable CLASS
+##############################################################################
+#' @export 
+`[.regTable` <- function (x, ...) {
+  myCall    <- match.call()
+  attrX     <- attributes(x)[c('N', 'r.squared', 'SER')]
+  dimnamesX <- dimnames(x)  # a two-element list: rows, then columns
+  
+
+  
+  # GET INDICES OF SELECTED ROWS AND COLUMNS  
+  callArgs <- rlang::call_args(myCall)  # a list
+  
+  # We need to check the length of callArgs because str(myRegTable) won't work
+  # otherwise. The problem is that it tries to subset regTable with a single
+  # number. For example, it (really str.default()) will call "x[6]". This will
+  # work when x is a matrix. But it won't work when "x" is a regTable unless
+  # we check the length of callArgs below.  [2020 01 29]
+  if (length(callArgs) >= 3) {
+    rowDim <- rlang::call_args(myCall)[[2]]
+    colDim <- rlang::call_args(myCall)[[3]]
+  } 
+  else {
+    rowDim <- NULL
+    colDim <- NULL
+  }
+
+  
+  # We now use rlang::is_missing(). It returns FALSE for objects that are NULL.
+  # But it returns TRUE when dimensions were specified in the normal way and
+  # one dimension wasn't specified. For example, colDimMissing will be TRUE
+  # for rT[1:3, ].  [2020 01 31]
+  #
+  # If this function is called from another function, rowDim may be (say) 'i' 
+  # rather than any integer. We need to evaluate i -- so we need to find the 
+  # frame that contains it. There are two ways to do this. First, we can 
+  # try dynGet(). Second, we can use the combination of find_rowDim() and 
+  # tryCatch() that I have below.  [2020 01 31]
+  rowDimMissing <- rlang::is_missing(rowDim)
+  colDimMissing <- rlang::is_missing(colDim)
+  if (rowDimMissing && !colDimMissing) {  # matches rT [, 3:5]
+    rowDim <- 1:nrow(x)
+  }
+  else if (!rowDimMissing) {              # matches rT[1:4, 3:5] and rT[1:4, ]
+    rowDim <- tryCatch(
+      expr  = eval(rowDim),
+      error = function (e) { 
+        dynGet(deparse(rowDim)) 
+      }
+    )
+  }
+
+    # The function returns the number of generations to search back in the 
+    # call stack.  [2020 01 30]
+    # find_rowDim <- function (rowDim) {
+    #   rowDimString    <- deparse(rowDim)  # for example, "i" 
+    #   sysCallList     <- sys.calls()
+    #   sysCallLength   <- length(sysCallList)
+    #   rowDimPositions <- grep(paste0("\\[\\s*", rowDimString, "\\s*,"), sysCallList)
+    #   ifelse(length(rowDimPositions)>0, sysCallLength - rowDimPositions, NULL)
+    # }
+    #
+    # tryCatch(
+    #   expr  = eval(rowDim),
+    #   error = function (e) { browser(); dynGet("i") }
+    #   error = function (e) {
+    #     goBack <- find_rowDim()
+    #     if (!is.null(goBack)) eval(rowDim, envir = parent.frame(goBack - 1))
+    #     else print(paste0("Could not evaluate \"i\"\n", e))
+    #   }
+    # )
+  
+  if (colDimMissing && !rowDimMissing) {  # matches rT[1:4, ]
+    colDim <- 1:ncol(x)
+  } 
+  else if (!colDimMissing) {              # matches rT[1:4, 3:6] and rT[, 3:6]
+    colDim <- tryCatch(
+      expr  = eval(colDim),
+      error = function (e) { 
+        dynGet(deparse(colDim))
+      })
+  }
+  
+  
+  
+  # SUBSET THE regTABLE OBJECT
+  x <- unclass(x)[...]
+  
+  
+  
+  # RESTORE "MATRIX" CLASS TO X
+  # If only one column has been selected, we return a one-column matrix. If 
+  # only one row has been selected, we return a one-row matrix. (Later, we 
+  # will add the "regTable" class to the one-row matrix.)  [2020 01 30]
+  if (length(attributes(x)$dim) == 2) class(x) <- "matrix"
+  else if (length(colDim) == 1 && length(rowDim)>1) x <- as.matrix(x)
+  else if (length(rowDim) == 1 && length(colDim)>1) x <- as.matrix(x) %>% t  
+  
+  
+  
+  # ASSIGN ROW NAMES AND COLUMN NAMES IF NEEDED
+  # If only a single row or column was selected, names have been stripped.
+  # We re-assign them here.  [2020 01 30]
+  if (class(x)=='matrix' & !is.null(rowDim) && is.null(rownames(x))) {
+    rownames(x) <- dimnamesX[[1]][rowDim]
+  }
+  if (class(x)=='matrix' & !is.null(colDim) && is.null(colnames(x))) {
+    colnames(x) <- dimnamesX[[2]][colDim]
+  }
+  
+  
+  
+  # CHECK: ARE REMAINING COLUMNS COLUMN TIERS?
+  # Or is there at least one tier from which the user removed one column but 
+  # not both?
+  is_odd  <- function (x) x %% 2 == 1
+  is_even <- function (x) x %% 2 == 0
+  if (any( is_odd(colDim) & !(colDim+1)%in%colDim)) {        # if est. column isn't followed by its SE column
+    onlyIntactColTiers <- FALSE
+  } 
+  else if (any( is_even(colDim) & !(colDim-1)%in%colDim)) {  # if SE column isn't preceded by its est. column
+    onlyIntactColTiers <- FALSE
+  } 
+  else {
+    onlyIntactColTiers <- TRUE
+    colDimOdd <- colDim[is_odd(colDim)]
+    colTiers  <- if (is.null(colDim)) 1:(ncol(x)/2) else ceiling(colDimOdd/2)
+  } 
+    
+
+  # RESTORE ATTRIBUTES
+  # We restore attributes only if the remaining columns form intact column 
+  # tiers. For example, if a user saved an estimate column from one tier but 
+  # not the corresponding SE column, we don't restore attributes.
+  #   When we -do- restore attributes, we restore only the attributes for the 
+  # remaining column tier. For example, if the user removed the second column
+  # tier (columns 3-4), we remove the corresponding entries in the "N", 
+  # "r.squared", and "SER" attributes.  [2020 01 29]  
+  if (onlyIntactColTiers) {
+    class(x) <- c("regTable", class(x))
+    if (!is.null(attrX$N))         attributes(x) <- c(attributes(x), list(N         = attrX$N[colTiers]))
+    if (!is.null(attrX$r.squared)) attributes(x) <- c(attributes(x), list(r.squared = attrX$r.squared[colTiers]))
+    if (!is.null(attrX$SER))       attributes(x) <- c(attributes(x), list(SER       = attrX$SER[colTiers]))
+  }
+  
+
+  
+  # MESSAGE  
+  # If users are removing rows, and attributes N, r.squared, and SER are
+  # unchanged, we remind them that the attributed are unchanged.  [2020 01 30]
+  presentAttributes <- ifelse(
+    is.null(attrX$r.squared),
+    'attribute "N" is unchanged.',
+    'attributes "N", "r.squared", and "SER" are unchanged.')
+  
+  if (sys.nframe() > 2) {
+    prevCall <- match.call(call = sys.call(-2))
+    latexTableCall <- as.character(prevCall)[1] == 'latexTable'
+  }
+  else {
+    latexTableCall <- FALSE
+  }
+  
+  # We add the "length(callArgs) < 3" condition to accommodate str() and 
+  # str.default(). See the comment above on str() for details.  [2020 01 29]
+  #   We exclude calls from latexTable(). It does a lot of subsetting of 
+  # regTable objects, and we don't want to throw warnings in those cases.  
+  # [2020 01 29]
+  if (onlyIntactColTiers && !rowDimMissing && length(callArgs) >= 3 && !latexTableCall) {
+    message(paste0("Rows removed, but ", presentAttributes))
+  }  
+
+  
+  # RETURN OBJECT
+  x 
+}
+
 
 
 
@@ -476,4 +694,12 @@ print.regTable <- function (
     )
   }
   print.table(x, right = TRUE, ...)
+}
+
+
+
+#' @export
+str.regTable <- function (object, ...) {
+  class(object) <- "matrix"
+  str(object)
 }
