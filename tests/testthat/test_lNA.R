@@ -20,7 +20,9 @@ test_that("lNA() assigns values and prints messages as it should", {
 
 
 test_that("lNAv() assigns values and prints messages as it should", {
-  expect_identical(lNAv(x), 2L)
+  sink(tempfile())
+    expect_identical(lNAv(x), 2L)
+  sink()
   expect_output(lNAv(x), '2 \\(length with NA=4\\)$')        
   expect_output(lNAv1 <- lNAv(x), '2 \\(length with NA=4\\)$') 
 })
