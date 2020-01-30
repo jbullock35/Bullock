@@ -701,5 +701,5 @@ print.regTable <- function (
 #' @export
 str.regTable <- function (object, ...) {
   class(object) <- "matrix"
-  str(object)
+  utils::str(object)
 }
