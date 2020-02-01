@@ -303,6 +303,51 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 
 
+<style>
+  <!--
+
+  a, a[href^="https:"] {
+    text-decoration: none;
+  }
+  body {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 1.05em;
+    line-height: 1.7;
+  }
+  div.sourceCode {
+    margin-top: -1ex;
+    margin-bottom: 6ex;
+    margin-left: 0;
+    margin-right: 0
+  }
+  h1 {
+    margin-top: 3ex;
+  }
+  h2 { 
+    border-bottom: unset; 
+    /* margin-block-end: unset; */
+    margin-bottom: 0.5ex;
+    padding-top: 2.75ex;
+  }
+  p {
+    margin: unset;
+    margin-bottom: 2ex;
+    max-width: 60ch;
+  }
+  
+  /* For images immediately preceded by code chunks */
+  .sourceCode + p > img {  
+    margin-top: -4ex;
+    margin-bottom: 4ex;
+  }
+  
+  .marginBottom1p5ex { margin-bottom:  1.5ex; }
+  .marginBottom2ex   { margin-bottom:  2.0ex; }
+  .marginBottom4ex   { margin-bottom:  4.0ex; }
+  .marginTopN4p5ex   { margin-top:    -4.5ex; }
+
+  -->
+</style>
 <p>The <code>Bullock</code> package provides three functions to help you make tables: <code>regTable()</code>, <code>latexTable()</code>, and <code>latexTablePDF()</code>. The functions can be used separately but are designed to be used together. <code>regTable()</code> generates a matrix of regression results, <code>latexTable()</code> turns it into LaTeX code, and <code>latexTablePDF()</code> renders the LaTeX code as PDF.</p>
 <p>Many other packages will help you to make tables. The outstanding feature of this package is that it offers you <em>less.</em> For example, this package offers you no opportunity to change colors or fonts, to add rules and borders in inappropriate places, or to create tables with baroque layouts. This package makes easy things easy, and it makes creating bad tables quite difficult.</p>
 <p>The other major feature of this package is that it makes tables easier to read by prioritizing the careful use of white space between different table elements. With that in mind, it produces “Tufte tables,” in which standard errors are printed to the right of their estimates and in smaller type. Relative to conventional formatting—which places standard errors below the estimates and in parentheses—the formatting used here makes it easier for readers to instantly identify the information that they need. To my knowledge, the table design used here was first used in Edward Tufte’s essay on <a href="https://www.edwardtufte.com/tufte/powerpoint">The Cognitive Style of PowerPoint</a>.</p>
@@ -351,7 +396,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <p>Or you can write the macro to a .tex file:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">latexTablePDF</span>(lT1, <span class="dt">outputFilenameStem =</span> <span class="st">&#39;irisTable&#39;</span>, <span class="dt">writeTex =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <div class="marginTopN4p5ex">
-<p>The .tex file can then be inserted into your master LaTeX document by adding <code>\input{irisTable.tex}</code> or <code>\include{irisTable.tex}</code> into your master LaTeX document. (For more on <code>\input</code> and <code>\include</code>, see <a href="https://en.wikibooks.org/wiki/LaTeX/Modular_Documents">the LaTeX wikibook</a> and <a href="https://tex.stackexchange.com/q/246">Stack Overflow</a>).</p>
+<p>The .tex file can then be inserted into your master LaTeX document by adding <code>\input{irisTable.tex}</code> or <code>\include{irisTable.tex}</code> into your master LaTeX document. (For more on <code>\input</code> and <code>\include</code>, see <a href="https://en.wikibooks.org/wiki/LaTeX/Modular_Documents">the LaTeX wikibook</a> and <a href="https://tex.stackexchange.com/q/246">Stack Overflow</a>.)</p>
 </div>
 <!--
 Why does `latexTable()` produce a macro by default, rather than just producing 
@@ -383,7 +428,7 @@ document.
 </div>
 <div id="tweaking-tables" class="section level2">
 <h2>Tweaking tables</h2>
-<p>Instead of using <code>update()</code>, you may prefer to edit your table “by hand” after they are produced by <code>latexTable()</code>. This is easy to do, because <code>latexTable()</code> returns an object of the “character” class—that is, a vector of strings. Each string is a line of LaTeX code. The simple format of the returned object makes it easy to edit the object before writing it to disk as a .tex or PDF file:</p>
+<p>Instead of using <code>update()</code>, you may prefer to edit your table “by hand” after it is produced by <code>latexTable()</code>. This is easy to do, because <code>latexTable()</code> returns an object of the “character” class—that is, a vector of strings. Each string is a line of LaTeX code. The simple format of the returned object makes it easy to edit the object before writing it to disk as a .tex or PDF file:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">lT2[<span class="dv">24</span><span class="op">:</span><span class="dv">26</span>]  </a>
 <a class="sourceLine" id="cb6-2" title="2"><span class="co">#&gt; [1] &quot;                             Petal length &amp;&amp;  .83 &amp; .10 &amp;&amp;    .93 &amp; .17 &amp;&amp;   1.26 &amp;  .68\tabularnewline&quot;</span></a>
 <a class="sourceLine" id="cb6-3" title="3"><span class="co">#&gt; [2] &quot;                              Petal width &amp;&amp;      &amp;     &amp;&amp;   -.32 &amp; .40 &amp;&amp;    .84 &amp; 2.40\tabularnewline&quot;</span></a>
@@ -412,7 +457,7 @@ document.
 </div>
 <div id="cutting-and-pasting-with-headerfooter-false" class="section level2">
 <h2>Cutting and pasting with <code>headerFooter = FALSE</code></h2>
-<p>You may prefer not to generate standalone .tex or PDF files. Instead, you may already have the skeleton of a LaTeX table set up in your master LaTeX document, and you may just want to copy the table rows (specified as LaTeX code) from R into that skeleton table. This is easy to do with the <code>headerFooter</code> argument to <code>latexTable()</code>:</p>
+<p>You may not want to generate standalone .tex or PDF files. Instead, you may already have the skeleton of a LaTeX table set up in your master LaTeX document, and you may just want to copy the table rows (specified as LaTeX code) from R into that skeleton table. This is easy to do with the <code>headerFooter</code> argument to <code>latexTable()</code>:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">latexTable</span>(</a>
 <a class="sourceLine" id="cb7-2" title="2">  <span class="dt">headerFooter  =</span> <span class="ot">FALSE</span>,</a>
 <a class="sourceLine" id="cb7-3" title="3">  <span class="dt">mat           =</span> rT1,</a>
