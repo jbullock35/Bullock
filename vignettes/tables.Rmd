@@ -50,6 +50,9 @@ vignette: >
   .marginBottom4ex   { margin-bottom:  4.0ex; }
   .marginTopN4p5ex   { margin-top:    -4.5ex; }
 
+  a.sourceLine { display: unset; }
+  pre > code.sourceCode > span { display: unset;  }
+
   -->
 </style>
 
