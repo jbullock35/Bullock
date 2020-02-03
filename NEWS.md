@@ -6,7 +6,7 @@
   users can change default number of digits that are displayed when they
   `print` a regTable object.
 * Added `envir` argument to `lsos()` and `.ls.objects()` (#6).
-* Added str.regTable().
+* Added `str.regTable()`.
 * Fixed bug in latexTable footers when `SE_table` is `FALSE` (#24).
 * Improved vignette formatting (#19).  
 &nbsp;  
