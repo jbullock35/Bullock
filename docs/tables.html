@@ -325,6 +325,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
     font-family: Georgia, "Times New Roman", Times, serif;
     font-size: 1.05em;
     line-height: 1.7;
+    margin-top: 9ex;
   }
   div.sourceCode {
     margin-top: -1ex;
@@ -334,11 +335,12 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
   }
   h1 {
     margin-top: 3ex;
+    margin-bottom: 0.67ex;
   }
   h2 { 
     border-bottom: unset; 
     /* margin-block-end: unset; */
-    margin-bottom: 0.5ex;
+    margin-bottom: 0.1ex;
     padding-top: 2.75ex;
   }
   p {
@@ -358,6 +360,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
   .marginBottom4ex   { margin-bottom:  4.0ex; }
   .marginTopN4p5ex   { margin-top:    -4.5ex; }
 
+  /* Fix display of source code on small screens. See #25. */
   a.sourceLine { display: unset; }
   pre > code.sourceCode > span { display: unset;  }
 
@@ -377,11 +380,11 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb1-6"><a href="#cb1-6"></a>rT1    &lt;-<span class="st"> </span><span class="kw">regTable</span>(lmList)</span>
 <span id="cb1-7"><a href="#cb1-7"></a>rT1</span>
 <span id="cb1-8"><a href="#cb1-8"></a><span class="co">#&gt;                          Sepal.Length  Sepal.Length  Sepal.Length</span></span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="co">#&gt;                              Est   SE      Est   SE      Est   SE</span></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="co">#&gt;              (Intercept)    4.31 0.08     4.19 0.10     4.58 0.11</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="co">#&gt;             Petal.Length    0.41 0.02     0.54 0.07     0.44 0.07</span></span>
-<span id="cb1-12"><a href="#cb1-12"></a><span class="co">#&gt;              Petal.Width                 -0.32 0.16    -1.24 0.22</span></span>
-<span id="cb1-13"><a href="#cb1-13"></a><span class="co">#&gt; Petal.Length:Petal.Width                                0.19 0.03</span></span></code></pre></div>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co">#&gt;                             Est    SE     Est    SE     Est    SE</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co">#&gt;              (Intercept)  4.307 0.078   4.191 0.097   4.577 0.112</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="co">#&gt;             Petal.Length  0.409 0.019   0.542 0.069   0.442 0.066</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="co">#&gt;              Petal.Width               -0.320 0.160  -1.239 0.219</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="co">#&gt; Petal.Length:Petal.Width                              0.189 0.034</span></span></code></pre></div>
 <p>Then use <code>latexTable()</code> convert the matrix into LaTeX code:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>lT1 &lt;-<span class="st"> </span><span class="kw">latexTable</span>(</span>
 <span id="cb2-2"><a href="#cb2-2"></a>  <span class="dt">mat      =</span> rT1,</span>

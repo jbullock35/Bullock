@@ -17,6 +17,7 @@ vignette: >
     font-family: Georgia, "Times New Roman", Times, serif;
     font-size: 1.05em;
     line-height: 1.7;
+    margin-top: 9ex;
   }
   div.sourceCode {
     margin-top: -1ex;
@@ -26,11 +27,12 @@ vignette: >
   }
   h1 {
     margin-top: 3ex;
+    margin-bottom: 0.67ex;
   }
   h2 { 
     border-bottom: unset; 
     /* margin-block-end: unset; */
-    margin-bottom: 0.5ex;
+    margin-bottom: 0.1ex;
     padding-top: 2.75ex;
   }
   p {
@@ -50,6 +52,7 @@ vignette: >
   .marginBottom4ex   { margin-bottom:  4.0ex; }
   .marginTopN4p5ex   { margin-top:    -4.5ex; }
 
+  /* Fix display of source code on small screens. See #25. */
   a.sourceLine { display: unset; }
   pre > code.sourceCode > span { display: unset;  }
 
