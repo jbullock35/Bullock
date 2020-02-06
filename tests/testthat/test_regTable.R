@@ -163,11 +163,15 @@ test_that("regTable subsetting works even when it occurs within another function
 
 
 test_that("print.regTable() output is formatted correctly", {
-  rT1_cluster_output     <- capture.output(rT1_cluster)
-  rT2_cluster_output     <- capture.output(rT2_cluster)
+  rT1_cluster_output     <- capture.output(print(rT1_cluster, 2))
+  rT2_cluster_output     <- capture.output(print(rT2_cluster, 2))
   rT2_dp0_cluster_output <- capture.output(print(rT2_cluster, 0))
   rT2_dp9_cluster_output <- capture.output(print(rT2_cluster, 9))
-  rT_oneRow_output       <- capture.output(regTable(list(lm1, lm2), rowsToKeep = 'Length'))
+  rT_oneRow_output       <- capture.output(
+    print.regTable(
+      regTable(list(lm1, lm2), rowsToKeep = 'Length'),
+      decimalPlaces = 2)
+  )
 
   expect_output(print(rT1_cluster_output[1]), "             Sepal.Length")  
   expect_output(print(rT1_cluster_output[2]), "                 Est   SE")
@@ -203,7 +207,7 @@ test_that("print.regTable() output is formatted correctly when using lm_robust o
   lm1_robust <- estimatr::lm_robust(Petal.Width ~ Petal.Length,               data = iris)
   lm2_robust <- estimatr::lm_robust(Petal.Width ~ Petal.Length * Sepal.Width, data = iris)
   rT1_robust <- regTable(list(lm1_robust, lm2_robust))
-  rT1_robust_output <- capture.output(rT1_robust)
+  rT1_robust_output <- capture.output(print(rT1_robust, 2))
   
   # We take this as the reference output:
   #  

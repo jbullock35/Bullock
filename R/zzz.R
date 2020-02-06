@@ -13,7 +13,7 @@
 .onLoad <- function(libname, pkgname) {
   op <- options()
   op.Bullock <- list(
-    Bullock.print.regTable.dp = 2L
+    Bullock.print.regTable.dp = 3L
   )
   toset <- !(names(op.Bullock) %in% names(op))
   if(any(toset)) options(op.Bullock[toset])
