@@ -14,7 +14,14 @@
 #' \code{estimatr} package. It should work with other regression objects, too 
 #' -- that is, with any regression objects for which the \code{coef()} and
 #' \code{vcov()} functions can be used.
-#' 
+
+#  NOTE: We don't want to make it possible to pass a single regression object 
+#  here. We do that sort of thing for latexTable, but here, it seems 
+#  dangerous. Things could go wrong if we users mistakenly say 
+#  "regTable(lm1, lm2)". See issue #13 for details, and note that I've looked 
+#  into this point more recently.  [2020 02 06] 
+
+
 #' @param colNames A vector of strings as long as \code{length(objList)}. 
 #' 
 #' @param rowsToRemove A vector of strings, which may specify regular 
