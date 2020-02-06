@@ -688,10 +688,10 @@ print.regTable <- function (
   # the outcome names couldn't be recovered from the regression objects),
   # don't print anything.  [2020 01 23]
   if (colTierNameString != '') {   
-    cat(
-      paste0(
-        rownameMarginSpace, colTierNameString, "\n")
-    )
+    if (requireNamespace("crayon", quietly = TRUE))
+      cat( crayon::bold(paste0(rownameMarginSpace, colTierNameString, "\n")) )
+    else 
+      cat( paste0(rownameMarginSpace, colTierNameString, "\n") )
   }
   print.table(x, right = TRUE, ...)
 }
@@ -702,4 +702,4 @@ print.regTable <- function (
 str.regTable <- function (object, ...) {
   class(object) <- "matrix"
   utils::str(object)
-}
+}	

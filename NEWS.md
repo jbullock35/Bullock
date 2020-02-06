@@ -2,9 +2,12 @@
 * Removed class restrictions on objects passed to `regTable()`. `regTable()`
   now works with almost every kind of regression object.
 * Added `[.regTable` method for intelligent subsetting of regTable objects (#27).
+* In `print.regTable()`, changed default digits after decimal place from 2 to 3.
 * Added global option `Bullock.print.regTable.dp` on package load so that 
   users can change default number of digits that are displayed when they
   `print` a regTable object.
+* In `print.regTable()`, use "crayon" package, when available, to render 
+  column-pair headings in bold (#23). 
 * Added `envir` argument to `lsos()` and `.ls.objects()` (#6).
 * Added `str.regTable()`.
 * Fixed bug in latexTable footers when `SE_table` is `FALSE` (#24).
