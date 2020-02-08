@@ -2,7 +2,6 @@
 * Removed class restrictions on objects passed to `regTable()`. `regTable()`
   now works with almost every kind of regression object.
 * Added `[.regTable` method for intelligent subsetting of regTable objects (#27).
-* In `print.regTable()`, changed default digits after decimal place from 2 to 3.
 * Added global option `Bullock.print.regTable.dp` on package load so that 
   users can change default number of digits that are displayed when they
   `print` a regTable object.
