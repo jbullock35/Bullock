@@ -1,7 +1,7 @@
 #' List objects and their characteristics
 #' 
-#' `lsos()` and `.ls.objects()` are like \code{ls()} in that they list the 
-#'  objects in a given environment. But they provide more detail: they show 
+#' \code{lsos()} and \code{ls.objects()} are like \code{ls()} in that they list  
+#' the objects in a given environment. But they provide more detail: they show 
 #' the class of each object, the amount of memory devoted to each objects, and
 #' the number of rows or columns of each object (if applicable).
 #' 
@@ -42,7 +42,6 @@
     
 
 
-# TODO: Add ability to search a given environment.  [2012 11 20]
 #' @rdname lsos
 #' @export
 .ls.objects <- function (pos = 1, envir = as.environment(pos), pattern, order.by,
