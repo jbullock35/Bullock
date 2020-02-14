@@ -374,71 +374,87 @@ regTable <- function (
   # work when x is a matrix. But it won't work when "x" is a regTable unless
   # we check the length of callArgs below.  [2020 01 29]
   if (length(callArgs) >= 3) {
-    rowDim <- rlang::call_args(myCall)[[2]]
+    rowDim <- rlang::call_args(myCall)[[2]]    
     colDim <- rlang::call_args(myCall)[[3]]
   } 
   else {
     rowDim <- NULL
     colDim <- NULL
   }
-
+ 
   
-  # We now use rlang::is_missing(). It returns FALSE for objects that are NULL.
-  # But it returns TRUE when dimensions were specified in the normal way and
-  # one dimension wasn't specified. For example, colDimMissing will be TRUE
-  # for rT[1:3, ].  [2020 01 31]
+  # rowDim and colDim should be numbers. But if they have been passed from 
+  # user-created function, they are not numbers; they instead have the "name"
+  # class. (See myFunc() in regTable_test.R for an example.) We now solve 
+  # this problem.  [2020 02 14]
+  if (!rlang::is_missing(rowDim) && is.name(rowDim)) rowDim <- dynGet(deparse(rowDim)) 
+  if (!rlang::is_missing(colDim) && is.name(colDim)) colDim <- dynGet(deparse(colDim))   
+
+
+  # rowDim or colDim may be missing. This will happen, for example, if a user
+  # passes rT[1:2, ] or rT[, 1:2]. So we now use rlang::is_missing(). It 
+  # returns FALSE for objects that are NULL. But it returns TRUE when 
+  # dimensions were specified in the normal way and one dimension wasn't 
+  # specified, as in the examples above.  [2020 02 13]
+  rowDimMissingWhenPassed <- rlang::is_missing(rowDim)  # used at end of file
+  if (rlang::is_missing(rowDim)) rowDim <- 1:nrow(x)
+  if (rlang::is_missing(colDim)) colDim <- 1:ncol(x)
+  
+  
+  # rowDim or colDim may still be a call rather than a set of numbers. For 
+  # example, if the user passes rT[1:2, 3:4], rowDim and colDim are calls, not
+  # numbers. We now convert them to numbers.
+  if (is.call(rowDim)) rowDim <- eval(rowDim)
+  if (is.call(colDim)) colDim <- eval(colDim)
+  
+  
+  #  colDimMissing <- rlang::is_missing(colDim)
+  #  if (rowDimMissing && !colDimMissing) {  # matches rT [, 3:5]
+  #    rowDim <- 1:nrow(x)
+  #  }
+  #  else if (colDimMissing && !rowDimMissing) {
+  #    colDim <- 1:ncol(x)
+  #  }
+  #  else if (!rowDimMissing) {              # matches rT[1:4, 3:5] and rT[1:4, ]
+  #    rowDim <- tryCatch(
+  #      expr  = eval(rowDim),
+  #      error = function (e) { 
+  #        dynGet(deparse(rowDim)) 
+  #      }
+  #    )
+  #  }
+
+  # The function returns the number of generations to search back in the 
+  # call stack.  [2020 01 30]
+  # find_rowDim <- function (rowDim) {
+  #   rowDimString    <- deparse(rowDim)  # for example, "i" 
+  #   sysCallList     <- sys.calls()
+  #   sysCallLength   <- length(sysCallList)
+  #   rowDimPositions <- grep(paste0("\\[\\s*", rowDimString, "\\s*,"), sysCallList)
+  #   ifelse(length(rowDimPositions)>0, sysCallLength - rowDimPositions, NULL)
+  # }
   #
-  # If this function is called from another function, rowDim may be (say) 'i' 
-  # rather than any integer. We need to evaluate i -- so we need to find the 
-  # frame that contains it. There are two ways to do this. First, we can 
-  # try dynGet(). Second, we can use the combination of find_rowDim() and 
-  # tryCatch() that I have below.  [2020 01 31]
-  rowDimMissing <- rlang::is_missing(rowDim)
-  colDimMissing <- rlang::is_missing(colDim)
-  if (rowDimMissing && !colDimMissing) {  # matches rT [, 3:5]
-    rowDim <- 1:nrow(x)
-  }
-  else if (!rowDimMissing) {              # matches rT[1:4, 3:5] and rT[1:4, ]
-    rowDim <- tryCatch(
-      expr  = eval(rowDim),
-      error = function (e) { 
-        dynGet(deparse(rowDim)) 
-      }
-    )
-  }
-
-    # The function returns the number of generations to search back in the 
-    # call stack.  [2020 01 30]
-    # find_rowDim <- function (rowDim) {
-    #   rowDimString    <- deparse(rowDim)  # for example, "i" 
-    #   sysCallList     <- sys.calls()
-    #   sysCallLength   <- length(sysCallList)
-    #   rowDimPositions <- grep(paste0("\\[\\s*", rowDimString, "\\s*,"), sysCallList)
-    #   ifelse(length(rowDimPositions)>0, sysCallLength - rowDimPositions, NULL)
-    # }
-    #
-    # tryCatch(
-    #   expr  = eval(rowDim),
-    #   error = function (e) { browser(); dynGet("i") }
-    #   error = function (e) {
-    #     goBack <- find_rowDim()
-    #     if (!is.null(goBack)) eval(rowDim, envir = parent.frame(goBack - 1))
-    #     else print(paste0("Could not evaluate \"i\"\n", e))
-    #   }
-    # )
+  # tryCatch(
+  #   expr  = eval(rowDim),
+  #   error = function (e) { browser(); dynGet("i") }
+  #   error = function (e) {
+  #     goBack <- find_rowDim()
+  #     if (!is.null(goBack)) eval(rowDim, envir = parent.frame(goBack - 1))
+  #     else print(paste0("Could not evaluate \"i\"\n", e))
+  #   }
+  # )
   
-  if (colDimMissing && !rowDimMissing) {  # matches rT[1:4, ]
-    colDim <- 1:ncol(x)
-  } 
-  else if (!colDimMissing) {              # matches rT[1:4, 3:6] and rT[, 3:6]
-    colDim <- tryCatch(
-      expr  = eval(colDim),
-      error = function (e) { 
-        dynGet(deparse(colDim))
-      })
-  }
-  
-  
+  #  if (colDimMissing && !rowDimMissing) {  # matches rT[1:4, ]
+  #    colDim <- 1:ncol(x)
+  #  } 
+  #  else if (!colDimMissing) {              # matches rT[1:4, 3:6] and rT[, 3:6]
+  #    colDim <- tryCatch(
+  #      expr  = eval(colDim),
+  #      error = function (e) { 
+  #        dynGet(deparse(colDim))
+  #      })
+  #  }
+    
   
   # SUBSET THE regTABLE OBJECT
   x <- unclass(x)[...]
@@ -523,7 +539,7 @@ regTable <- function (
   #   We exclude calls from latexTable(). It does a lot of subsetting of 
   # regTable objects, and we don't want to throw warnings in those cases.  
   # [2020 01 29]
-  if (onlyIntactColTiers && !rowDimMissing && length(callArgs) >= 3 && !latexTableCall) {
+  if (onlyIntactColTiers && !rowDimMissingWhenPassed && length(callArgs) >= 3 && !latexTableCall) {
     message(paste0("Rows removed, but ", presentAttributes))
   }  
 
