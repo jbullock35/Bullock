@@ -417,9 +417,7 @@ latexTable <- function(
   if(!is.null(spacerColumns) && max(spacerColumns) >= ncol) {
     stop("max(spacerColumns) must be less than ncol(mat).")
   }
-  if (!is.null(spacerColumns) && (ncol %% 2 != 0) && headerFooter) {
-    warning("spacerColumns is non-NULL, ncol(mat) is odd, and headerFooter == TRUE. This combination of options is unlikely to produce a table that will work in LaTeX.")
-  }
+
   
   # FOOTER ROW LENGTHS
   if (! is.null(footerRows)) {
