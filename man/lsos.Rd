@@ -42,8 +42,8 @@ Data frame with columns "Class," "Size," "Row," and "Columns." The row
 names of the data frame are the names of objects in the environment.
 }
 \description{
-`lsos()` and `.ls.objects()` are like \code{ls()} in that they list the 
- objects in a given environment. But they provide more detail: they show 
+\code{lsos()} and \code{ls.objects()} are like \code{ls()} in that they list  
+the objects in a given environment. But they provide more detail: they show 
 the class of each object, the amount of memory devoted to each objects, and
 the number of rows or columns of each object (if applicable).
 }

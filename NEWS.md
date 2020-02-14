@@ -7,6 +7,7 @@
   `print` a regTable object.
 * In `print.regTable()`, use "crayon" package, when available, to render 
   column-pair headings in bold (#23). 
+* Added `PDF_crop()`.
 * Added `envir` argument to `lsos()` and `.ls.objects()` (#6).
 * Added `str.regTable()`.
 * Fixed bug in latexTable footers when `SE_table` is `FALSE` (#24).
