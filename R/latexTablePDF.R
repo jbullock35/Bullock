@@ -366,27 +366,17 @@ latexTablePDF <- function(
   tmpFilename <- tempfile(fileext = '.tex')  # includes path to tempdir()
   writeLines(newTable, tmpFilename)
   if (writePDF) {  
-    if (container && verbose) {
-      # browser()
-      system2(
-        command = 'pdflatex', 
-        args    = c(
-          paste("-output-directory", shQuote(tempdir())),
-          shQuote(tmpFilename) 
-        )
-      )
-    } 
-    else if (container && !verbose) {
+    if (container) {
       system2(
         command = 'pdflatex', 
         args    = c(
           paste("-output-directory", shQuote(tempdir())),
           shQuote(tmpFilename) 
         ),
-        stdout  = FALSE,
-        stderr  = FALSE        
+        stdout = if (verbose) "" else FALSE,
+        stderr = if (verbose) "" else FALSE
       )
-    }  
+    } 
   }
 
   
