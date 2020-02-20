@@ -366,7 +366,6 @@ latexTablePDF <- function(
   tmpFilename <- tempfile(fileext = '.tex')  # includes path to tempdir()
   writeLines(newTable, tmpFilename)
   if (writePDF) {  
-    if (container) {
       system2(
         command = 'pdflatex', 
         args    = c(
@@ -376,7 +375,6 @@ latexTablePDF <- function(
         stdout = if (verbose) "" else FALSE,
         stderr = if (verbose) "" else FALSE
       )
-    } 
   }
 
   
