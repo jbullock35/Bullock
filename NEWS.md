@@ -17,8 +17,11 @@
   objects that it is processing were created with 
   `latexTable(..., callCommand = FALSE)`.
 * Added `envir` argument to `lsos()` and `.ls.objects()` (#6).
+* Improved vignette formatting (#19).
+
+## Bug fix
 * Fixed bug in latexTable footers when `SE_table` is `FALSE` (#24).
-* Improved vignette formatting (#19).  
+ 
 &nbsp;  
 &nbsp;  
 &nbsp;  
