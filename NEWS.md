@@ -13,7 +13,7 @@
 
 ## Other enhancements
 * Added `PDF_crop()`.
-* `latexTablePDF()` is now able to write PDF files even when the "latexTable" 
+* `latexTablePDF()` is now able to write PDF files even when the latexTable 
   objects that it is processing were created with 
   `latexTable(..., callCommand = FALSE)`.
 * Added `envir` argument to `lsos()` and `.ls.objects()` (#6).
