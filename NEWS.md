@@ -21,7 +21,6 @@
 
 ## Bug fix
 * Fixed bug in latexTable footers when `SE_table` is `FALSE` (#24).
- 
 &nbsp;  
 &nbsp;  
 &nbsp;  
