@@ -1,18 +1,22 @@
-# Version 2.1.0.9000
+# Version 2.2.0 (2020-02-24)
+
+## `regTable()` changes
 * Removed class restrictions on objects passed to `regTable()`. `regTable()`
   now works with almost every kind of regression object.
 * Added `[.regTable` method for intelligent subsetting of regTable objects (#27).
 * Added global option `Bullock.print.regTable.dp` on package load so that 
   users can change default number of digits that are displayed when they
   `print` a regTable object.
+* Added `str.regTable()`.
 * In `print.regTable()`, use "crayon" package, when available, to render 
   column-pair headings in bold (#23). 
+
+## Other enhancements
 * Added `PDF_crop()`.
 * `latexTablePDF()` is now able to write PDF files even when the "latexTable" 
   objects that it is processing were created with 
   `latexTable(..., callCommand = FALSE)`.
 * Added `envir` argument to `lsos()` and `.ls.objects()` (#6).
-* Added `str.regTable()`.
 * Fixed bug in latexTable footers when `SE_table` is `FALSE` (#24).
 * Improved vignette formatting (#19).  
 &nbsp;  
