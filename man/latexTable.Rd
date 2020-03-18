@@ -275,11 +275,15 @@ a LaTeX macro that creates a well-formatted LaTeX table.
 }
 \note{
 \emph{Required LaTeX packages.} The LaTeX code produced by the
-\code{latexTable} makes use of capabilities provided by the \code{array},
-\code{booktabs}, \code{caption}, and \code{numprint}{\NB}LaTeX packages---and,
-for landscaped tables, the \code{afterpage} and \code{pdflscape}{\NB}packages.
-If you haven't installed those LaTeX packages, you won't be able to render
-the tables produced by \code{latexTable}.\cr\cr
+\code{latexTable} makes use of capabilities provided by the \code{booktabs},
+\code{caption}, \code{float}, and \code{numprint} LaTeX packages---and,
+for landscaped tables, the \code{pdflscape}{\NB}package. If you haven't
+installed those LaTeX packages, you won't be able to render the tables
+produced by \code{latexTable}.\cr
+\indent The LaTeX code produced by \code{latexTable} also makes use of
+capabilities provided by the \code{array} and \code{afterpage} LaTeX
+packages---but these packages are \href{https://www.ctan.org/pkg/latex-tools}{included}
+in every LaTeX distribution.\cr\cr
 \emph{Changes from pre-release versions:}
 \itemize{
 \item The names of some arguments have

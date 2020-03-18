@@ -13,19 +13,20 @@
 #' single \code{\\input} or \code{\\include} command to your LaTeX document.
 #' For details, see \href{../doc/tables.html}{\code{vignette("tables", package = "Bullock")}}.
 
-#' @note \emph{Required LaTeX tools.} If \code{writePDF} is \code{TRUE}, 
-#'   \code{pdflatex} must be installed on your system. (It is part of almost 
-#'   every LaTeX installation.) The `array,` `booktabs,` `caption,` and 
-#'   `numprint` packages must also be installed. In addition:
-#' * If \code{writePDF} is \code{TRUE} and \code{containerFilename} is 
-#'   "tableContainer.tex" (the default), the `fancyhdr,` `footmisc`, `geometry,`
-#'   and `ragged2e` packages must be installed.
-#' * If \code{writePDF} is \code{TRUE} and you are producing a landscaped 
-#'   table, the \code{afterpage} and \code{pdflscape} packages must be
+#' @note \emph{Required LaTeX tools.} If `writePDF` is `FALSE`, you do not
+#' need to have LaTeX installed. But if `writePDF` is `TRUE`: 
+#' * \code{pdflatex} must be installed on your system. It is part of almost 
+#'   every LaTeX installation. The `array` and `afterpage` packages must also
+#'   be installed; if you have a LaTeX installation, you already have these
+#'   packages. 
+#' * The `booktabs,` `caption,` and `numprint` must be installed. 
+#' * If \code{containerFilename} is "tableContainer.tex" (the default), the 
+#'   `fancyhdr,` `footmisc`, `geometry,` and `ragged2e` packages must be 
 #'   installed.
-#' 
-#' Most of these packages, and perhaps all of them, are already part of your 
-#' LaTeX installation.
+#' * If you are producing a landscaped table, the \code{pdflscape} package 
+#'   must be installed.
+#' * If your `latexTable()` output was produced with `floatPlacement = 'H'`, 
+#'   the `float` package must be installed.
 #' @md
 
 
@@ -236,12 +237,16 @@ latexTablePDF <- function(
     latexTable_collapsed <- sapply(latexTable, paste0, collapse = '')
     tablesAreLandscaped <- grepl("\\\\begin\\{landscape\\}", latexTable_collapsed) %>%
       any
+    floatPlacementIsHere <- grepl("{H}", latexTable_collapsed, fixed = TRUE) %>% any
     requiredPackageList  <- qw("array booktabs caption numprint")
     if (containerFilename == 'tableContainer.tex') {
       requiredPackageList <- c(requiredPackageList, qw("fancyhdr footmisc geometry ragged2e"))
     }
     if (tablesAreLandscaped) {
       requiredPackageList <- c(requiredPackageList, qw("afterpage pdflscape"))
+    }
+    if (floatPlacementIsHere) {
+      requiredPackageList <- c(requiredPackageList, "float")
     }
     installedPackageList <- system2(
       command = "kpsewhich", 

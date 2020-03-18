@@ -1,3 +1,8 @@
+* Updated `latexTable()` and `latexTable()` PDF documentation on 
+  required LaTeX packages. Added check for the `float` package to 
+  `latexTablePDF()`.
+
+
 # Version 2.2.0 (2020-02-24)
 
 ## `regTable()` changes

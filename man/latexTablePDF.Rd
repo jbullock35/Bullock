@@ -104,21 +104,22 @@ single \code{\\input} or \code{\\include} command to your LaTeX document.
 For details, see \href{../doc/tables.html}{\code{vignette("tables", package = "Bullock")}}.
 }
 \note{
-\emph{Required LaTeX tools.} If \code{writePDF} is \code{TRUE},
-\code{pdflatex} must be installed on your system. (It is part of almost
-every LaTeX installation.) The \verb{array,} \verb{booktabs,} \verb{caption,} and
-\code{numprint} packages must also be installed. In addition:
+\emph{Required LaTeX tools.} If \code{writePDF} is \code{FALSE}, you do not
+need to have LaTeX installed. But if \code{writePDF} is \code{TRUE}:
 \itemize{
-\item If \code{writePDF} is \code{TRUE} and \code{containerFilename} is
-"tableContainer.tex" (the default), the \verb{fancyhdr,} \code{footmisc}, \verb{geometry,}
-and \code{ragged2e} packages must be installed.
-\item If \code{writePDF} is \code{TRUE} and you are producing a landscaped
-table, the \code{afterpage} and \code{pdflscape} packages must be
+\item \code{pdflatex} must be installed on your system. It is part of almost
+every LaTeX installation. The \code{array} and \code{afterpage} packages must also
+be installed; if you have a LaTeX installation, you already have these
+packages.
+\item The \verb{booktabs,} \verb{caption,} and \code{numprint} must be installed.
+\item If \code{containerFilename} is "tableContainer.tex" (the default), the
+\verb{fancyhdr,} \code{footmisc}, \verb{geometry,} and \code{ragged2e} packages must be
 installed.
+\item If you are producing a landscaped table, the \code{pdflscape} package
+must be installed.
+\item If your \code{latexTable()} output was produced with \code{floatPlacement = 'H'},
+the \code{float} package must be installed.
 }
-
-Most of these packages, and perhaps all of them, are already part of your
-LaTeX installation.
 }
 \examples{
 \dontrun{
