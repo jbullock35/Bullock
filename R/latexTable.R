@@ -46,7 +46,8 @@
 #' @concept tables
 #' @seealso Other functions for making tables: \linkInt{regTable}, 
 #' \linkInt{latexTablePDF}. See also the \href{../doc/tables.html}{Building better tables in less time} 
-#' vignette. 
+#' and \href{../doc/tables_RMarkdown.html}{Using `latexTable()` with R Markdown documents}
+#' vignettes. 
 
 
 #' @examples

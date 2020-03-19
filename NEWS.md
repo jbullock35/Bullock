@@ -1,3 +1,5 @@
+* Added vignette on using `latexTable()` with R Markdown documents
+  (#20).
 * Updated `latexTable()` and `latexTable()` PDF documentation on 
   required LaTeX packages. Added check for the `float` package to 
   `latexTablePDF()`.

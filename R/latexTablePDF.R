@@ -32,7 +32,8 @@
 
 #' @seealso Other functions for making tables: \linkInt{latexTable}, 
 #' \linkInt{latexTablePDF}. See also the \href{../doc/tables.html}{Building better tables in less time} 
-#' vignette. 
+#' and \href{../doc/tables_RMarkdown.html}{Using `latexTable()` with R Markdown documents}
+#' vignettes. 
 
 #' @examples
 #' \dontrun{

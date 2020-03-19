@@ -1,0 +1,122 @@
+---
+title: "Using `latexTable()` with R Markdown documents"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{tables}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style>
+  <!--
+
+  a, a[href^="https:"] {
+    text-decoration: none;
+  }
+  body {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 1.05em;
+    line-height: 1.7;
+    margin-top: 9ex;
+    margin-bottom: 12ex;
+  }
+  div.sourceCode {
+    margin-top: -1ex;
+    margin-bottom: 1.5ex;
+    margin-left: 0;
+    margin-right: 0
+  }
+  h1 {
+    margin-top: 3ex;
+    margin-bottom: 0.67ex;
+  }
+  h2 { 
+    border-bottom: unset; 
+    /* margin-block-end: unset; */
+    margin-bottom: 0.1ex;
+    padding-top: 2.75ex;
+  }
+  p {
+    margin: unset;
+    margin-bottom: 2ex;
+    max-width: 60ch;
+  }
+  
+  /* For images immediately preceded by code chunks */
+  .sourceCode + p > img {  
+    margin-top: -4ex;
+    margin-bottom: 4ex;
+  }
+  
+  .marginBottom1p5ex { margin-bottom:  1.5ex; }
+  .marginBottom2ex   { margin-bottom:  2.0ex; }
+  .marginBottom4ex   { margin-bottom:  4.0ex; }
+  .marginTopN4p5ex   { margin-top:    -4.5ex; }
+
+  /* Fix display of source code on small screens. See #25. */
+  a.sourceLine { display: unset; }
+  pre > code.sourceCode > span { display: unset;  }
+
+  -->
+</style>
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+It is easy to use `latexTable()` in R Markdown documents, provided that 
+you are generating LaTeX or PDF files from those R Markdown documents. To do
+so, you need to take only two steps: load a file via the `in_header` option 
+for R Markdown documents, and wrap your `latexTable()` output in the 
+`raw_latex()` command that is provided by the `knitr` package.
+
+
+
+## 1. Header
+To use `latexTable()` in R Markdown documents, certain LaTeX packages must be 
+loaded: the `afterpage, array, booktabs, caption, numprint` and `ragged2e` 
+packages. Depending on the options that you specify in your `latexTable()` 
+call, you may also need to load the `afterpage`, `float`, and `pdflscape`
+packages. 
+
+The `Bullock` package comes with a file, `latexTable_RMarkdown_preamble.tex`,
+that loads all of these packages. Thus, to load the packages, you need only 
+tell R Markdown to load `latexTable_RMarkdown_preamble.tex`. The best way to 
+do this is by using the `in_header` option in the header of your R Markdown 
+document. The header should look like this:
+
+    ---
+    title: "Test latexTable() Output"
+    output: 
+      pdf_document:
+        includes:
+          in_header: !expr system.file("latexTable_RMarkdown_preamble.tex", package = "Bullock", mustWork = TRUE)
+    ---
+
+
+
+## 2. Inserting `latexTable()` output 
+To insert `latexTable()` output into your document,  just wrap the output in 
+a `raw_latex()` command:
+
+```{r}
+library(Bullock)
+library(knitr)
+myTable <- latexTable(matrix(1:16, nrow = 4))
+raw_latex(myTable)
+```
+Remember that if you are using multiple tables, you will need to specify 
+a unique LaTeX name for each one (by using the `commandName` argument in your 
+`latexTable()` calls).
+
+
+
+## 3. Limitations
+The most obvious limitation is that `latexTable()` cannot be used when 
+generating HTML documents from R Markdown. It will work only when generating 
+LaTeX or PDF from R Markdown.

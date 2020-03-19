@@ -9,7 +9,8 @@ seem to have equivalents in any other package.
 
 The package's largest feature is a set of tools for table-making. See 
 the [Building better tables in less time](https://jbullock35.github.io/Bullock/tables.html)
-vignette for an introduction.
+vignette for an introduction. [Using `latexTable()` with R Markdown documents](https://jbullock35.github.io/Bullock/tables_RMarkdown.html)
+may also be helpful. 
 
 Installation instructions: first, be sure that you have installed the 
 `devtools` package. Then run 
