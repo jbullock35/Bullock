@@ -1,0 +1,47 @@
+% latexTable_RMarkdown_preamble.tex
+%
+% This file may be used when using latexTable() tables in an R Markdown 
+% document. It loads all of the packages that may be required to produce 
+% latexTable() output. To use this file, the header of your R Markdown
+% document should look like this:
+%
+% ---
+% title: "My Document"
+% output: 
+%   pdf_document:
+%     includes:
+%       in_header: "latexTable_RMarkdown_preamble.tex"
+%     keep_md: true
+%     keep_tex: true
+% ---
+
+
+\usepackage{afterpage}    
+
+\usepackage{array} 
+  \setlength{\extrarowheight}{7pt}   % adding 1pt of space to every row in every table
+
+\usepackage{booktabs}
+  \setlength{\heavyrulewidth}{.08em} % for \toprule and \bottomrule.  .08em is the default.
+  \setlength{\belowrulesep}{2.0ex}   % for \cmidrule.  .08ex is the default.
+
+\newlength\captionIndent
+  \setlength\captionIndent{.45in}
+\usepackage[font=rm, labelfont={it}, justification=RaggedRight, margin={0in}, parskip=0pt]{caption}
+  \setlength{\textfloatsep}{30pt plus 2pt minus 2pt}
+  \DeclareCaptionLabelFormat{noindent}{\fontsize{12bp}{14.4bp}\selectfont\bothIfFirst{\noindent\hspace*{-\RaggedRightParindent}#1\ }{#2}}
+  \captionsetup{labelformat=noindent, aboveskip=15bp, justification=RaggedRight}
+
+\usepackage{float} 
+
+\usepackage[autolanguage, noaddmissingzero, warning]{numprint}
+  \npfourdigitnosep % print "6002.54" instead of "6,002.45"
+
+\usepackage{pdflscape}    
+
+\usepackage[document]{ragged2e}
+  % Load this package after fonts and font sizes have been established.  (Companion 2e, 106.)
+  \setlength\RaggedRightRightskip{0pt plus .6in} %  for hyphenation % .6
+  \setlength\RaggedRightParindent{.5in}
+  \setlength\JustifyingParindent{0in}
+
