@@ -2,7 +2,7 @@
 title: "Building better tables in less time"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{tables}
+  %\VignetteIndexEntry{Building better tables in less time}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

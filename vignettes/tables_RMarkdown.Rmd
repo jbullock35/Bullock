@@ -2,7 +2,7 @@
 title: "Using `latexTable()` with R Markdown documents"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{tables}
+  %\VignetteIndexEntry{Using latexTable() with R Markdown documents}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
