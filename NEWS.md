@@ -1,8 +1,15 @@
+# Version 2.2.1 (2020-03-20)
 * Added vignette on using `latexTable()` with R Markdown documents
   (#20).
 * Updated `latexTable()` and `latexTable()` PDF documentation on 
   required LaTeX packages. Added check for the `float` package to 
   `latexTablePDF()`.
+* Moved knitr and rmarkdown from "Suggests" to "Imports" to prevent 
+  package installation errors when `build_vignettes = TRUE`
+&nbsp;  
+&nbsp;  
+&nbsp;  
+
 
 
 # Version 2.2.0 (2020-02-24)
