@@ -13,15 +13,13 @@ Authors@R: c(
   person("Joseph", "Lucke", role = "ctb"),
   person("Matt", "Pettis", role = "ctb"),
   person("Ken", "Williams", role = "ctb")) 
-Imports: lmtest, magrittr, rlang, stringr
+Imports: knitr, lmtest, magrittr, rlang, rmarkdown, stringr
 Suggests: 
   AER,
   crayon,
   ivpack,
   multiwayvcov,
-  testthat,
-  knitr,
-  rmarkdown
+  testthat
 Description: These functions are used in John Bullock's code; they are 
   typically needed for replication purposes. They range in complexity from a 
   function that removes NA values from a vector prior to summing it 
