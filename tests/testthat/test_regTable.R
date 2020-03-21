@@ -7,8 +7,10 @@ context("Check regTable() output")
 data(iris)
 lm1 <- lm(Sepal.Length ~ Petal.Length,               data = iris)
 lm2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data = iris)
-rT1_cluster <- regTable(list(lm1),      clusterVar = list(iris$Species))
-rT2_cluster <- regTable(list(lm1, lm2), clusterVar = list(iris$Species))
+if (require(multiwayvcov)) {
+  rT1_cluster <- regTable(list(lm1),      clusterVar = list(iris$Species))
+  rT2_cluster <- regTable(list(lm1, lm2), clusterVar = list(iris$Species))
+}
 iris$SepalMed <- iris$Sepal.Length > median(iris$Sepal.Length)
 glm1 <- glm(SepalMed ~ Petal.Length, data = iris, family = binomial(link = logit))
 glm2 <- glm(SepalMed ~ Petal.Length + Petal.Width, data = iris, family = binomial(link = logit))
@@ -49,7 +51,9 @@ test_that("regTable() produces correct estimates and SEs with \"lm\" objects and
   #             (Intercept) Petal.Length Petal.Width
   # (Intercept)       0.0597      -0.0249      0.0355
   # Petal.Length     -0.0249       0.0124     -0.0189
-  # Petal.Width       0.0355      -0.0189      0.0291   
+  # Petal.Width       0.0355      -0.0189      0.0291
+  if (!require(multiwayvcov)) skip("multiwayvcov package not available")    
+    
   expect_equal(rT1_cluster[1, 2], sqrt(0.03674), tol = 0.0001)
   expect_equal(rT1_cluster[2, 2], sqrt(0.00161), tol = 0.0001)
   
@@ -63,8 +67,8 @@ test_that("regTable() produces correct estimates and SEs with \"lm\" objects and
 
 
 test_that("regTable() produces correct estimates and SEs with \"ivreg\" objects and clustering", {
-  if (!require(AER)) skip("AER package not available")
-  if (!require(AER)) skip("ivpack package not available")
+  if (!require(AER))    skip("AER package not available")
+  if (!require(ivpack)) skip("ivpack package not available")
   iv1 <- ivreg(Sepal.Length ~ Petal.Length | Petal.Width,  data = iris)
   iv2 <- ivreg(Sepal.Length ~ Petal.Width  | Petal.Length, data = iris)
   rT1_iv_cluster <- regTable(list(iv1),      clusterVar = list(iris$Species))
@@ -92,8 +96,9 @@ test_that("regTable() produces correct estimates and SEs with \"ivreg\" objects 
 
 
 test_that("regTable() produces correct estimates and SEs with both \"lm\" and \"ivreg\" objects and clustering", {
-  if (!require(AER))    skip("AER package not available")
-  if (!require(ivpack)) skip("ivpack package not available")
+  if (!require(AER))          skip("AER package not available")
+  if (!require(ivpack))       skip("ivpack package not available")
+  if (!require(multiwayvcov)) skip("multiwayvcov package not available")
   iv1 <- ivreg(Sepal.Length ~ Petal.Length | Petal.Width,  data = iris)
   iv2 <- ivreg(Sepal.Length ~ Petal.Width  | Petal.Length, data = iris)
   rT_mixed <- regTable(list(lm1, lm2, iv1, iv2), clusterVar = list(iris$Species))
@@ -113,6 +118,8 @@ test_that("regTable() produces correct estimates and SEs with both \"lm\" and \"
 
 
 test_that("regTable() objects have correct class and attributes after subsetting", {
+  if (!require(multiwayvcov)) skip("multiwayvcov package not available")
+  
   expect_s3_class(rT2_cluster[1:2,    ], qw("regTable matrix"), exact = TRUE)    
   expect_s3_class(rT2_cluster[   , 1:2], qw("regTable matrix"), exact = TRUE)
   expect_s3_class(rT2_cluster[   , 3:4], qw("regTable matrix"), exact = TRUE)
@@ -149,6 +156,8 @@ test_that("regTable() objects have correct class and attributes after subsetting
 
 
 test_that("regTable subsetting works even when it occurs within another function", {
+  if (!require(multiwayvcov)) skip("multiwayvcov package not available")
+    
   rows <- 1
   cols <- 1
   myFunc <- function (rT, rows, cols) {
@@ -163,6 +172,8 @@ test_that("regTable subsetting works even when it occurs within another function
 
 
 test_that("print.regTable() output is formatted correctly", {
+  if (!require(multiwayvcov)) skip("multiwayvcov package not available")
+  
   rT1_cluster_output     <- capture.output(print(rT1_cluster, 2))
   rT2_cluster_output     <- capture.output(print(rT2_cluster, 2))
   rT2_dp0_cluster_output <- capture.output(print(rT2_cluster, 0))
