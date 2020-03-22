@@ -444,8 +444,8 @@ latexTable <- function(
   
   
   # CONVERT MATRIX ENTRIES TO STRINGS AND REPLACE NA ENTRIES  [2020 01 14]
-  if (identical(class(mat), qw("regTable matrix"))) {
-    class(mat) <- 'matrix'  # Remove "regTable" class to avoid errors when we subset later on.  [2020 01 30]
+  if (inherits(mat, "regTable")) {
+    class(mat) <- class(mat)[-grep('regTable', mat)]  # Remove "regTable" class to avoid errors when we subset later on.  [2020 01 30]
   }
   mat[is.na(mat)] <- paste0(' ', NA_text)
 

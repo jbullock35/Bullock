@@ -178,7 +178,7 @@ regTable <- function (
     }
   }
 
-  if (!is.null(clusterVar) && class(clusterVar) != 'list') {
+  if (!is.null(clusterVar) && !inherits(clusterVar, 'list')) {
     stop("clusterVar must be an object of class 'list'")
   }
   
@@ -257,7 +257,7 @@ regTable <- function (
       clusterVar <- rep(clusterVar, length(objList))  # make clusterVar same length as objList
     }
     classMatrix <- sapply(objList, class)             # regression objs. may have >1 class
-    if (class(classMatrix) == 'character') {
+    if (inherits(classMatrix, 'character')) {
       classMatrix <- t(matrix(classMatrix))  
     }
     for (i in 1:ncol(classMatrix)) {
@@ -319,7 +319,7 @@ regTable <- function (
       # If we are dealing with a single predictor, the line above will drop 
       # the row name, causing problems. This block of code restores the row
       # name.  [2018 11 15]
-      if (class(tmp) == 'numeric') {  # if we're dealing with a single row of output
+      if (inherits(tmp, 'numeric')) {  # if we're dealing with a single row of output
         tmp <- matrix(
           data = tmp,
           dimnames = list(c('Estimate', 'Std. Error'), rownames(lmtest::coeftest(x)))) %>%
@@ -474,10 +474,10 @@ regTable <- function (
   # ASSIGN ROW NAMES AND COLUMN NAMES IF NEEDED
   # If only a single row or column was selected, names have been stripped.
   # We re-assign them here.  [2020 01 30]
-  if (class(x)=='matrix' & !is.null(rowDim) && is.null(rownames(x))) {
+  if (inherits(x, 'matrix') & !is.null(rowDim) && is.null(rownames(x))) {
     rownames(x) <- dimnamesX[[1]][rowDim]
   }
-  if (class(x)=='matrix' & !is.null(colDim) && is.null(colnames(x))) {
+  if (inherits(x, 'matrix') & !is.null(colDim) && is.null(colnames(x))) {
     colnames(x) <- dimnamesX[[2]][colDim]
   }
   

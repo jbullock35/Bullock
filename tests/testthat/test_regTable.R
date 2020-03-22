@@ -67,8 +67,10 @@ test_that("regTable() produces correct estimates and SEs with \"lm\" objects and
 
 
 test_that("regTable() produces correct estimates and SEs with \"ivreg\" objects and clustering", {
-  if (!require(AER))    skip("AER package not available")
-  if (!require(ivpack)) skip("ivpack package not available")
+  suppressWarnings({
+    if (!require(AER))    skip("AER package not available")
+    if (!require(ivpack)) skip("ivpack package not available")
+  })
   iv1 <- ivreg(Sepal.Length ~ Petal.Length | Petal.Width,  data = iris)
   iv2 <- ivreg(Sepal.Length ~ Petal.Width  | Petal.Length, data = iris)
   rT1_iv_cluster <- regTable(list(iv1),      clusterVar = list(iris$Species))
@@ -96,9 +98,11 @@ test_that("regTable() produces correct estimates and SEs with \"ivreg\" objects 
 
 
 test_that("regTable() produces correct estimates and SEs with both \"lm\" and \"ivreg\" objects and clustering", {
-  if (!require(AER))          skip("AER package not available")
-  if (!require(ivpack))       skip("ivpack package not available")
-  if (!require(multiwayvcov)) skip("multiwayvcov package not available")
+  suppressWarnings({
+    if (!require(AER))          skip("AER package not available")
+    if (!require(ivpack))       skip("ivpack package not available")
+    if (!require(multiwayvcov)) skip("multiwayvcov package not available")
+  })
   iv1 <- ivreg(Sepal.Length ~ Petal.Length | Petal.Width,  data = iris)
   iv2 <- ivreg(Sepal.Length ~ Petal.Width  | Petal.Length, data = iris)
   rT_mixed <- regTable(list(lm1, lm2, iv1, iv2), clusterVar = list(iris$Species))
@@ -120,16 +124,16 @@ test_that("regTable() produces correct estimates and SEs with both \"lm\" and \"
 test_that("regTable() objects have correct class and attributes after subsetting", {
   if (!require(multiwayvcov)) skip("multiwayvcov package not available")
   
-  expect_s3_class(rT2_cluster[1:2,    ], qw("regTable matrix"), exact = TRUE)    
-  expect_s3_class(rT2_cluster[   , 1:2], qw("regTable matrix"), exact = TRUE)
-  expect_s3_class(rT2_cluster[   , 3:4], qw("regTable matrix"), exact = TRUE)
-  expect_s3_class(rT2_cluster[1:2, 3:4], qw("regTable matrix"), exact = TRUE)
-  expect_s3_class(rT2_cluster[  2,    ], qw("regTable matrix"), exact = TRUE)  # only one row
-  expect_s3_class(rT2_cluster[  2, 3:4], qw("regTable matrix"), exact = TRUE)  # only one row
-  expect_equal(class(rT2_cluster[   , 2:3]), "matrix")
-  expect_equal(class(rT2_cluster[   ,   2]), "matrix")
-  expect_equal(class(rT2_cluster[1:2,   2]), "matrix")
-  expect_equal(class(rT2_cluster[  1,   2]), "numeric")  
+  expect_s3_class(rT2_cluster[1:2,    ], qw("regTable matrix"), exact = FALSE)    
+  expect_s3_class(rT2_cluster[   , 1:2], qw("regTable matrix"), exact = FALSE)
+  expect_s3_class(rT2_cluster[   , 3:4], qw("regTable matrix"), exact = FALSE)
+  expect_s3_class(rT2_cluster[1:2, 3:4], qw("regTable matrix"), exact = FALSE)
+  expect_s3_class(rT2_cluster[  2,    ], qw("regTable matrix"), exact = FALSE)  # only one row
+  expect_s3_class(rT2_cluster[  2, 3:4], qw("regTable matrix"), exact = FALSE)  # only one row
+  expect_true(inherits(rT2_cluster[   , 2:3], "matrix"))
+  expect_true(inherits(rT2_cluster[   ,   2], "matrix"))
+  expect_true(inherits(rT2_cluster[1:2,   2], "matrix"))
+  expect_true(inherits(rT2_cluster[  1,   2], "numeric"))  
 
   rT2_cluster_attrNames <- names(attributes(rT2_cluster))
   expect_true(all(qw("N r.squared SER") %in% rT2_cluster_attrNames))
@@ -165,7 +169,7 @@ test_that("regTable subsetting works even when it occurs within another function
   }
   rT2_cluster_subset <- myFunc(rT2_cluster, 2:3, 2:4)
   
-  expect_equal(class(rT2_cluster_subset), "matrix")
+  expect_true(inherits(rT2_cluster_subset, "matrix"))
   expect_equal(dim(rT2_cluster_subset), c(2, 3))
 })
 
