@@ -1,7 +1,7 @@
 Package: Bullock
 Type: Package
 Title: Tools for table-making and miscellaneous helper utilities
-Version: 2.2.2
+Version: 2.2.2.9000
 Date: 2020-03-22
 Authors@R: c(
   person("John", "Bullock", email = "john@johnbullock.org", role = c("aut", "cre")),
