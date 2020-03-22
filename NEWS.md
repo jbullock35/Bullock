@@ -1,3 +1,10 @@
+# Version 2.2.2 (2020-03-22)
+Updated `latexTable()` and `regTable()` for compatibility with R 4.0.0.
+&nbsp;  
+&nbsp;  
+&nbsp;  
+
+
 # Version 2.2.1 (2020-03-20)
 * Added vignette on using `latexTable()` with R Markdown documents
   (#20).
