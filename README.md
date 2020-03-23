@@ -13,6 +13,7 @@ vignette for an introduction. [Using <tt>latexTable()</tt> with R Markdown docum
 may also be helpful. 
 
 Installation instructions: 
+
     # install.packages("devtools")
     devtools::install_github("tidyverse/dplyr")
 
