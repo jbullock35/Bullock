@@ -1,3 +1,9 @@
+# Version 2.2.2.9000
+Minor update to `qw()` documentation (#37).
+&nbsp;  
+&nbsp;  
+&nbsp;  
+
 # Version 2.2.2 (2020-03-22)
 Updated `latexTable()` and `regTable()` for compatibility with R 4.0.0.
 &nbsp;  
