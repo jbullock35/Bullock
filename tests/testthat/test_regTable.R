@@ -7,6 +7,7 @@ context("Check regTable() output")
 data(iris)
 lm1 <- lm(Sepal.Length ~ Petal.Length,               data = iris)
 lm2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data = iris)
+rT1 <- regTable(list(lm1, lm2))
 if (require(multiwayvcov)) {
   rT1_cluster <- regTable(list(lm1),      clusterVar = list(iris$Species))
   rT2_cluster <- regTable(list(lm1, lm2), clusterVar = list(iris$Species))
@@ -121,7 +122,46 @@ test_that("regTable() produces correct estimates and SEs with both \"lm\" and \"
 })
 
 
-test_that("regTable() objects have correct class and attributes after subsetting", {
+test_that("regTable() objects without clustering have correct class and attributes after subsetting", {
+  expect_s3_class(rT1[1:2,    ], qw("regTable matrix"), exact = FALSE)    
+  expect_s3_class(rT1[   , 1:2], qw("regTable matrix"), exact = FALSE)
+  expect_s3_class(rT1[   , 3:4], qw("regTable matrix"), exact = FALSE)
+  expect_s3_class(rT1[1:2, 3:4], qw("regTable matrix"), exact = FALSE)
+  expect_s3_class(rT1[  2,    ], qw("regTable matrix"), exact = FALSE)  # only one row
+  expect_s3_class(rT1[  2, 3:4], qw("regTable matrix"), exact = FALSE)  # only one row
+  expect_true(inherits(rT1[   , 2:3], "matrix"))
+  expect_true(inherits(rT1[   ,   2], "matrix"))
+  expect_true(inherits(rT1[1:2,   2], "matrix"))
+  expect_true(inherits(rT1[  1,   2], "numeric"))  
+
+  rT1_attrNames <- names(attributes(rT1))
+  expect_true(all(qw("N r.squared SER") %in% rT1_attrNames))
+  
+  rT1_attrNames_b <- names(attributes(rT1[1,]))
+  expect_true(all(qw("N r.squared SER") %in% rT1_attrNames_b))
+
+  rT1_attrNames_c <- names(attributes(rT1[2:3,]))
+  expect_true(all(qw("N r.squared SER") %in% rT1_attrNames_c))
+  
+  rT1_attrNames_d <- names(attributes(rT1[, 3:4]))
+  expect_true(all(qw("N r.squared SER") %in% rT1_attrNames_d))
+  
+  rT1_attrNames_e <- names(attributes(rT1[, 2:3]))
+  expect_false(all(qw("N r.squared SER") %in% rT1_attrNames_e))
+
+  rT1_attrNames_f <- names(attributes(rT1[, 3]))
+  expect_false(all(qw("N r.squared SER") %in% rT1_attrNames_f))
+
+  expect_message(
+    object = rT1[1:2, ], 
+    regexp = "Rows removed, but.*unchanged\\.")
+})
+
+
+
+
+
+test_that("regTable() objects with clustering have correct class and attributes after subsetting", {
   if (!require(multiwayvcov)) skip("multiwayvcov package not available")
   
   expect_s3_class(rT2_cluster[1:2,    ], qw("regTable matrix"), exact = FALSE)    
@@ -160,17 +200,15 @@ test_that("regTable() objects have correct class and attributes after subsetting
 
 
 test_that("regTable subsetting works even when it occurs within another function", {
-  if (!require(multiwayvcov)) skip("multiwayvcov package not available")
-    
   rows <- 1
   cols <- 1
   myFunc <- function (rT, rows, cols) {
     rT[rows, cols]
   }
-  rT2_cluster_subset <- myFunc(rT2_cluster, 2:3, 2:4)
+  rT1_subset <- myFunc(rT1, 2:3, 2:4)
   
-  expect_true(inherits(rT2_cluster_subset, "matrix"))
-  expect_equal(dim(rT2_cluster_subset), c(2, 3))
+  expect_true(inherits(rT1_subset, "matrix"))
+  expect_equal(dim(rT1_subset), c(2, 3))
 })
 
 
