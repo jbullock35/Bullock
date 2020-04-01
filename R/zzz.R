@@ -2,8 +2,9 @@
 # Created on 2020-01-22
 # Created by John Bullock
 
-# See https://r-pkgs.org/r.html for more on the .onAttach and .onLoad 
-# functions.  [2020 01 22]
+# I use this function to set the "Bullock.print.regTable.dp" option when the
+# package is loaded. See https://r-pkgs.org/r.html for more on the .onAttach 
+# and .onLoad functions.  [2020 01 22]
 
 
 # .onAttach <- function(libname, pkgname) {
