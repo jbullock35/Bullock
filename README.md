@@ -1,10 +1,8 @@
 # Bullock
 
 <!-- badges: start -->
-[![Travis build status](https://travis-ci.com/jbullock35/scrape_NU_courseEvals.svg?branch=master)](https://travis-ci.com/github/jbullock35/scrape_NU_courseEvals)
+[![Travis build status](https://travis-ci.com/jbullock35/Bullock.svg?branch=master)](https://travis-ci.com/jbullock35/Bullock)
 <!-- badges: end -->
-https://travis-ci.com/jbullock35/scrape_NU_courseEvals.svg?token=syFTDXz2oNQg6sAqupYE&branch=master&status=passed
-
 
 This package contains utilities that I use in my R code. Most of them don't 
 seem to have equivalents in any other package. 
