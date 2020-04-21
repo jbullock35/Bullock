@@ -1,6 +1,7 @@
 # Version 2.2.2.9000
-Reduced test_regTable.R reliance on multiwayvcov package (#36).
-Minor update to `qw()` documentation (#37).
+* Added `snakeToCamel()`.
+* Reduced test_regTable.R reliance on multiwayvcov package (#36).
+* Minor update to `qw()` documentation (#37).
 &nbsp;  
 &nbsp;  
 &nbsp;  
