@@ -1,5 +1,5 @@
 # Version 2.2.2.9000
-* Added `snakeToCamel()`.
+* Added `snakeToCamel()`, `medianNA()`, `rangeNA()` (#32).
 * Reduced test_regTable.R reliance on multiwayvcov package (#36).
 * Minor update to `qw()` documentation (#37).
 &nbsp;  

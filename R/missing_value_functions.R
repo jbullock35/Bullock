@@ -59,6 +59,14 @@ meanNA <- function(x) mean(x, na.rm = TRUE)
 
 #' @rdname missingValueFunctions
 #' @export
+medianNA <- function(x) median(x, na.rm = TRUE)
+
+#' @rdname missingValueFunctions
+#' @export
+rangeNA <- function(x)  range(x, na.rm = TRUE)
+
+#' @rdname missingValueFunctions
+#' @export
 sdNA <- function(x)  sd(x, na.rm = TRUE)
     
 #' @rdname missingValueFunctions

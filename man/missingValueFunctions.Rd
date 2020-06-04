@@ -5,6 +5,8 @@
 \alias{lNA}
 \alias{lNAv}
 \alias{meanNA}
+\alias{medianNA}
+\alias{rangeNA}
 \alias{sdNA}
 \alias{sumNA}
 \alias{varNA}
@@ -15,6 +17,10 @@ lNA(x, verbose = FALSE)
 lNAv(x)
 
 meanNA(x)
+
+medianNA(x)
+
+rangeNA(x)
 
 sdNA(x)
 

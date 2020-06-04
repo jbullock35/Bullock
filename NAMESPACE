@@ -1,12 +1,12 @@
 importFrom("magrittr", "%>%")
 importFrom("rlang", ".data")
-importFrom("stats", "logLik", "model.matrix", "nobs", "sd", "var")
+importFrom("stats", "logLik", "median", "model.matrix", "nobs", "sd", "var")
 export(
   "%IN%", latexTable, latexTablePDF, lNA, lNAv, lsos,   
   lt_colNumbers, lt_nobsRow, lt_rSquaredRow, 
-  meanNA, mergeFac, modalValue, moveToDF, PDF_crop, pop, push, qw, 
-  regTable, reliability, rescale, sdNA, shift, snakeToCamel, unshift, sumNA, 
-  varNA)
+  meanNA, medianNA, mergeFac, modalValue, moveToDF, PDF_crop, pop, push, qw, 
+  rangeNA, regTable, reliability, rescale, sdNA, shift, snakeToCamel, 
+  unshift, sumNA, varNA)
 S3method(`[`,    latexTable)
 S3method(c,      latexTable)
 S3method(print,  latexTable)
