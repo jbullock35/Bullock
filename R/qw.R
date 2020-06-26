@@ -1,7 +1,7 @@
 #' Perl-like function for quoting a list of words
 #' 
 #' \code{qw} stands for \emph{quote words.} The function takes a string of 
-#' words separated by whitepsace characters.  It returns a vector in which 
+#' words separated by whitespace characters.  It returns a vector in which 
 #' each element is a word.  The point of the function is to speed the 
 #' creation of vectors of words and to make for more readable code.
 #' 
@@ -12,6 +12,8 @@
 #' @param x A string. It may contain newline characters; \code{x} will be 
 #' split by these characters just as it will be split by ordinary spaces.
 #' See the examples.
+#' 
+#' @return Character vector.
 #' 
 #' @author Florent Delmotte (``flodel''). See 
 #' \url{http://stackoverflow.com/questions/520810/}.

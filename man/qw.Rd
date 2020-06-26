@@ -11,9 +11,12 @@ qw(x)
 split by these characters just as it will be split by ordinary spaces.
 See the examples.}
 }
+\value{
+Character vector.
+}
 \description{
 \code{qw} stands for \emph{quote words.} The function takes a string of 
-words separated by whitepsace characters.  It returns a vector in which 
+words separated by whitespace characters.  It returns a vector in which 
 each element is a word.  The point of the function is to speed the 
 creation of vectors of words and to make for more readable code.
 }
