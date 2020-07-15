@@ -17,6 +17,8 @@ Imports: knitr, lmtest, magrittr, rlang, rmarkdown, stringr
 Suggests: 
   AER,
   crayon,
+  dplyr,
+  estimatr,
   ivpack,
   multiwayvcov,
   testthat
@@ -29,7 +31,7 @@ License: GPL (>= 2)
 LazyLoad: yes
 URL: https://github.com/jbullock35/Bullock
 BugReports: https://github.com/jbullock35/Bullock/issues
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 Encoding: UTF-8
 Language: nob
 VignetteBuilder: knitr

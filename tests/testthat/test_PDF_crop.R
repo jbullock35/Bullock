@@ -51,3 +51,36 @@ test_that("PDF_crop() can handle different kinds of paths", {
       regexp = NA)
   }
 })
+
+
+test_that("PDF_crop() can handle paths that contain spaces", {
+  skip_if_not(
+    condition = requireNamespace("dplyr", quietly = TRUE),
+    message = "dplyr package not available, so skipping the 'PDF_crop() can handle paths that contain spaces' test"
+  )
+   
+  check_pdfcrop_presence()
+
+  # input file is in a directory that has spaces in its name
+  tmpDir <- dplyr::case_when(
+    !is.null(Sys.getenv("R_SESSION_TMPDIR")) ~ Sys.getenv("R_SESSION_TMPDIR"),
+    !is.null(Sys.getenv("TEMP"))             ~ Sys.getenv("TEMP"),
+    !is.null(Sys.getenv("TMP"))              ~ Sys.getenv("TMP"),
+    TRUE ~ "/tmp"
+  )
+  tmpDir <- paste0(tmpDir, "/test of PDF_crop")
+  tmpDir <- normalizePath(tmpDir, mustWork = FALSE)
+  if (!dir.exists(tmpDir)) dir.create(tmpDir)  
+  tmpFile <-  tempfile(fileext = ".pdf", tmpdir = tmpDir)
+  pdf(tmpFile)
+    plot(1:10, 1:10)
+  dev.off()
+  PDF_crop(tmpFile, deleteOriginal = FALSE)
+  expect_true(file.exists(sub('.pdf', '_crop.pdf', tmpFile)))
+  
+  # output to a different directory, which also has spaces in its name
+  newOutputDir <- paste(dirname(tmpFile), 2)
+  if (!dir.exists(newOutputDir)) dir.create(newOutputDir)  
+  PDF_crop(tmpFile, newOutputDir)
+  expect_true(file.exists(sub('.pdf', '_crop.pdf', paste0(newOutputDir, "/", basename(tmpFile)))))
+})

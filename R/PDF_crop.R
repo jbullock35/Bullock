@@ -59,8 +59,8 @@ PDF_crop <- function (
   
   # GET OUTPUT DIRECTORY
   if (is.null(dirOutput)) dirOutput <- dirname(input)
-  dirOutput <- sub('([\\d\\w])$', '\\1/', dirOutput, perl = TRUE)  # add trailing slash
   dirOutput <- normalizePath(dirOutput, mustWork = TRUE)
+  dirOutput <- sub('([\\d\\w])$', '\\1/', dirOutput, perl = TRUE)  # add trailing slash
   
   
   # CROP THE FILE
@@ -73,14 +73,17 @@ PDF_crop <- function (
     shell(
       paste(
         'pdfcrop', 
-        input, 
-        paste0(dirOutput, outputBaseName)),
+        shQuote(input), 
+        shQuote(paste0(dirOutput, outputBaseName))),
       ignore.stdout = !verbose)
   }
   else {
     system2(
       'pdfcrop',
-      c(input, paste0(dirOutput, outputBaseName)),
+      c(
+        shQuote(input), 
+        shQuote(paste0(dirOutput, outputBaseName))
+      ),
       stdout = if (verbose) "" else FALSE)
   }
   
@@ -95,3 +98,18 @@ PDF_crop <- function (
     system2('open', args = paste0(dirOutput, outputBaseName), wait = FALSE)
 } 
 
+
+#################
+# input file is in a directory that has spaces in its name
+if (0) {
+  tmpDir <- ifelse(is.null(Sys.getenv("TEMP")), Sys.getenv("TMP"), Sys.getenv("TEMP"))
+  tmpDir <- paste0(tmpDir, "/test of PDF_crop")
+  tmpDir <- normalizePath(tmpDir, mustWork = FALSE)
+  if (!dir.exists(tmpDir)) dir.create(tmpDir)  
+  tmpFile <-  tempfile(fileext = ".pdf", tmpdir = tmpDir)
+  pdf(tmpFile)
+    plot(1:10, 1:10)
+  dev.off()
+  PDF_crop(tmpFile, deleteOriginal = FALSE, verbose = TRUE)
+  expect_true(file_exists(sub('.pdf', '_crop.pdf', tmpFile)))
+}
