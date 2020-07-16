@@ -15,6 +15,6 @@ may also be helpful.
 Installation instructions: 
 
     # install.packages("devtools")
-    devtools::install_github("jbullock35/Bullock")
+    devtools::install_github("jbullock35/Bullock", build_vignettes = TRUE)
 
 If you have problems with the package, please feel free to [post an issue](https://github.com/jbullock35/Bullock/issues) or to [write to&nbsp;me](mailto:john@johnbullock.org). I will be happy to help.
