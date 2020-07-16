@@ -54,6 +54,7 @@ test_that("PDF_crop() can handle different kinds of paths", {
 
 
 test_that("PDF_crop() can handle paths that contain spaces", {
+  skip_on_travis()  # See issue #44 - these tests don't work on Travis
   skip_if_not(
     condition = requireNamespace("dplyr", quietly = TRUE),
     message = "dplyr package not available, so skipping the 'PDF_crop() can handle paths that contain spaces' test"
