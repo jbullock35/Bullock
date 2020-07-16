@@ -447,6 +447,9 @@ latexTable <- function(
   if (inherits(mat, "regTable")) {
     class(mat) <- class(mat)[-grep('regTable', mat)]  # Remove "regTable" class to avoid errors when we subset later on.  [2020 01 30]
   }
+  mat <- apply(mat, 2, as.character)                               # For tibbles, must explicitly convert to character  [2020 07 16]
+    # mat <- mutate_all(mat, as.character)                         # dplyr solution                 
+    # mat <- mat %>% mutate(across(everything(), as.character()))  # R 4.0+ only
   mat[is.na(mat)] <- paste0(' ', NA_text)
 
   

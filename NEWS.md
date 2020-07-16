@@ -3,6 +3,7 @@
 * Added `snakeToCamel()`, `medianNA()`, `rangeNA()` (#32).
 * `PDF_crop()` can now take paths that have spaces.
 * Reduced test_regTable.R reliance on multiwayvcov package (#36).
+* Fix bug with `latexTable()` when `mat` is a tibble.
 * Minor update to `qw()` documentation (#37).
 &nbsp;  
 &nbsp;  
