@@ -1,4 +1,4 @@
-# Version 2.2.2.9000
+# Version 2.3.0 (2020-07-16) 
 * Added `strip0()` (#41).
 * Added `snakeToCamel()`, `medianNA()`, `rangeNA()` (#32).
 * `PDF_crop()` can now take paths that have spaces.
@@ -8,6 +8,7 @@
 &nbsp;  
 &nbsp;  
 &nbsp;  
+
 
 # Version 2.2.2 (2020-03-22)
 Updated `latexTable()` and `regTable()` for compatibility with R 4.0.0.
