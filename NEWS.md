@@ -1,5 +1,5 @@
 # Version 2.3.0 (2020-07-16) 
-* Added `strip0()` (#41).x
+* Added `strip0()` (#41).
 * Added `snakeToCamel()`, `medianNA()`, `rangeNA()` (#32).
 * `PDF_crop()` can now take paths that have spaces.
 * Reduced test_regTable.R reliance on multiwayvcov package (#36).
