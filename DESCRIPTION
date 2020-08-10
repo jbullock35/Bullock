@@ -31,7 +31,7 @@ License: GPL (>= 2)
 LazyLoad: yes
 URL: https://github.com/jbullock35/Bullock
 BugReports: https://github.com/jbullock35/Bullock/issues
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Encoding: UTF-8
 Language: nob
 VignetteBuilder: knitr

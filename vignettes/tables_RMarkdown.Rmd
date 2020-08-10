@@ -100,9 +100,9 @@ document. The header should look like this:
 
 
 
-## 2. Inserting `latexTable()` output 
-To insert `latexTable()` output into your document,  just wrap the output in 
-a `raw_latex()` command:
+## 2. Inserting `latexTable()` output into an R Markdown document 
+To insert `latexTable()` output into your R Markdown document, just wrap 
+the output in a `raw_latex()` command:
 
 ```{r}
 library(Bullock)
@@ -116,7 +116,24 @@ a unique LaTeX name for each one (by using the `commandName` argument in your
 
 
 
-## 3. Limitations
+## 3. Inserting `latexTable()` output into a Sweave / Rnw document.
+LaTeX documents that contain embedded R code chunks are sometimes called 
+"Sweave" documents, and they typically have the extension `.Rnw`. The 
+procedure for embedding `latexTable()` output into these documents is just
+a little different:
+
+```{r, echo = FALSE, results = TRUE, comment = ''}
+cat('<<myTable, echo = FALSE, results = "asis">>=')   
+cat('library(Bullock)')   
+cat('library(knitr)')
+cat('myTable <- latexTable(matrix(1:16, nrow = 4))')   
+cat('cat(myTable, sep = "\\n")')   
+cat('@')
+```
+   
+
+
+## 4. Limitations
 The most obvious limitation is that `latexTable()` cannot be used when 
 generating HTML documents from R Markdown. It will work only when generating 
 LaTeX or PDF from R Markdown.

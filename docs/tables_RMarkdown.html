@@ -14,16 +14,19 @@
 
 <title>Using latexTable() with R Markdown documents</title>
 
-<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
-// be compatible with the behavior of Pandoc < 2.8).
-document.addEventListener('DOMContentLoaded', function(e) {
-  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
-  var i, h, a;
-  for (i = 0; i < hs.length; i++) {
-    h = hs[i];
-    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
-    a = h.attributes;
-    while (a.length > 0) h.removeAttribute(a[0].name);
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
   }
 });
 </script>
@@ -31,18 +34,19 @@ document.addEventListener('DOMContentLoaded', function(e) {
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -62,7 +66,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {   }
 @media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -380,17 +384,28 @@ output:
       in_header: !expr system.file(&quot;latexTable_RMarkdown_preamble.tex&quot;, package = &quot;Bullock&quot;, mustWork = TRUE)
 ---</code></pre>
 </div>
-<div id="inserting-latextable-output" class="section level2">
-<h2>2. Inserting <code>latexTable()</code> output</h2>
-<p>To insert <code>latexTable()</code> output into your document, just wrap the output in a <code>raw_latex()</code> command:</p>
+<div id="inserting-latextable-output-into-an-r-markdown-document" class="section level2">
+<h2>2. Inserting <code>latexTable()</code> output into an R Markdown document</h2>
+<p>To insert <code>latexTable()</code> output into your R Markdown document, just wrap the output in a <code>raw_latex()</code> command:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">library</span>(Bullock)</span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="kw">library</span>(knitr)</span>
 <span id="cb2-3"><a href="#cb2-3"></a>myTable &lt;-<span class="st"> </span><span class="kw">latexTable</span>(<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">16</span>, <span class="dt">nrow =</span> <span class="dv">4</span>))</span>
 <span id="cb2-4"><a href="#cb2-4"></a><span class="kw">raw_latex</span>(myTable)</span></code></pre></div>
+
 <p>Remember that if you are using multiple tables, you will need to specify a unique LaTeX name for each one (by using the <code>commandName</code> argument in your <code>latexTable()</code> calls).</p>
 </div>
+<div id="inserting-latextable-output-into-a-sweave-rnw-document." class="section level2">
+<h2>3. Inserting <code>latexTable()</code> output into a Sweave / Rnw document.</h2>
+<p>LaTeX documents that contain embedded R code chunks are sometimes called “Sweave” documents, and they typically have the extension <code>.Rnw</code>. The procedure for embedding <code>latexTable()</code> output into these documents is just a little different:</p>
+<pre><code>&lt;&lt;myTable, echo = FALSE, results = &quot;asis&quot;&gt;&gt;=
+library(Bullock)
+library(knitr)
+myTable &lt;- latexTable(matrix(1:16, nrow = 4))
+cat(myTable, sep = &quot;\n&quot;)
+@</code></pre>
+</div>
 <div id="limitations" class="section level2">
-<h2>3. Limitations</h2>
+<h2>4. Limitations</h2>
 <p>The most obvious limitation is that <code>latexTable()</code> cannot be used when generating HTML documents from R Markdown. It will work only when generating LaTeX or PDF from R Markdown.</p>
 </div>
 

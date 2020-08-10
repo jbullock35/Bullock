@@ -1,3 +1,7 @@
+# Version 2.3.0.9000 
+* Added, to the "R Markdown" vignette, instructions for using `latexTable()` 
+  output in a Sweave / Rnw document.
+
 # Version 2.3.0 (2020-07-16) 
 * Added `strip0()` (#41).
 * Added `snakeToCamel()`, `medianNA()`, `rangeNA()` (#32).
