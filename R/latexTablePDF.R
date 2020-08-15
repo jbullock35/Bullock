@@ -117,11 +117,12 @@
 #'   Table{\NB}3b, etc.\cr
 #'     \indent \code{continuedFloat} and \code{continuedFloatStar} cannot both 
 #'   be \code{TRUE}.
-#' @param firstPageEmpty Logical variable. If \code{TRUE}, the page that 
-#'   contains the first table in \code{latexTable} will have an empty header
-#'   and footer. (Technically, \code{latexTablePDF} will insert 
-#'   \code{\\thispagestyle{empty}} into the code block that contains the first
-#'   table in \code{latexTable}.)    
+#' @param firstPageEmpty Logical variable. Defaults to the value of 
+#'   \code{container}. If \code{TRUE}, the page that contains the first 
+#'   table in \code{latexTable} will have an empty header and footer. 
+#'   (Technically, \code{latexTablePDF} will insert 
+#'   \code{\\thispagestyle{empty}} into the code block that contains the 
+#'   first table in \code{latexTable}.)    
 #' @param firstTableNumber Integer. What number should the first table in 
 #'   \code{latexTable} have?\cr
 #'   \indent By default, the table numbering will be "natural." That is, the 
@@ -151,7 +152,7 @@ latexTablePDF <- function(
   
   continuedFloat     = FALSE,
   continuedFloatStar = FALSE,  
-  firstPageEmpty     = TRUE,
+  firstPageEmpty     = container,
   firstTableNumber   = NULL,
   
   openPDFOnExit      = TRUE) {

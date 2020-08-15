@@ -15,7 +15,7 @@ latexTablePDF(
   verbose = FALSE,
   continuedFloat = FALSE,
   continuedFloatStar = FALSE,
-  firstPageEmpty = TRUE,
+  firstPageEmpty = container,
   firstTableNumber = NULL,
   openPDFOnExit = TRUE
 )
@@ -68,11 +68,12 @@ Table{\NB}3b, etc.\cr
 \indent \code{continuedFloat} and \code{continuedFloatStar} cannot both
 be \code{TRUE}.}
 
-\item{firstPageEmpty}{Logical variable. If \code{TRUE}, the page that
-contains the first table in \code{latexTable} will have an empty header
-and footer. (Technically, \code{latexTablePDF} will insert
-\code{\\thispagestyle{empty}} into the code block that contains the first
-table in \code{latexTable}.)}
+\item{firstPageEmpty}{Logical variable. Defaults to the value of
+\code{container}. If \code{TRUE}, the page that contains the first
+table in \code{latexTable} will have an empty header and footer.
+(Technically, \code{latexTablePDF} will insert
+\code{\\thispagestyle{empty}} into the code block that contains the
+first table in \code{latexTable}.)}
 
 \item{firstTableNumber}{Integer. What number should the first table in
 \code{latexTable} have?\cr
