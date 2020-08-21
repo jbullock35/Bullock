@@ -1,4 +1,5 @@
 # Version 2.3.0.9000 
+* Add `printAll()` to print all rows of a tibble.
 * Change default of `firstPageEmpty` in `latexTablePDF()` from `TRUE` to 
   `container`; that is, `container` will be `TRUE` (by default) if 
   `container` is `TRUE`, and `FALSE` if it is `FALSE`.   

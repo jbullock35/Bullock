@@ -21,7 +21,8 @@ Suggests:
   estimatr,
   ivpack,
   multiwayvcov,
-  testthat
+  testthat,
+  tibble
 Description: These functions are used in John Bullock's code; they are 
   typically needed for replication purposes. They range in complexity from a 
   function that removes NA values from a vector prior to summing it 
