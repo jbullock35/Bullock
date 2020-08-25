@@ -67,8 +67,6 @@
 #' @name stackUtilities
 #' @rdname stackUtilities
 #' @export
-
-
 push <- function(x, values) {
   assign(as.character(substitute(x)), c(x, values), parent.frame())
 }
