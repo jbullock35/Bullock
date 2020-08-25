@@ -7,6 +7,7 @@
 #' \emph{column-tier.}
 
 #' @importFrom magrittr %>%
+#' @importFrom stats nobs
 
 #' @param objList List of regression objects. This is the only required 
 #' argument. \code{regTable()} has been tested with objects of classes 

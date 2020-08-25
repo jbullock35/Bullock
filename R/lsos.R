@@ -43,7 +43,6 @@
 
 
 #' @rdname lsos
-#' @export
 .ls.objects <- function (pos = 1, envir = as.environment(pos), pattern, order.by,
                         decreasing=FALSE, n=NULL) {
     napply <- function(names, fn) sapply(names, function(x)

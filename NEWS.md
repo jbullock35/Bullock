@@ -5,8 +5,8 @@
   `container` is `TRUE`, and `FALSE` if it is `FALSE`.   
 * Added, to the "R Markdown" vignette, instructions for using `latexTable()` 
   output in a Sweave / Rnw document.
-* Roxygenized documentation for `reliability()`. All documentation is now 
-  roxygenized (#7).  
+* Roxygenized documentation for `reliability()` and `NAMESPACE`. All 
+  documentation is now roxygenized (#7).  
   
 
 # Version 2.3.0 (2020-07-16) 

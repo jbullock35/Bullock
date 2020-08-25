@@ -58,6 +58,7 @@ lNAv <- function (x) lNA(x, verbose = TRUE)
 meanNA <- function(x) mean(x, na.rm = TRUE)
 
 #' @rdname missingValueFunctions
+#' @importFrom stats median 
 #' @export
 medianNA <- function(x) median(x, na.rm = TRUE)
 
@@ -66,11 +67,15 @@ medianNA <- function(x) median(x, na.rm = TRUE)
 rangeNA <- function(x)  range(x, na.rm = TRUE)
 
 #' @rdname missingValueFunctions
+#' @importFrom stats sd
 #' @export
 sdNA <- function(x)  sd(x, na.rm = TRUE)
     
 #' @rdname missingValueFunctions
+#' @export
 sumNA <- function(x) sum(x, na.rm = TRUE)
 
 #' @rdname missingValueFunctions
+#' @importFrom stats var
+#' @export
 varNA <- function(x) var(x, na.rm = TRUE)
