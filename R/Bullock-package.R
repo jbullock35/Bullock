@@ -11,6 +11,7 @@
 #' Of the convenience functions, I most often use \linkInt{qw}, 
 #' \linkInt{reliability}, \linkInt{meanNA}, and \linkInt{sumNA}.  
 
-#' @aliases Bullock
-#' @keywords internal
-"_PACKAGE" 
+#' @docType package
+#' @name Bullock
+#' @aliases Bullock-package
+NULL
