@@ -352,6 +352,14 @@ latexTable <- function(
   latexTableCall <- match.call()   
 
   
+  # CHECK THAT mat IS A MATRIX
+  # This must be done before we try to access colNames in the code 
+  # immediately below.
+  if (! inherits(mat, "matrix")) {
+    stop('"mat" must be of class "matrix"')
+  }
+
+  
   # GET PRELIMINARY INFORMATION  
   # These seemingly redundant lines are important.  Without them, changes to 
   # rownames(mat) and colnames(mat) will change rowNames and colNames, 
@@ -385,9 +393,11 @@ latexTable <- function(
 
 
   
-  ############################################################################
+  ##########################################################################
   # CHECK ARGUMENTS 
-  ############################################################################
+  ##########################################################################
+  # We've already checked that "mat" is a matrix: we need to do so before 
+  # accessing colNames, as we do above.  [2020 08 26] 
   if (grepl('[^bhHpt!]', floatPlacement)) {
     stop('floatPlacement can contain only these characters: "p", "h", "H", "t", "b", and "!".')
   }
