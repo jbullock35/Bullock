@@ -28,6 +28,13 @@ test_that("lNAv() assigns values and prints messages as it should", {
 })
 
 
+test_that("lNA() handles nonexistent vectors appropriately", {
+  data(iris)
+  expect_identical(lNA(iris$Petal.Width), 150L)
+  expect_error(lNA(iris$Petal.WidthXXX))
+  expect_error(lNA(iris[, "Petal.WidthXXX"]))  
+})
+
 
 
 

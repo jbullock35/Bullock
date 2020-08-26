@@ -35,6 +35,7 @@
 #' @rdname missingValueFunctions
 #' @export
 lNA <- function(x, verbose = FALSE) {   
+  stopifnot(!is.null(x))
   y <- length(x[!is.na(x)])
   if (verbose) {
     print(
@@ -55,27 +56,45 @@ lNAv <- function (x) lNA(x, verbose = TRUE)
 
 #' @rdname missingValueFunctions
 #' @export
-meanNA <- function(x) mean(x, na.rm = TRUE)
+meanNA <- function(x) {
+  stopifnot(!is.null(x))
+  mean(x, na.rm = TRUE)
+}
 
 #' @rdname missingValueFunctions
 #' @importFrom stats median 
 #' @export
-medianNA <- function(x) median(x, na.rm = TRUE)
+medianNA <- function(x) {
+  stopifnot(!is.null(x))
+  median(x, na.rm = TRUE)
+}
 
 #' @rdname missingValueFunctions
 #' @export
-rangeNA <- function(x)  range(x, na.rm = TRUE)
+rangeNA <- function(x) {
+  stopifnot(!is.null(x))
+  range(x, na.rm = TRUE)
+}
 
 #' @rdname missingValueFunctions
 #' @importFrom stats sd
 #' @export
-sdNA <- function(x)  sd(x, na.rm = TRUE)
-    
+sdNA <- function(x) {
+  stopifnot(!is.null(x))
+  sd(x, na.rm = TRUE)
+}
+
 #' @rdname missingValueFunctions
 #' @export
-sumNA <- function(x) sum(x, na.rm = TRUE)
+sumNA <- function(x) {
+  stopifnot(!is.null(x))
+  sum(x, na.rm = TRUE)
+}
 
 #' @rdname missingValueFunctions
 #' @importFrom stats var
 #' @export
-varNA <- function(x) var(x, na.rm = TRUE)
+varNA <- function(x) {
+  stopifnot(!is.null(x))
+  var(x, na.rm = TRUE)
+}

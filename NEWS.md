@@ -1,5 +1,9 @@
 # Version 2.3.0.9000 
 * Add `printAll()` to print all rows of a tibble.
+* Missing-value functions (`lNA()` and kin) now check for the existence of 
+  columns that are specified as `foo$x`. For example, if a user runs 
+  `lNA(foo$x)` but `x` is not an element of `foo`, the function will throw
+  an error message (#45). It previously returned 0.
 * Change default of `firstPageEmpty` in `latexTablePDF()` from `TRUE` to 
   `container`; that is, `container` will be `TRUE` (by default) if 
   `container` is `TRUE`, and `FALSE` if it is `FALSE`.   
