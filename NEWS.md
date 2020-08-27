@@ -11,6 +11,7 @@
   output in a Sweave / Rnw document.
 * In `latexTable()`, check that `mat` has class `matrix` to avoid an 
   obscure error message when it doesn't (#34).
+* `PDF_crop()` now throws an error when new cropped PDF isn't created (#42).  
 * Roxygenized documentation for `reliability()` and `NAMESPACE`. All 
   documentation is now roxygenized (#7).  
   

@@ -87,6 +87,20 @@ PDF_crop <- function (
       stdout = if (verbose) "" else FALSE)
   }
   
+
+  # CHECK FOR SUCCESSFUL CREATION OF CROPPED FILE
+  # I think that even if pdfcrop fails above, PDF_crop() won't fail, and it 
+  # may thus proceed. If unchecked, this behavior could lead PDF_crop() to 
+  # delete the input file. So we check the behavior here.  [2020 08 26] 
+  if (! file.exists(paste0(dirOutput, outputBaseName))) {
+    stop(paste(
+        "pdfcrop seems to have failed:", 
+        paste0(dirOutput, outputBaseName), 
+        "does not exist"))
+  }   
+
+  
+  # DELETE ORIGINAL FILE
   if (deleteOriginal) file.remove(input)
   
   
