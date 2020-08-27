@@ -1,17 +1,19 @@
 # Version 2.3.0.9000 
 * Add `printAll()` to print all rows of a tibble.
-* Missing-value functions (`lNA()` and kin) now check for the existence of 
-  columns that are specified as `foo$x`. For example, if a user runs 
-  `lNA(foo$x)` but `x` is not an element of `foo`, the function will throw
-  an error message (#45). It previously returned 0.
+* Missing-value functions (`lNA()` and kin) now throw an error when `x` is
+  `NULL`. For example, if a user runs `lNA(foo$x)` but `x` is not an element 
+  of `foo`, the function will throw an error message (#45). It previously 
+  returned 0.
 * Change default of `firstPageEmpty` in `latexTablePDF()` from `TRUE` to 
   `container`; that is, `container` will be `TRUE` (by default) if 
   `container` is `TRUE`, and `FALSE` if it is `FALSE`.   
-* Added, to the "R Markdown" vignette, instructions for using `latexTable()` 
-  output in a Sweave / Rnw document.
 * In `latexTable()`, check that `mat` has class `matrix` to avoid an 
   obscure error message when it doesn't (#34).
 * `PDF_crop()` now throws an error when new cropped PDF isn't created (#42).  
+
+* Added, to the "R Markdown" vignette, instructions for using `latexTable()` 
+  output in a Sweave / Rnw document.
+* Small improvements to `latexTable()` documentation.
 * Roxygenized documentation for `reliability()` and `NAMESPACE`. All 
   documentation is now roxygenized (#7).  
   

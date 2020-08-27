@@ -111,13 +111,8 @@ specifies entries for a row of the footer. The default is
 row. If a model is of class "lm," it will also provide an
 \ifelse{html}{\out{R<sup>2</sup>}}{\eqn{R^2}} and
 "Std. error of regression" row.\cr
-The first entry in each \code{footerRows} list-element should be the
-row name for the corresponding footer row (e.g., '$F$', '$R^2$').\cr
-If \code{SE_table} is \code{FALSE}, each entry after the footer row
-name will be centered in its column. If \code{SE_table} is \code{TRUE}
-(the default), each entry after the footer row name will be horizontally
-centered in its column tier. See the documentation of the \code{SE_table}
-parameter for more on column tiers.}
+\indent The first entry in each \code{footerRows} list-element should
+be the row name for the corresponding footer row (e.g., '$F$', '$R^2$').\cr}
 
 \item{colNames}{List, or object that can be coerced to a list, of column
 headings. Typically, each element in the list is a character vector, and
