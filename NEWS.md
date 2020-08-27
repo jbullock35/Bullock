@@ -7,9 +7,12 @@
 * Change default of `firstPageEmpty` in `latexTablePDF()` from `TRUE` to 
   `container`; that is, `container` will be `TRUE` (by default) if 
   `container` is `TRUE`, and `FALSE` if it is `FALSE`.   
+* Improve ability of `latexTable()` to handle lists that contain functions,
+  e.g., `lt_rSquaredRow`.
 * In `latexTable()`, check that `mat` has class `matrix` to avoid an 
   obscure error message when it doesn't (#34).
 * `PDF_crop()` now throws an error when new cropped PDF isn't created (#42).  
+* Add tests for `latexTable()`.
 
 * Added, to the "R Markdown" vignette, instructions for using `latexTable()` 
   output in a Sweave / Rnw document.

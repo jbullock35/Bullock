@@ -106,13 +106,16 @@ labels will be printed to the left of each row in \code{mat}.
 
 \item{footerRows}{List, object that can be coerced to a list, or a function
 that creates a list. Each element in the list is a character vector that
-specifies entries for a row of the footer. The default is
+specifies entries for a row of the footer, or a function that creates
+such a character vector. The default is
 \linkInt{lt_footer}, which typically provides a "Number of observations"
 row. If a model is of class "lm," it will also provide an
 \ifelse{html}{\out{R<sup>2</sup>}}{\eqn{R^2}} and
 "Std. error of regression" row.\cr
 \indent The first entry in each \code{footerRows} list-element should
-be the row name for the corresponding footer row (e.g., '$F$', '$R^2$').\cr}
+be the row name for the corresponding footer row (e.g., '$F$', '$R^2$').\cr
+\indent See the examples for various ways to specify the
+\code{footerRows} argument.}
 
 \item{colNames}{List, or object that can be coerced to a list, of column
 headings. Typically, each element in the list is a character vector, and
@@ -305,6 +308,7 @@ latexTable(rT1, SE_table = FALSE, colNames = lt_colNumbers())
 lt2 <- latexTable(
   mat      = rT1, 
   colNames = list(qw("model model model"), qw("1 2 3")))
+\dontrun{
 lt3 <- latexTable(
   mat         = rT1, 
   colNames    = lt_colNumbers(),
@@ -324,6 +328,12 @@ lt4 <- update(
     c("My first footer row",  "a",     "b",     "c"),
     c("My second footer row", "Lorem", "ipsum", "dolor")
   ))
+}
+
+# You can pass a previously created list to the "footerRows" argument. To
+# store functions in that list, use alist():
+footerList <- alist(lt_rSquaredRow, lt_SER_row)
+latexTable(rT1, footerRows = footerList)
 }
 \seealso{
 Other functions for making tables: \linkInt{regTable},

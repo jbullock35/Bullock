@@ -14,6 +14,16 @@ lt1_default  <- latexTable(mat1)
 mat_char <- matrix(as.character(mat1), nrow(mat1), ncol(mat1))
 mat_char[is.na(mat_char)]
 
+# Create objects in parent environment that have the same names as objects 
+# in the function environment. Do this to ensure that the function isn't 
+# drawing on the parent environment. (It has happened before.)  [2020 08 27]
+footerRow  <- data.frame(x=3)
+footerRows <- rep(1:5, each = 10)
+footerList <- data.frame(x=3)
+landscape  <- data.frame(x=3)
+
+
+# Create latexTables
 lt1_noFormat      <- latexTable(mat1, formatNumbers = FALSE)
 lt1_noFormat_dp10 <- latexTable(mat1, formatNumbers = FALSE, decimalPlaces = 10)
 lt1_dp0      <- latexTable(mat1, decimalPlaces = 0)
@@ -319,16 +329,75 @@ test_that("footer rows are handled correctly when SE_table is FALSE", {
 })
 
 
+test_that("footer rows are handled correctly when a function is passed to the footerRows argument", {
+  expect_error(latexTable(mat1, footerRows = lt_rSquaredRow))
+  expect_error(latexTable(mat1, footerRows = lt_rSquaredRow()))      
+
+  lT1_footerCheck <- latexTable(rT1, footerRows = lt_rSquaredRow())
+  expect_match(lT1_footerCheck[29], "          \\\\multicolumn\\{2\\}\\{c\\}\\{.76\\} &&")  
+  expect_match(lT1_footerCheck[30], "          \\\\multicolumn\\{2\\}\\{c\\}\\{.77\\} &&")
+  expect_match(lT1_footerCheck[31], "          \\\\multicolumn\\{2\\}\\{c\\}\\{.81\\}\\\\tabularnewline")
+  
+  lT1_footerCheck2 <- latexTable(rT1, footerRows = list(lt_rSquaredRow()))
+  expect_match(lT1_footerCheck2[29], "          \\\\multicolumn\\{2\\}\\{c\\}\\{.76\\} &&")  
+  expect_match(lT1_footerCheck2[30], "          \\\\multicolumn\\{2\\}\\{c\\}\\{.77\\} &&")
+  expect_match(lT1_footerCheck2[31], "          \\\\multicolumn\\{2\\}\\{c\\}\\{.81\\}\\\\tabularnewline")
+
+  lT1_footerCheck3 <- latexTable(rT1, footerRows = list(lt_rSquaredRow(), c("a", "b", "c", "d")))
+  expect_match(lT1_footerCheck3[29], "          \\\\multicolumn\\{2\\}\\{c\\}\\{.76\\} &&")  
+  expect_match(lT1_footerCheck3[30], "          \\\\multicolumn\\{2\\}\\{c\\}\\{.77\\} &&")
+  expect_match(lT1_footerCheck3[31], "          \\\\multicolumn\\{2\\}\\{c\\}\\{.81\\}\\\\tabularnewline")
+  expect_match(lT1_footerCheck3[32], "        a && ")
+  expect_match(lT1_footerCheck3[33], "          \\\\multicolumn\\{2\\}\\{c\\}\\{b\\} &&")
+  expect_match(lT1_footerCheck3[34], "          \\\\multicolumn\\{2\\}\\{c\\}\\{c\\} &&")
+  expect_match(lT1_footerCheck3[35], "          \\\\multicolumn\\{2\\}\\{c\\}\\{d\\}\\\\tabularnewline")
+  
+  footerList <- alist(lt_rSquaredRow, c("a", "b", "c", "d"))
+  lT1_footerCheck4 <- latexTable(rT1, footerRows = footerList)
+  expect_match(lT1_footerCheck4[29], "          \\\\multicolumn\\{2\\}\\{c\\}\\{.76\\} &&")  
+  expect_match(lT1_footerCheck4[30], "          \\\\multicolumn\\{2\\}\\{c\\}\\{.77\\} &&")
+  expect_match(lT1_footerCheck4[31], "          \\\\multicolumn\\{2\\}\\{c\\}\\{.81\\}\\\\tabularnewline")
+  expect_match(lT1_footerCheck4[32], "        a && ")
+  expect_match(lT1_footerCheck4[33], "          \\\\multicolumn\\{2\\}\\{c\\}\\{b\\} &&")
+  expect_match(lT1_footerCheck4[34], "          \\\\multicolumn\\{2\\}\\{c\\}\\{c\\} &&")
+  expect_match(lT1_footerCheck4[35], "          \\\\multicolumn\\{2\\}\\{c\\}\\{d\\}\\\\tabularnewline")
+})
 
 
 
+# **************************************************************************
+# LANDSCAPE SETTING ####
+# **************************************************************************
 
-##############################################################################
+# NARROW TABLE
+expect_length(grep('landscape', latexTable(mat1)), 0) 
+expect_length(grep('landscape', latexTable(mat1, landscape = FALSE)), 0)
+expect_length(grep('landscape', latexTable(mat1, landscape = TRUE)),  2) 
+landscape <- FALSE
+expect_length(grep('landscape', latexTable(mat1, landscape = TRUE)),  2) 
+landscape <- TRUE
+expect_length(grep('landscape', latexTable(mat1, landscape = FALSE)), 0)
+
+# WIDE TABLE
+mat1Wide <- cbind(mat1, mat1, mat1)
+expect_length(grep('landscape', latexTable(mat1Wide)), 2) 
+expect_length(grep('landscape', latexTable(mat1Wide, landscape = FALSE)), 0)
+expect_length(grep('landscape', latexTable(mat1Wide, landscape = TRUE)),  2) 
+landscape <- FALSE
+expect_length(grep('landscape', latexTable(mat1Wide, landscape = TRUE)),  2) 
+landscape <- TRUE
+expect_length(grep('landscape', latexTable(mat1Wide, landscape = FALSE)), 0)
+
+
+
+############################################################################
 # FLOAT PLACEMENT
-##############################################################################
+############################################################################
 test_that("floatPlacement argument is used correctly", {
   expect_equal(as.character(lT3[length(lT3)]), "\\myTable{p}")
   expect_equal(as.character(lT3_placement_t[length(lT3_placement_t)]), "\\myTable{t}")
   expect_equal(as.character(lT3_placement_H[length(lT3_placement_H)]), "\\myTable{H}")    
   expect_equal(as.character(lT3_placement_not_thbH[length(lT3_placement_not_thbH)]), "\\myTable{!thbH}")        
 })
+
+

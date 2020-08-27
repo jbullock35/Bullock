@@ -61,6 +61,7 @@
 #' lt2 <- latexTable(
 #'   mat      = rT1, 
 #'   colNames = list(qw("model model model"), qw("1 2 3")))
+#' \dontrun{
 #' lt3 <- latexTable(
 #'   mat         = rT1, 
 #'   colNames    = lt_colNumbers(),
@@ -80,6 +81,12 @@
 #'     c("My first footer row",  "a",     "b",     "c"),
 #'     c("My second footer row", "Lorem", "ipsum", "dolor")
 #'   ))
+#' }
+#' 
+#' # You can pass a previously created list to the "footerRows" argument. To
+#' # store functions in that list, use alist():
+#' footerList <- alist(lt_rSquaredRow, lt_SER_row)
+#' latexTable(rT1, footerRows = footerList)
 
 
 #' @param mat Matrix of numbers to be displayed in a LaTeX table.
@@ -143,13 +150,16 @@
 #'   \code{rowNames} can be \code{NULL}.
 #' @param footerRows List, object that can be coerced to a list, or a function 
 #'   that creates a list. Each element in the list is a character vector that
-#'   specifies entries for a row of the footer. The default is
+#'   specifies entries for a row of the footer, or a function that creates 
+#'   such a character vector. The default is
 #'   \linkInt{lt_footer}, which typically provides a "Number of observations" 
 #'   row. If a model is of class "lm," it will also provide an 
 #'   \ifelse{html}{\out{R<sup>2</sup>}}{\eqn{R^2}} and 
 #'   "Std. error of regression" row.\cr
 #'     \indent The first entry in each \code{footerRows} list-element should  
 #'   be the row name for the corresponding footer row (e.g., '$F$', '$R^2$').\cr
+#'     \indent See the examples for various ways to specify the 
+#'   \code{footerRows} argument.
 #     \indent If \code{SE_table} is \code{FALSE}, each entry after the   
 #   footer row name will be centered in its column. If \code{SE_table} is 
 #   /code{TRUE} (the default), each entry after the footer row name will be  
@@ -371,21 +381,39 @@ latexTable <- function(
   #
   # TODO: can I get around this by using "force(rowNames)" and "force(colNames)"?
   # See http://adv-r.had.co.nz/Functions.html#all-calls.  [2019 12 20]
-  # --Replacing the "decimalPlaces" assignment with force(decimalPlaces) 
-  #   doesn't work; instead, I get an error from lt_rSquaredRow(). Perhaps   
-  #   it would work if force(decimalPlaces) were called from lt_footer().
-  #   Date: 2019 12 28
   # rowNames      <- rowNames
   # colNames      <- colNames 
   # decimalPlaces <- decimalPlaces  
   if (! is.null(colNames)) {
     colNames <- if (is.list(colNames)) colNames else list(colNames)
   }
-  footerRows <- footerRows
   if (! is.null(footerRows)) {
+
+    # Ensure that footerRows is a list. 
     footerRows <- if (is.list(footerRows)) footerRows else list(footerRows)
+
+    # The user may pass an "alist" list as a function. He might do this when 
+    # he wants to send a list of functions (for example, lt_rSquared_row) to 
+    # the "footerRows" argument.
+    #   The contents of "alist" lists haevn't been evaluated. This makes them 
+    # able to store functions. But they need to be evaluated here before we 
+    # can use them.  [2020 08 27]
+    listClasses <- sapply(footerRows, function (x) inherits(x, c("name", "call")))
+    listClasses <- which(listClasses)
+    for (ind in listClasses) { 
+      footerRows[[ind]] <- eval(footerRows[[ind]])
+    }
+    for (i in seq_along(footerRows)) {
+      if (inherits(footerRows[[i]], "function")) {      
+        tmp <- footerRows[[i]]
+        footerRows[[i]] <- tmp()
+      }
+    }
   }
-  landscape  <- landscape
+
+  
+  # Finish up
+  # landscape  <- landscape
   nrow       <- nrow(mat)
   ncol       <- ncol(mat)
   if (formatNumbers) {
@@ -833,13 +861,14 @@ latexTable <- function(
   
   
   
-  ############################################################################
+  ##########################################################################
   # PRINT FOOTER
-  ############################################################################
+  ##########################################################################
   if (headerFooter) {
     if (! is.null(footerRows)) {
       outputStrings <- c(outputStrings, '        \\addlinespace[.15in]')
       for (i in footerRows) {
+        
         footerRow <- unlist(i)
         
         # Break off the rowname.  [2012 07 25]
@@ -862,8 +891,8 @@ latexTable <- function(
           footerRow <- gsub('^0(\\.\\d+)$', '\\1', footerRow)
         }
         
-        # Add trailing zeroes for R^2 and SER, e.g., change "1.9" to "1.90" or
-        # 1.9000 as needed.  [2019 12 30]
+        # Add trailing zeroes for R^2 and SER, e.g., change "1.9" to "1.90" 
+        # or 1.9000 as needed.  [2019 12 30]
         if (footerRowName %in% c('$R^2$', 'R$^2$', 'SER', 'Std. error of regression', 'Standard error of regression')) {
           for (i in 1:length(footerRow)) {
             ncharAfterDecimal  <- gsub('\\d*\\.', '', footerRow[i]) %>% nchar
@@ -1026,7 +1055,10 @@ lt_colNames_default <- function (
 #' @param SE_table Logical variable. See \linkInt{latexTable}.
 #' @param decimalPlaces Integer. See See \linkInt{latexTable}.
 lt_footer <- function (  
-
+  # When lt_footer() is the "footerRows" argument to latexTable(), it is  
+  # called immediately after latexTable() -- that is, before any code in 
+  # latexTable() is executed.  [2020 08 27]
+  
   # If arguments are not supplied, we look to the calling frame --
   # parent.frame() -- for the arguments. This strategy is appropriate because
   # this function will typically be called from latexTable(), rather than 
@@ -1065,6 +1097,10 @@ lt_footer <- function (
   # lt_rSquaredRow() will throw an error. The problem is that decimalPlaces is
   # in the parent frame when lt_footer() is called, but not when 
   # lt_rSquaredRow() is called.  [2019 12 29]
+  #
+  # The double return() calls here ensure that NULL will be returned when 
+  # appropriate, even if there is a non-NULL "footerList" variable in the 
+  # global environment.  [2020 08 27]
   force(decimalPlaces)  
   
   if (SE_table && !is.null(rowNames)) {
@@ -1076,11 +1112,11 @@ lt_footer <- function (
       footerList <- c(footerList, lt_SER_row(mat, decimalPlaces) %>% list)
     if (!is.null(attr(mat, "N")))
       footerList <- c(footerList, lt_nobsRow(mat) %>% list)
+    
+    if (length(footerList) > 0) return(footerList)
   }
   
-  if ( !exists('footerList') || length(footerList)==0 ) footerList <- NULL
-  
-  footerList
+  else return(NULL)
 }
 
 
@@ -1211,10 +1247,15 @@ lt_rSquaredRow <- function (
   # that problem by using the latexTable() default values when the user hasn't
   # supplied his own values.  [2019 12 29]
   userCall <- sys.call(-1)  
-  if (is.null(mat))  mat <- rlang::call_args(userCall)[[1]] %>% eval
-    # sys.call(-1) is the user's call, e.g., "latexTable(rT1, footerRows = lt_rSquaredRow())"
-    # In this line of code, we assume that the first argument is the "mat"
-    # argument.
+  if (is.null(mat)) {
+    # sys.call(-1) is typically the user's call, e.g., 
+    # "latexTable(rT1, footerRows = lt_rSquaredRow())". In this line of 
+    # code, we assume that the first argument is the "mat" argument.
+    matName <- deparse( rlang::call_args(userCall)[[1]] )  # e.g., "myRegTable"
+    
+    # Now get the actual table
+    mat <- dynGet(matName)
+  }
 
   if (is.null(decimalPlaces)) decimalPlaces <- rlang::call_args(userCall)[['decimalPlaces']] %>% eval
   if (is.null(decimalPlaces)) decimalPlaces <- formals(latexTable)$decimalPlaces  # get default value
