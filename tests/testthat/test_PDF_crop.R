@@ -15,6 +15,7 @@ check_pdfcrop_presence <- function () {
 
 
 test_that("PDF_crop() can handle different kinds of paths", {
+  skip_on_travis()  # See issue #44 - these tests don't work on Travis
   check_pdfcrop_presence()
 
   tmpFile <- tempfile(fileext = ".pdf")
