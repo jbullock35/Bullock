@@ -12,7 +12,8 @@
 * In `latexTable()`, check that `mat` has class `matrix` to avoid an 
   obscure error message when it doesn't (#34).
 * `PDF_crop()` now throws an error when new cropped PDF isn't created (#42).  
-* Add tests for `latexTable()`.
+* Add more tests of `latexTable()`.
+&nbsp;  
 
 * Added, to the "R Markdown" vignette, instructions for using `latexTable()` 
   output in a Sweave / Rnw document.
