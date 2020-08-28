@@ -31,11 +31,13 @@
 #' flexible in its handling of PDF files but can handle other file formats.
 #' 
 #' @examples
+#' \dontrun{
 #' tmpFile <- tempfile(fileext = ".pdf")
 #' pdf(tmpFile)
 #'   plot(1:10, 1:10)
 #' dev.off()
 #' PDF_crop(tmpFile)
+#' }
 
 
 #' @export

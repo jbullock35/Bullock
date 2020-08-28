@@ -43,11 +43,13 @@ requires that pdfcrop.exe be installed and in your path. To get pdfcrop.exe,
 install MikTeX or Tex Live, or just use \code{tinytex::tlmgr_install('pdfcrop')}.
 }
 \examples{
+\dontrun{
 tmpFile <- tempfile(fileext = ".pdf")
 pdf(tmpFile)
   plot(1:10, 1:10)
 dev.off()
 PDF_crop(tmpFile)
+}
 }
 \seealso{
 \code{\link[knitr:plot_crop]{knitr::plot_crop()}}, which is less
