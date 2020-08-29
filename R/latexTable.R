@@ -1253,8 +1253,15 @@ lt_rSquaredRow <- function (
     # code, we assume that the first argument is the "mat" argument.
     matName <- deparse( rlang::call_args(userCall)[[1]] )  # e.g., "myRegTable"
     
-    # Now get the actual table
+    # Now get the actual table. dynGet() searches the parent frame, then the
+    # grandparent frame, and so on, til it finds "mat."  [2020 08 29]
     mat <- dynGet(matName)
+      # The following approach is safer than dynGet(matName) because, unlike 
+      # the dynGet() approach, it looks only to the parent of the calling 
+      # frame to find "mat". The following approach also works in most 
+      # circumstances. But because it searches only the parent of the 
+      # calling frame, it will fail in special circumstances.  [2020 08 29]
+      # mat <- get(matName, envir = rlang::env_parent(rlang::caller_env()))
   }
 
   if (is.null(decimalPlaces)) decimalPlaces <- rlang::call_args(userCall)[['decimalPlaces']] %>% eval
