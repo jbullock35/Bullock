@@ -9,7 +9,7 @@ seem to have equivalents in any other package.
 
 The package's largest feature is a set of tools for table-making. See 
 the [Building better tables in less time](https://jbullock35.github.io/Bullock/tables.html)
-vignette for an introduction. [Using <tt>latexTable()</tt> with R Markdown documents](https://jbullock35.github.io/Bullock/tables_RMarkdown.html)
+vignette for an introduction. [Using <tt>latexTable()</tt> with R Markdown and Rnw documents](https://jbullock35.github.io/Bullock/tables_RMarkdown.html)
 may also be helpful. 
 
 Installation instructions: 
