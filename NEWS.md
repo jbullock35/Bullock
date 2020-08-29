@@ -21,7 +21,10 @@
 * Small improvements to `latexTable()` documentation.
 * Roxygenized documentation for `reliability()` and `NAMESPACE`. All 
   documentation is now roxygenized (#7).  
-  
+&nbsp;  
+&nbsp;  
+&nbsp;  
+
 
 # Version 2.3.0 (2020-07-16) 
 * Added `strip0()` (#41).
