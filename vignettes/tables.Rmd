@@ -260,7 +260,7 @@ read and to modify in the LaTeX editor of your choice.
 -->
 
 
-## Using `latexTable()` in R Markdown documents.
+## Using `latexTable()` in R Markdown documents
 It is easy to use `latexTable()` in R Markdown documents. See the 
 [Using `latexTable()` with R Markdown documents](https://jbullock35.github.io/Bullock/tables_RMarkdown.html)
 vignette for details.
