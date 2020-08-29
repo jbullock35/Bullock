@@ -167,6 +167,6 @@ the \code{float} package must be installed.
 \seealso{
 Other functions for making tables: \linkInt{latexTable},
 \linkInt{regTable}. See also the \href{../doc/tables.html}{Building better tables in less time}
-and \href{../doc/tables_RMarkdown.html}{Using \code{latexTable()} with R Markdown documents}
+and \href{../doc/tables_RMarkdown.html}{Using \code{latexTable()} with R Markdown and Rnw documents}
 vignettes.
 }

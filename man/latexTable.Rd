@@ -338,7 +338,7 @@ latexTable(rT1, footerRows = footerList)
 \seealso{
 Other functions for making tables: \linkInt{regTable},
 \linkInt{latexTablePDF}. See also the \href{../doc/tables.html}{Building better tables in less time}
-and \href{../doc/tables_RMarkdown.html}{Using \code{latexTable()} with R Markdown documents}
+and \href{../doc/tables_RMarkdown.html}{Using \code{latexTable()} with R Markdown and Rnw documents}
 vignettes.
 }
 \concept{Tufte}

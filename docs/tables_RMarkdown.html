@@ -12,7 +12,7 @@
 
 
 
-<title>Using latexTable() with R Markdown documents</title>
+<title>Using latexTable() with R Markdown and Rnw documents</title>
 
 <script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
 // v0.0.1
@@ -315,7 +315,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">Using <code>latexTable()</code> with R Markdown documents</h1>
+<h1 class="title toc-ignore">Using <code>latexTable()</code> with R Markdown and Rnw documents</h1>
 
 
 
@@ -372,8 +372,8 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
   -->
 </style>
 <p>It is easy to use <code>latexTable()</code> in R Markdown documents, provided that you are generating LaTeX or PDF files from those R Markdown documents. To do so, you need to take only two steps: load a file via the <code>in_header</code> option for R Markdown documents, and wrap your <code>latexTable()</code> output in the <code>raw_latex()</code> command that is provided by the <code>knitr</code> package.</p>
-<div id="header" class="section level2">
-<h2>1. Header</h2>
+<div id="headers-for-r-markdown-documents" class="section level2">
+<h2>1. Headers for R Markdown documents</h2>
 <p>To use <code>latexTable()</code> in R Markdown documents, certain LaTeX packages must be loaded: the <code>afterpage, array, booktabs, caption, numprint</code> and <code>ragged2e</code> packages. Depending on the options that you specify in your <code>latexTable()</code> call, you may also need to load the <code>afterpage</code>, <code>float</code>, and <code>pdflscape</code> packages.</p>
 <p>The <code>Bullock</code> package comes with a file, <code>latexTable_RMarkdown_preamble.tex</code>, that loads all of these packages. Thus, to load the packages, you need only tell R Markdown to load <code>latexTable_RMarkdown_preamble.tex</code>. The best way to do this is by using the <code>in_header</code> option in the header of your R Markdown document. The header should look like this:</p>
 <pre><code>---

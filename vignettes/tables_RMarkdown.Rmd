@@ -1,8 +1,8 @@
 ---
-title: "Using `latexTable()` with R Markdown documents"
+title: "Using `latexTable()` with R Markdown and Rnw documents"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Using latexTable() with R Markdown documents}
+  %\VignetteIndexEntry{Using latexTable() with R Markdown and Rnw documents}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -77,7 +77,7 @@ for R Markdown documents, and wrap your `latexTable()` output in the
 
 
 
-## 1. Header
+## 1. Headers for R Markdown documents
 To use `latexTable()` in R Markdown documents, certain LaTeX packages must be 
 loaded: the `afterpage, array, booktabs, caption, numprint` and `ragged2e` 
 packages. Depending on the options that you specify in your `latexTable()` 
