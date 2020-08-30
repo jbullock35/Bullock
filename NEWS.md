@@ -1,5 +1,6 @@
 # Version 2.3.0.9000 
 * Add `printAll()` to print all rows of a tibble.
+* Add `minNA()` and `maxNA()`.
 * Missing-value functions (`lNA()` and kin) now throw an error when `x` is
   `NULL`. For example, if a user runs `lNA(foo$x)` but `x` is not an element 
   of `foo`, the function will throw an error message (#45). It previously 

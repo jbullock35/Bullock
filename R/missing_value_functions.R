@@ -54,6 +54,15 @@ lNA <- function(x, verbose = FALSE) {
 #' @export
 lNAv <- function (x) lNA(x, verbose = TRUE)
 
+
+#' @rdname missingValueFunctions
+#' @export
+maxNA <- function(x) {
+  stopifnot(!is.null(x))
+  max(x, na.rm = TRUE)
+}
+
+
 #' @rdname missingValueFunctions
 #' @export
 meanNA <- function(x) {
@@ -68,6 +77,15 @@ medianNA <- function(x) {
   stopifnot(!is.null(x))
   median(x, na.rm = TRUE)
 }
+
+
+#' @rdname missingValueFunctions
+#' @export
+minNA <- function(x) {
+  stopifnot(!is.null(x))
+  min(x, na.rm = TRUE)
+}
+
 
 #' @rdname missingValueFunctions
 #' @export

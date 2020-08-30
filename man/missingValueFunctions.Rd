@@ -4,8 +4,10 @@
 \alias{missingValueFunctions}
 \alias{lNA}
 \alias{lNAv}
+\alias{maxNA}
 \alias{meanNA}
 \alias{medianNA}
+\alias{minNA}
 \alias{rangeNA}
 \alias{sdNA}
 \alias{sumNA}
@@ -16,9 +18,13 @@ lNA(x, verbose = FALSE)
 
 lNAv(x)
 
+maxNA(x)
+
 meanNA(x)
 
 medianNA(x)
+
+minNA(x)
 
 rangeNA(x)
 
