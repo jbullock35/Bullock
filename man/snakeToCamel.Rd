@@ -21,3 +21,6 @@ snakeToCamel("party_ID")      # [1] "partyID"
 snakeToCamel("hours_9_to_5")  # [1] "hours9_to_5" 
 
 }
+\seealso{
+\linkInt{spaceToCamel}
+}

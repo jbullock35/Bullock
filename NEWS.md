@@ -1,4 +1,5 @@
 # Version 2.3.0.9000 
+* Add `spaceToCamel()`.
 * Add `printAll()` to print all rows of a tibble.
 * Add `minNA()` and `maxNA()`.
 * Missing-value functions (`lNA()` and kin) now throw an error when `x` is

@@ -12,6 +12,9 @@
 #' snakeToCamel("party_ID")      # [1] "partyID"
 #' snakeToCamel("hours_9_to_5")  # [1] "hours9_to_5" 
 #' 
+#' @seealso 
+#' \linkInt{spaceToCamel}
+
 #' @export 
 snakeToCamel <- function(x) {
   gsub("([[:lower:]])_(\\w)", "\\1\\U\\2", x, perl = TRUE)
