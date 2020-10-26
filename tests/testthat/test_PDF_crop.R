@@ -65,9 +65,9 @@ test_that("PDF_crop() can handle paths that contain spaces", {
 
   # input file is in a directory that has spaces in its name
   tmpDir <- dplyr::case_when(
-    !is.null(Sys.getenv("R_SESSION_TMPDIR")) ~ Sys.getenv("R_SESSION_TMPDIR"),
-    !is.null(Sys.getenv("TEMP"))             ~ Sys.getenv("TEMP"),
-    !is.null(Sys.getenv("TMP"))              ~ Sys.getenv("TMP"),
+    !is.null(Sys.getenv("R_SESSION_TMPDIR")) & nzchar(Sys.getenv("R_SESSION_TMPDIR"))  ~ Sys.getenv("R_SESSION_TMPDIR"),
+    !is.null(Sys.getenv("TEMP"))             & nzchar(Sys.getenv("TEMP"))              ~ Sys.getenv("TEMP"),
+    !is.null(Sys.getenv("TMP"))              & nzchar(Sys.getenv("TMP"))               ~ Sys.getenv("TMP"),
     TRUE ~ "/tmp"
   )
   tmpDir <- paste0(tmpDir, "/test of PDF_crop")

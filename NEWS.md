@@ -15,6 +15,8 @@
   obscure error message when it doesn't (#34).
 * `PDF_crop()` now throws an error when new cropped PDF isn't created (#42).  
 * Add more tests of `latexTable()`.
+* Fix test of `PDF_crop()` to handle cases in which 
+  Sys.getenv("R_SESSION_TMPDIR") is an empty string.
 &nbsp;  
 &nbsp;  
 
