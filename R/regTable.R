@@ -6,7 +6,6 @@
 #' that represent a regression are a \emph{column-pair} or a
 #' \emph{column-tier.}
 
-#' @importFrom magrittr %>%
 #' @importFrom stats nobs
 
 #' @param objList List of regression objects. This is the only required 

@@ -15,3 +15,8 @@
 #' @name Bullock
 #' @aliases Bullock-package
 NULL
+
+## usethis namespace: start
+#' @importFrom magrittr %>%
+## usethis namespace: end
+NULL
