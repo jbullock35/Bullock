@@ -1,8 +1,13 @@
 # Version 2.3.0.9000 
-* Add `cutYears()` (#50).
-* Add `spaceToCamel()`.
-* Add `printAll()` to print all rows of a tibble.
-* Add `minNA()` and `maxNA()`.
+
+## New functions
+* `cutYears()` (#50), 
+* `minNA()` and `maxNA()`.
+* `printAll()` to print all rows of a tibble.
+* `sourcing()` (#49)
+* `spaceToCamel()`.
+
+## Other changes
 * Missing-value functions (`lNA()` and kin) now throw an error when `x` is
   `NULL`. For example, if a user runs `lNA(foo$x)` but `x` is not an element 
   of `foo`, the function will throw an error message (#45). It previously 
