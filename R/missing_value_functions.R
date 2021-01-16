@@ -13,15 +13,16 @@
 #' lNA(NA)    # 0
 #' 
 #' x <- c(1:3, NA, 5)
-#' lNA(x)     # 4
-#' lNAv(x)    # 4 (length with NA=5)
+#' allNA(x <= 5)  # TRUE
+#' lNA(x)         # 4
+#' lNAv(x)        # 4 (length with NA=5)
 #' 
-#' sum(NA)    # NA
-#' sumNA(NA)  # 0
+#' sum(NA)        # NA
+#' sumNA(NA)      # 0
 #' 
-#' sum(x)     # NA
-#' sumNA(x)   # 11
-#' meanNA(x)  # 2.75
+#' sum(x)         # NA
+#' sumNA(x)       # 11
+#' meanNA(x)      # 2.75
 #' 
 #' sdNA(x)
 #' varNA(x)
@@ -31,6 +32,14 @@
 #' @param verbose Logical variable. If \code{TRUE}, \code{lNA} will print the 
 #'   lengths of \code{x} before and after \code{NA} values have been removed.
 #' @name missingValueFunctions
+
+#' @rdname missingValueFunctions
+#' @export
+allNA <- function(x) {
+  stopifnot(!is.null(x))
+  all(x, na.rm = TRUE)
+}
+
 
 #' @rdname missingValueFunctions
 #' @export
@@ -49,6 +58,7 @@ lNA <- function(x, verbose = FALSE) {
     y
   }
 }
+
 
 #' @rdname missingValueFunctions
 #' @export

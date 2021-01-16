@@ -2,6 +2,7 @@
 % Please edit documentation in R/missing_value_functions.R
 \name{missingValueFunctions}
 \alias{missingValueFunctions}
+\alias{allNA}
 \alias{lNA}
 \alias{lNAv}
 \alias{maxNA}
@@ -14,6 +15,8 @@
 \alias{varNA}
 \title{Missing-value helper functions.}
 \usage{
+allNA(x)
+
 lNA(x, verbose = FALSE)
 
 lNAv(x)
@@ -54,15 +57,16 @@ but also prints the lengths of the vector before and after NAs are removed.
 lNA(NA)    # 0
 
 x <- c(1:3, NA, 5)
-lNA(x)     # 4
-lNAv(x)    # 4 (length with NA=5)
+allNA(x <= 5)  # TRUE
+lNA(x)         # 4
+lNAv(x)        # 4 (length with NA=5)
 
-sum(NA)    # NA
-sumNA(NA)  # 0
+sum(NA)        # NA
+sumNA(NA)      # 0
 
-sum(x)     # NA
-sumNA(x)   # 11
-meanNA(x)  # 2.75
+sum(x)         # NA
+sumNA(x)       # 11
+meanNA(x)      # 2.75
 
 sdNA(x)
 varNA(x)

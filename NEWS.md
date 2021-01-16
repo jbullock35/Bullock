@@ -2,7 +2,7 @@
 
 ## New functions
 * `cutYears()` (#50), 
-* `minNA()` and `maxNA()`.
+* `allNA` (#48), `minNA()` and `maxNA()`.
 * `printAll()` to print all rows of a tibble.
 * `sourcing()` (#49)
 * `spaceToCamel()`.
