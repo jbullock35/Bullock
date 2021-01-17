@@ -4,7 +4,7 @@
 \alias{cutYears}
 \title{Transform a vector of year values into an ordered factor of year groups.}
 \usage{
-cutYears(x, breaks, levelsBoundedByData = TRUE)
+cutYears(x, breaks, levelsBoundedByData = TRUE, shortLabels = FALSE)
 }
 \arguments{
 \item{x}{Vector of four-digit integers, or of four-character strings
@@ -12,10 +12,19 @@ that can be converted to integers, e.g., "1900".}
 
 \item{breaks}{Numeric vector of cutpoints}
 
-\item{levelsBoundedByData}{Ensures that the lowest and highest levels of
-the returned factor will contain some data. Also ensures that the label
-for the highest factor level reports the maximum year in \code{x}, rather
-than a higher year.}
+\item{levelsBoundedByData}{Logical. Ensures that the lowest and highest
+levels of the returned factor will contain some data. Also ensures that
+the label for the highest factor level reports the maximum year in
+\code{x}, rather than a higher year.}
+
+\item{shortLabels}{Logical. If \code{FALSE}, the second year in each
+label will always have four digits: for example, "1975-1999". If
+\code{TRUE} (the default), the second year in each label will typically
+have two digits: for example, "1975-99". But even if \code{shortLabels}
+is \code{TRUE}, the second year in a label will have four digits if it
+isn't in the same century as the first year. For example,
+\code{cutYears()} will always produce a label like "1975-2001" instead of
+"1975-01".}
 }
 \description{
 This function is a wrapper around \linkInt{cut}. Given a vector of
@@ -53,8 +62,11 @@ will contain 1985.
 years <- rep(1975:1993, each = 3)
 fac1a <- cut(     years, breaks = seq(1975, 1993, by = 3))
 fac1b <- cutYears(years, breaks = seq(1975, 1993, by = 3))
+fac1c <- cutYears(years, breaks = seq(1975, 1993, by = 3), shortLabels = FALSE)
+ 
 table(fac1a)
 table(fac1b)
+table(fac1c)
 
 fac2a <- cut(     years, breaks = seq(1975, 1990, by = 3))
 fac2b <- cutYears(years, breaks = seq(1975, 1990, by = 3))

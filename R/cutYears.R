@@ -36,17 +36,30 @@
 #' 
 #' @param breaks Numeric vector of cutpoints
 #' 
-#' @param levelsBoundedByData Ensures that the lowest and highest levels of
-#' the returned factor will contain some data. Also ensures that the label
-#' for the highest factor level reports the maximum year in \code{x}, rather
-#' than a higher year.
+#' @param levelsBoundedByData Logical. Ensures that the lowest and highest 
+#' levels of the returned factor will contain some data. Also ensures that
+#' the label for the highest factor level reports the maximum year in 
+#' \code{x}, rather than a higher year.
+#' 
+#' @param shortLabels Logical. If \code{FALSE}, the second year in each 
+#' label will always have four digits: for example, "1975-1999". If
+#' \code{TRUE} (the default), the second year in each label will typically 
+#' have two digits: for example, "1975-99". But even if \code{shortLabels}
+#' is \code{TRUE}, the second year in a label will have four digits if it 
+#' isn't in the same century as the first year. For example, 
+#' \code{cutYears()} will always produce a label like "1975-2001" instead of
+#' "1975-01".
+#'    
 #' 
 #' @examples
 #' years <- rep(1975:1993, each = 3)
 #' fac1a <- cut(     years, breaks = seq(1975, 1993, by = 3))
 #' fac1b <- cutYears(years, breaks = seq(1975, 1993, by = 3))
+#' fac1c <- cutYears(years, breaks = seq(1975, 1993, by = 3), shortLabels = FALSE)
+#'  
 #' table(fac1a)
 #' table(fac1b)
+#' table(fac1c)
 #' 
 #' fac2a <- cut(     years, breaks = seq(1975, 1990, by = 3))
 #' fac2b <- cutYears(years, breaks = seq(1975, 1990, by = 3))
@@ -66,7 +79,7 @@
 
 
 #' @export 
-cutYears <- function (x, breaks, levelsBoundedByData = TRUE) {
+cutYears <- function (x, breaks, levelsBoundedByData = TRUE, shortLabels = FALSE) {
   
   if (! inherits(x, qw("character integer numeric"))) {
     stop('"x" must be of class "character", "integer", or "numeric".')
@@ -127,7 +140,7 @@ cutYears <- function (x, breaks, levelsBoundedByData = TRUE) {
     secondYearOffset <- 1 * (i+1 != length(breaks))  # always 0 or 1
     firstYearLabel  <- breaks[i]
     secondYearLabel <- breaks[i+1] - secondYearOffset
-    if (substr(firstYearLabel, 1, 2) == substr(secondYearLabel, 1, 2)) {
+    if (shortLabels & substr(firstYearLabel, 1, 2) == substr(secondYearLabel, 1, 2)) {
       secondYearLabel <- substr(secondYearLabel, 3, 4)
     }
     newLabel   <- paste(firstYearLabel, secondYearLabel, sep = "-")
