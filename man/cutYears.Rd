@@ -48,10 +48,6 @@ case like this, the lowest factor level returned by \code{cutYears()} will
 include 1975, and the highest factor level returned by \code{cutYears()}
 will contain 1985.
 }
-
-When \code{levelsBoundedByData} is \code{FALSE} (not the default), \code{cutYears()} is
-almost equivalent to \code{cut(x, breaks, include.lowest = TRUE, right = FALSE)};
-the only difference lies with the factor labels.
 }
 \examples{
 years <- rep(1975:1993, each = 3)

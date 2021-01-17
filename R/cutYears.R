@@ -28,10 +28,6 @@
 #'   case like this, the lowest factor level returned by `cutYears()` will
 #'   include 1975, and the highest factor level returned by `cutYears()` 
 #'   will contain 1985.
-#' 
-#' When `levelsBoundedByData` is `FALSE` (not the default), `cutYears()` is 
-#' almost equivalent to `cut(x, breaks, include.lowest = TRUE, right = FALSE)`; 
-#' the only difference lies with the factor labels. 
 #' @md 
 
 
@@ -86,6 +82,13 @@ cutYears <- function (x, breaks, levelsBoundedByData = TRUE) {
   }
   
     
+  # If min(breaks) is greater than the earliest year, add a new breakpoint 
+  # that is earlier than any others.  [2021 01 16]
+  if (min(x) < min(breaks)) {
+    message("You have set min(x) < min(breaks). Revising factor levels accordingly.")
+    breaks <- c(min(x), breaks)
+  }
+  
   # If "breaks" doesn't include the maximum year, add a new breakpoint.
   if (max(breaks) < max(x)) {
     breaks <- c(breaks, max(x))
@@ -101,13 +104,19 @@ cutYears <- function (x, breaks, levelsBoundedByData = TRUE) {
       breaks <- breaks[-length(breaks)]
     } 
     
-    # Reduce the remaining too-high breakpoint to the maximum year.
-    breaks[which.max(breaks)] <- max(x)
+    # If the second-highest breakpoint is the same as the maximum year, 
+    # eliminate the highest breakpoint. Otherwise, reduce the highest 
+    # breakpoint to the maximum year.
+    if (breaks[length(breaks) - 1] == max(x)) {
+    } 
+    else {
+      breaks[which.max(breaks)] <- max(x)
+    }
   }
  
   
   
-  # construct labels for each level of the factor
+  # CONSTRUCT LABELS FOR EACH LEVEL OF THE FACTOR
   yearLabels <- NULL
   for (i in 1:(length(breaks) - 1)) {
     # We are constructing labels of the form {breaks[1]-(breaks[2]-1)}, 
@@ -115,18 +124,17 @@ cutYears <- function (x, breaks, levelsBoundedByData = TRUE) {
     # For example, if the breaks are c(1975, 1979, 1983), the labels are
     # "1975-78" and "1979-83".
     secondYearOffset <- 1 * (i+1 != length(breaks))  # always 0 or 1
-    
-    secondYear <- dplyr::case_when(
-      substr(breaks[i+1], 3, 4) == "01" ~ breaks[i+1] - secondYearOffset,  # 1900, 2000, etc.
-      substr(breaks[i+1], 3, 4) == "00" ~ 99,
-      TRUE                              ~ as.integer(substr(breaks[i+1], 3, 4)) - secondYearOffset)   
-
-    newLabel   <- paste(breaks[i], stringr::str_pad(secondYear, 2, "left", "0"), sep = "-")
+    firstYearLabel  <- breaks[i]
+    secondYearLabel <- breaks[i+1] - secondYearOffset
+    if (substr(firstYearLabel, 1, 2) == substr(secondYearLabel, 1, 2)) {
+      secondYearLabel <- substr(secondYearLabel, 3, 4)
+    }
+    newLabel   <- paste(firstYearLabel, secondYearLabel, sep = "-")
     yearLabels <- c(yearLabels, newLabel)    
   }
   
   
-  # create ordered factor
+  # CREATE ORDERED FACTOR
   yearFac <- cut(
     x              = x, 
     breaks         = breaks, 
@@ -135,16 +143,19 @@ cutYears <- function (x, breaks, levelsBoundedByData = TRUE) {
     right          = FALSE,
     ordered_result = TRUE)
   
+  
+  # DROP EMPTY LEVELS THAT ARE OUTSIDE THE RANGE OF THE DATA
   if (levelsBoundedByData) {
     
-    # get indices of levels that have some data
+    levelIndices_missing    <- which(table(yearFac) == 0)
     levelIndices_nonMissing <- which(table(yearFac) > 0)
     
-    # drop levels that have no data that are before the first level with 
-    # data, or after the last level with data
-    if (min(levelIndices_nonMissing) > 1) {
-      levels(yearFac)[1:(min(levelIndices_nonMissing) - 1)] <- NA
+    # drop levels that have no data and that are before the first level 
+    if (any(levelIndices_missing < min(levelIndices_nonMissing))) {
+      levels(yearFac)[levelIndices_missing < min(levelIndices_nonMissing)] <- NA
     }
+    
+    # drop levels that have no data and that are after the last level
     if (max(levelIndices_nonMissing) < length(levels(yearFac))) {
       levels(yearFac)[(max(levelIndices_nonMissing)+1):length(levels(yearFac))] <- NA
     }
