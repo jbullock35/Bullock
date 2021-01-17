@@ -13,7 +13,7 @@
   of `foo`, the function will throw an error message (#45). It previously 
   returned 0.
 * Change default of `firstPageEmpty` in `latexTablePDF()` from `TRUE` to 
-  `container`; that is, `container` will be `TRUE` (by default) if 
+  `container`; that is, `firstPageEmpty` will by default be `TRUE` if 
   `container` is `TRUE`, and `FALSE` if it is `FALSE`.   
 * Improve ability of `latexTable()` to handle lists that contain functions,
   e.g., `lt_rSquaredRow`.
