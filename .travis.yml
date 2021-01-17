@@ -1,10 +1,12 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
+dist: bionic
 language: R
 cache: packages
 sudo: false
 warnings_are_errors: false
 
 before_install:
-  - tlmgr update --self
-  - tlmgr --repository http://ctan.math.utah.edu/ctan/tex-archive/systems/texlive/tlnet/ install booktabs caption fancyhdr footmisc geometry numprint pdflscape ragged2e 
+  # - tlmgr update --self
+  # - tlmgr --repository http://ctan.math.utah.edu/ctan/tex-archive/systems/texlive/tlnet/ install booktabs caption fancyhdr footmisc geometry numprint pdflscape ragged2e 
+  - tlmgr install booktabs caption fancyhdr footmisc geometry numprint pdflscape ragged2e 
