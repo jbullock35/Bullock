@@ -84,33 +84,34 @@ cutYears <- function (x, breaks, levelsBoundedByData = TRUE) {
     
   # If min(breaks) is greater than the earliest year, add a new breakpoint 
   # that is earlier than any others.  [2021 01 16]
-  if (min(x) < min(breaks)) {
-    message("You have set min(x) < min(breaks). Revising factor levels accordingly.")
-    breaks <- c(min(x), breaks)
+  if (minNA(x) < minNA(breaks)) {
+    # message("You have set min(x) < min(breaks). Revising factor levels accordingly.")
+    breaks <- c(minNA(x), breaks)
   }
   
   # If "breaks" doesn't include the maximum year, add a new breakpoint.
-  if (max(breaks) < max(x)) {
-    breaks <- c(breaks, max(x))
+  if (maxNA(breaks) < maxNA(x)) {
+    # message("You have set max(x) > max(breaks). Revising factor levels accordingly.")
+    breaks <- c(breaks, maxNA(x))
   }
   
   # If levelsBoundedByData is TRUE and the maximum breakpoint exceeds the 
   # maximum year, reduce the maximum breakpoint to the maximum year.
-  if (levelsBoundedByData & max(breaks) > max(x)) {
+  if (levelsBoundedByData & maxNA(breaks) > maxNA(x)) {
 
     # If multiple breakpoints are greater than the maximum year, keep only 
     # the smallest of them.
-    while (length(which(breaks > max(x))) > 1) {
+    while (length(which(breaks > maxNA(x))) > 1) {
       breaks <- breaks[-length(breaks)]
     } 
     
     # If the second-highest breakpoint is the same as the maximum year, 
     # eliminate the highest breakpoint. Otherwise, reduce the highest 
     # breakpoint to the maximum year.
-    if (breaks[length(breaks) - 1] == max(x)) {
+    if (breaks[length(breaks) - 1] == maxNA(x)) {
     } 
     else {
-      breaks[which.max(breaks)] <- max(x)
+      breaks[which.max(breaks)] <- maxNA(x)
     }
   }
  
@@ -152,7 +153,7 @@ cutYears <- function (x, breaks, levelsBoundedByData = TRUE) {
     
     # drop levels that have no data and that are before the first level 
     if (any(levelIndices_missing < min(levelIndices_nonMissing))) {
-      levels(yearFac)[levelIndices_missing < min(levelIndices_nonMissing)] <- NA
+      levels(yearFac)[which(levelIndices_missing < min(levelIndices_nonMissing))] <- NA
     }
     
     # drop levels that have no data and that are after the last level
