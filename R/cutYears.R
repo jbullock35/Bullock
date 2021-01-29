@@ -79,7 +79,7 @@
 
 
 #' @export 
-cutYears <- function (x, breaks, levelsBoundedByData = TRUE, shortLabels = FALSE) {
+cutYears <- function (x, breaks, levelsBoundedByData = TRUE, shortLabels = TRUE) {
   
   if (! inherits(x, qw("character integer numeric"))) {
     stop('"x" must be of class "character", "integer", or "numeric".')

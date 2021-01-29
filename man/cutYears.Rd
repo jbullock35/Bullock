@@ -4,7 +4,7 @@
 \alias{cutYears}
 \title{Transform a vector of year values into an ordered factor of year groups.}
 \usage{
-cutYears(x, breaks, levelsBoundedByData = TRUE, shortLabels = FALSE)
+cutYears(x, breaks, levelsBoundedByData = TRUE, shortLabels = TRUE)
 }
 \arguments{
 \item{x}{Vector of four-digit integers, or of four-character strings
