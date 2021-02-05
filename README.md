@@ -1,7 +1,7 @@
 # Bullock
 
 <!-- badges: start -->
-[![Travis build status](https://travis-ci.com/jbullock35/Bullock.svg?branch=master)](https://travis-ci.com/jbullock35/Bullock)
+<!-- [![Travis build status](https://travis-ci.com/jbullock35/Bullock.svg?branch=master)](https://travis-ci.com/jbullock35/Bullock) -->
 <!-- badges: end -->
 
 This package contains utilities that I use in my R code. Most of them don't 
