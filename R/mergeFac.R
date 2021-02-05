@@ -10,10 +10,16 @@
 #' will look to the corresponding values of the next factor, and so{\NB}on.
 
 #' @note
-#' Merging factors in this way is trickier than just using a command like 
-#' \code{fac1[is.na(fac1)] <- fac2[is.na(fac1)]} because \code{fac1} and 
-#' \code{fac2} may have different factor levels.  This commands takes care of 
-#' the problem by merging the levels among different factors.
+#' \code{mergeFac()} is deprecated. You should use \code{dplyr::coalesce()} 
+#' instead. No problems with \code{mergeFac()} have been reported, but 
+#' \code{dplyr::coalesce()} does all that \code{mergeFac()} does, is more 
+#' powerful, and will be just as well maintained.
+#' 
+#' Merging factors as \code{mergeFac()} does is trickier than just using a 
+#' command like \code{fac1[is.na(fac1)] <- fac2[is.na(fac1)]} because 
+#' \code{fac1} and \code{fac2} may have different factor levels.  This 
+#' command takes care of the problem by merging the levels among different 
+#' factors.
 
 #' @param x Factor variable.
 #' @param ... Other factor variables.
@@ -27,6 +33,7 @@
 
 #' @export 
 mergeFac <- function(x, ...) {
+  .Deprecated(msg = "  mergeFac() is deprecated and will be removed from the Bullock\n  package sometime after February 2022. Use dplyr::coalesce() instead.")
   stopifnot('factor' %in% class(x))
   otherFactors <- list(...)
   if (! all(sapply(otherFactors, function (x) 'factor' %in% class(x))) ) {
@@ -43,6 +50,3 @@ mergeFac <- function(x, ...) {
   }
   droplevels(newFac)  # drop unused levels
 }
-
-
-

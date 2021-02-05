@@ -24,6 +24,7 @@
 * Add more tests of `latexTable()`.
 * Fix test of `PDF_crop()` to handle cases in which 
   Sys.getenv("R_SESSION_TMPDIR") is an empty string.
+* Deprecated `mergeFac()` in favor of `dplyr::coalesce()` (#46).
 &nbsp;  
 &nbsp;  
 

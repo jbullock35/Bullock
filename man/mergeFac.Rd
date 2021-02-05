@@ -23,10 +23,16 @@ the corresponding values of that factor are also missing, \code{mergeFac()}
 will look to the corresponding values of the next factor, and so{\NB}on.
 }
 \note{
-Merging factors in this way is trickier than just using a command like 
-\code{fac1[is.na(fac1)] <- fac2[is.na(fac1)]} because \code{fac1} and 
-\code{fac2} may have different factor levels.  This commands takes care of 
-the problem by merging the levels among different factors.
+\code{mergeFac()} is deprecated. You should use \code{dplyr::coalesce()} 
+instead. No problems with \code{mergeFac()} have been reported, but 
+\code{dplyr::coalesce()} does all that \code{mergeFac()} does, is more 
+powerful, and will be just as well maintained.
+
+Merging factors as \code{mergeFac()} does is trickier than just using a 
+command like \code{fac1[is.na(fac1)] <- fac2[is.na(fac1)]} because 
+\code{fac1} and \code{fac2} may have different factor levels.  This 
+command takes care of the problem by merging the levels among different 
+factors.
 }
 \examples{
 fac1 <- factor(c("a", NA,  "b", NA,  NA))
