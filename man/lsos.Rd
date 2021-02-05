@@ -11,10 +11,11 @@
   pattern,
   order.by,
   decreasing = FALSE,
+  MB = TRUE,
   n = NULL
 )
 
-lsos(..., n = 8)
+lsos(..., MB = TRUE, n = 8)
 }
 \arguments{
 \item{pos}{Numeric. Specifies the position, in the search list, of the
@@ -31,6 +32,9 @@ The returned data frame will be sorted by the specified column.}
 \item{decreasing}{Logical variable. Should results be listed in decreasing
 order of the \code{order.by} column? In \code{.ls.objects()} the default is
 \code{FALSE}; in \code{lsos()}, it is \code{TRUE}.}
+
+\item{MB}{Logical. If \code{TRUE} (the default), object size is reported 
+in megabytes. If \code{FALSE}, it is reported in kilobytes.}
 
 \item{n}{Numeric. Number of objects to list. In \code{lsos()}, the default 
 is{\NB}8.}
@@ -60,6 +64,7 @@ lsos()
 lsos(pattern = '\\\\.df$')  # list only objects ending in ".df"
 }
 \author{
-Both functions were created by Dirk Edelbuettel and modified by JD Long. 
-See \url{http://stackoverflow.com/questions/1358003/} for details.
+Both functions were created by Dirk Edelbuettel and modified by JD Long 
+and John Bullock. See \url{http://stackoverflow.com/questions/1358003/} 
+for details.
 }

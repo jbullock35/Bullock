@@ -17,6 +17,7 @@
   `container` is `TRUE`, and `FALSE` if it is `FALSE`.   
 * Improve ability of `latexTable()` to handle lists that contain functions,
   e.g., `lt_rSquaredRow`.
+* Change default `lsos()` output so that object size is reported in MB (#47).
 * In `latexTable()`, check that `mat` has class `matrix` to avoid an 
   obscure error message when it doesn't (#34).
 * `PDF_crop()` now throws an error when new cropped PDF isn't created (#42).  
