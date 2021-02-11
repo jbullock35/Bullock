@@ -33,7 +33,7 @@
 
 #' @export 
 mergeFac <- function(x, ...) {
-  .Deprecated(msg = "  mergeFac() is deprecated and will be removed from the Bullock\n  package sometime after February 2022. Use dplyr::coalesce() instead.")
+  .Deprecated(msg = "mergeFac() is deprecated and will be removed from the Bullock\n  package sometime after February 2022. Use dplyr::coalesce() instead.")
   stopifnot('factor' %in% class(x))
   otherFactors <- list(...)
   if (! all(sapply(otherFactors, function (x) 'factor' %in% class(x))) ) {
