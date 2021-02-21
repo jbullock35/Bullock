@@ -1,4 +1,4 @@
-# Version 2.4.0
+# Version 2.4.0 (2021-02-21)
 
 ## New functions
 * `allNA` (#48), `minNA()` and `maxNA()`.
