@@ -1,5 +1,5 @@
-# test_lNA.R
-# Created on 2019-01-18
+# test_strip0.R
+# Created on 2020-06-26
 # Created by John Bullock
 
 context("Check strip0() output")
