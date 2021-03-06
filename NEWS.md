@@ -1,3 +1,7 @@
+# Version 2.4.0.9000 (2021-03-06)
+* Add makePercentage().
+
+
 # Version 2.4.0 (2021-02-21)
 
 ## New functions
