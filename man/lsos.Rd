@@ -11,7 +11,7 @@
   pattern,
   order.by,
   decreasing = FALSE,
-  MB = TRUE,
+  MB = MB,
   n = NULL
 )
 

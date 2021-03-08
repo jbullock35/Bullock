@@ -46,10 +46,10 @@
 
 
 #' @rdname lsos
-.ls.objects <- function (pos = 1, envir = as.environment(pos), pattern, order.by,
-                        decreasing=FALSE, MB = TRUE, n=NULL) {
+.ls.objects <- function (pos = 1, envir = as.environment(pos), pattern, order.by, 
+                        decreasing = FALSE, MB = MB, n=NULL) {
     napply <- function(names, fn) sapply(names, function(x)
-                                         fn(get(x, pos = pos)))
+                                         fn(get(x, envir = envir)))
     names <- ls(envir = envir, pattern = pattern)
     if (length(names) == 0) {
       cat("No objects matching the pattern could be found.")
@@ -60,8 +60,9 @@
     obj.type <- ifelse(is.na(obj.class), obj.mode, obj.class)
     obj.size <- napply(
         names, 
-        function (x) format(utils::object.size(x), units = if (MB) "MB" else "Kb", digits = 3)) %>%
-      { gsub("^([\\d\\.]*).*", "\\1", .data, perl = TRUE) } %>%  # extract numbers from "0.005 Mb", etc.
+        function (x) format(utils::object.size(x), units = if (MB) "MB" else "Kb", digits = 3)
+      ) 
+    obj.size <- gsub(" Mb|Kb", "", obj.size) %>%  
       as.numeric()
     
     obj.prettysize <- sapply(obj.size, function(r) prettyNum(r, big.mark = ",") )
@@ -75,7 +76,7 @@
         out <- out[order(out[[order.by]], decreasing=decreasing), ]
         out <- out[c("Class", "PrettySize", "Rows", "Columns")]
         names(out) <- c("Class", "Size", "Rows", "Columns")
-    if (MB) names(out)[2] <- "Size (MB)" else "Size (Kb)"
+    names(out)[2] <- if (MB) "Size (MB)" else "Size (Kb)"
     if (!is.null(n))
         out <- utils::head(out, n)
     out
@@ -85,6 +86,6 @@
 #' @rdname lsos
 #' @export
 lsos <- function(..., MB = TRUE, n = 8) {
-    .ls.objects(..., MB = TRUE, order.by="Size", decreasing=TRUE, n=n)
+  .ls.objects(..., MB = MB, order.by = "Size", decreasing = TRUE, n = n)
 }
 

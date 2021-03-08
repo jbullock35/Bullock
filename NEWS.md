@@ -1,5 +1,10 @@
-# Version 2.4.0.9000 (2021-03-06)
+# Version 2.4.0.1 (2021-03-08)
+* Fix `lsos()` and add tests for it (#61).
 * Add makePercentage().
+&nbsp;  
+&nbsp;  
+&nbsp;  
+
 
 
 # Version 2.4.0 (2021-02-21)
