@@ -12,7 +12,7 @@ makePercentage(x, dp = 0)
 \item{dp}{Integer specifying the number of decimal places in the returned string.}
 }
 \value{
-A string, e.g., "57%"
+A string, e.g., "57\%".
 }
 \description{
 Takes an object \code{x} of class "character" or "numeric". Returns an 
@@ -21,7 +21,7 @@ percentage.
 }
 \details{
 By default, the returned string will have no decimal digits: it will be
-"57%", not "57.0%". But if \code{dp} is greater than 0, the returned  
+"57\%", not "57.0\%". But if \code{dp} is greater than 0, the returned  
 string will always have \code{dp} decimal places.
 }
 \examples{

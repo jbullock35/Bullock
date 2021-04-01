@@ -5,14 +5,14 @@
 #' percentage.
 #' 
 #' By default, the returned string will have no decimal digits: it will be
-#' "57%", not "57.0%". But if \code{dp} is greater than 0, the returned  
+#' "57\%", not "57.0\%". But if \code{dp} is greater than 0, the returned  
 #' string will always have \code{dp} decimal places. 
 #' 
 #' @param x Object of class "character," "integer," or "numeric."
 #' @param dp Integer specifying the number of decimal places in the returned string. 
 #'
 #' @return 
-#' A string, e.g., "57%"   
+#' A string, e.g., "57\%".   
 #' 
 #' @examples
 #' makePercentage(.5)            # "50%"
