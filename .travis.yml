@@ -7,8 +7,9 @@ sudo: false
 warnings_are_errors: false
 
 before_install:
-  # Approach suggested at https://travis-ci.community/t/default-latex-install-no-longer-works/11489/4:
+  # Approach inspired by https://travis-ci.community/t/default-latex-install-no-longer-works/11489/4:
   - tlmgr option repository https://ctan.kako-dev.de/systems/texlive/tlnet/
+  - apt install texlive-luatex
   - luaotfload-tool -fu
     # - uaotfload-tool -fu
   - tlmgr install booktabs caption fancyhdr footmisc geometry numprint pdflscape ragged2e 
