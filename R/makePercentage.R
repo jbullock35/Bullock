@@ -46,10 +46,3 @@ makePercentage <- function(x, dp = 0) {
   }  
   paste0(xRounded, "%")
 }
-
-makePercentage(0000.5)
-makePercentage(0000.5000000, dp=9)
-makePercentage(.3, dp=3)
-makePercentage(.357, 3)
-
-makePercentage(c(.1, .2))
