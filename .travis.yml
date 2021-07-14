@@ -3,7 +3,7 @@
 dist: bionic
 language: R
 cache: packages
-sudo: false
+# sudo: false
 warnings_are_errors: false
 
 before_install:
