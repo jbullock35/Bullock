@@ -3,18 +3,10 @@
 dist: bionic
 language: R
 cache: packages
-# sudo: false
+sudo: false
 warnings_are_errors: false
 
 before_install:
-  # Approach inspired by https://travis-ci.community/t/default-latex-install-no-longer-works/11489/4:
-  - tlmgr option repository https://ctan.kako-dev.de/systems/texlive/tlnet/
-  - sudo apt install texlive-luatex
-  - luaotfload-tool -fu
-    # - uaotfload-tool -fu
-  - tlmgr install booktabs caption fancyhdr footmisc geometry numprint pdflscape ragged2e 
-  
-  # Old approach:
-  # - tlmgr update --self
-  # - tlmgr --repository http://ctan.math.utah.edu/ctan/tex-archive/systems/texlive/tlnet/ install booktabs caption fancyhdr footmisc geometry numprint pdflscape ragged2e 
+  - tlmgr update --self
+  - tlmgr --repository http://ctan.math.utah.edu/ctan/tex-archive/systems/texlive/tlnet/ install booktabs caption fancyhdr footmisc geometry numprint pdflscape ragged2e 
   # - tlmgr install booktabs caption fancyhdr footmisc geometry numprint pdflscape ragged2e 
