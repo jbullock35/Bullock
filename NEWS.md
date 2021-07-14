@@ -1,5 +1,9 @@
-# Version 2.4.0.9000
+# Version 2.4.0.2 (2021-07-14)
+* Add `suppress_warnings()`.
 * Fix small problem with `makePercentage()` documentation.
+&nbsp;  
+&nbsp;  
+&nbsp;  
 
 
 # Version 2.4.0.1 (2021-03-08)
@@ -8,7 +12,6 @@
 &nbsp;  
 &nbsp;  
 &nbsp;  
-
 
 
 # Version 2.4.0 (2021-02-21)
