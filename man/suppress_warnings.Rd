@@ -41,6 +41,8 @@ suppress_warnings( {sqrt(-1); warning("oops", call. = FALSE)}, ~nchar(.)>10 )
 suppress_warnings( {sqrt(-1); warning("ooops", call. = FALSE)}, "NaN" )
   # Warning message:
   # oops
+suppress_warnings( {sqrt(-1); invisible()}, "NaN" )
+  # Nothing is printed.
 }
 \author{
 The function was created by Antoine Fabri ("Moody_Mudskipper"): see 

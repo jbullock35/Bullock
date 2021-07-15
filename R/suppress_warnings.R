@@ -37,6 +37,8 @@
 #' suppress_warnings( {sqrt(-1); warning("ooops", call. = FALSE)}, "NaN" )
 #'   # Warning message:
 #'   # oops
+#' suppress_warnings( {sqrt(-1); invisible()}, "NaN" )
+#'   # Nothing is printed.
 
     
 
