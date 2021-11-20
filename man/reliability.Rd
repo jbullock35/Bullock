@@ -12,16 +12,22 @@ reliability(x, ...)
 \item{...}{additional arguments passed to \code{var()}}
 }
 \value{
-List with two elements. The first element, \code{alpha}, is the 
-estimated Cronbach's alpha for the battery of \code{n} variables. The 
-second element, \code{alpha.if.deleted}, reports the estimated 
-reliability of each combination of \code{n - 1} variables.
+The function prints output to the screen and invisibly returns a list with five elements:
+\itemize{
+\item \code{nrowBeforeListwiseDeletion} is the number of rows of \code{x}.
+\item \code{nrowAfterListwiseDeletion} is the number of rows of \code{x} after listwise deletion.
+\item \code{alpha} is Cronbach's alpha for \code{x} after listwise deletion.
+\item \code{alphaSmall} is a vector of \code{ncol(x)} numbers. It shows what Cronbach's alpha is when we remove one variable at a time from \code{na.omit(x)}.
+\item \code{alphaSmallAfterListwiseDeletion} is a vector of \code{ncol(x)} numbers. It shows what Cronbach's alpha is when we remove one variable at a time from \code{x} and then use listwise deletion on the new matrix.
+}
 }
 \description{
 Given a matrix \code{x} in which every column represents a variable,
-this function reports (a) the estimated reliability for the battery of 
-\code{n} variables, and (b) the estimated variability for each possible 
-combination of \code{n - 1} variables.
+this function reports (a) the estimated reliability (Cronbach's alpha)
+for the battery of \code{n} variables, and (b) the estimated reliability
+for each possible combination of \code{n - 1} variables. If \code{x}
+contains missing values, listwise deletion will be done via
+\code{na.omit(x)} so that alpha can be calculated.
 }
 \examples{
 data(iris)
@@ -30,4 +36,6 @@ reliability(iris[, 1:4])
 }
 \author{
 Peter Ellis
+
+John G. Bullock
 }

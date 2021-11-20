@@ -21,32 +21,60 @@ alpha_cronbach <- function(S) {
 #' Compute and report Cronbach's alpha
 #' 
 #' Given a matrix \code{x} in which every column represents a variable,
-#' this function reports (a) the estimated reliability for the battery of 
-#' \code{n} variables, and (b) the estimated variability for each possible 
-#' combination of \code{n - 1} variables.
+#' this function reports (a) the estimated reliability (Cronbach's alpha) 
+#' for the battery of \code{n} variables, and (b) the estimated reliability 
+#' for each possible combination of \code{n - 1} variables. If \code{x} 
+#' contains missing values, listwise deletion will be done via 
+#' \code{na.omit(x)} so that alpha can be calculated.
 #' 
 #' @author Peter Ellis
+#' @author John G. Bullock
+#' 
 #' 
 #' @param x Matrix of numbers
 #' @param ... additional arguments passed to \code{var()}
 #' 
-#' @return List with two elements. The first element, \code{alpha}, is the 
-#' estimated Cronbach's alpha for the battery of \code{n} variables. The 
-#' second element, \code{alpha.if.deleted}, reports the estimated 
-#' reliability of each combination of \code{n - 1} variables.
+#' @return The function prints output to the screen and invisibly returns a list with five elements:
+#' * \code{nrowBeforeListwiseDeletion} is the number of rows of \code{x}.
+#' * \code{nrowAfterListwiseDeletion} is the number of rows of \code{x} after listwise deletion.
+#' * \code{alpha} is Cronbach's alpha for \code{x} after listwise deletion.
+#' * \code{alphaSmall} is a vector of \code{ncol(x)} numbers. It shows what Cronbach's alpha is when we remove one variable at a time from \code{na.omit(x)}.
+#' * \code{alphaSmallAfterListwiseDeletion} is a vector of \code{ncol(x)} numbers. It shows what Cronbach's alpha is when we remove one variable at a time from \code{x} and then use listwise deletion on the new matrix.
+#' @md 
 #' 
 #' @examples 
 #' data(iris)
 #' reliability(iris[, 1:4])
 #' 
+#' @importFrom stats na.omit
 #' @export 
 reliability <- function(x, ...) {
-  j <- dim(x)[2]
-  out <- numeric(j)
+  xSmall   <- na.omit(x)
+  j        <- dim(xSmall)[2]
+  out      <- numeric(j)
+  outSmall <- numeric(j)
+  
+  alpha <- alpha_cronbach(var(xSmall, ...))
+  
   for (i in 1:j){
-    out[i] <- alpha_cronbach(var(x[ ,-i], ...))
+    out[i] <- alpha_cronbach(var(xSmall[ , -i], ...))
+    
+    xSmallListwise <- na.omit(x[, -i])
+    outSmall[i]    <- alpha_cronbach(var(xSmallListwise, ...))
   }
-  list(
-    alpha            = alpha_cronbach(var(x, ...)), 
-    alpha.if.deleted = out)
+
+  cat("nrow before listwise deletion:", nrow(x), "\n")
+  cat("nrow after listwise deletion: ", nrow(xSmall), "\n")
+  cat("Cronbach's alpha:", alpha, "\n")
+  cat("Cronbach's alpha if one var. deleted, with this matrix:                        ", out, "\n")
+  cat("Cronbach's alpha if one var. deleted, with listwise deletion on the new matrix:", outSmall, "\n")
+  
+  reliabilityList <- list(
+    nrowBeforeListwiseDeletion = nrow(x),
+    nrowAfterListwiseDeletion  = nrow(xSmall),
+    alpha = alpha,
+    alphaSmall = out,
+    alphaSmallAfterListwiseDeletion = outSmall
+  )
+  
 } 

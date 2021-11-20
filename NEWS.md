@@ -1,3 +1,11 @@
+# Version 2.4.0.3 (2021-11-20)
+* Significant improvements to output of `reliability()`.
+&nbsp;  
+&nbsp;  
+&nbsp;  
+
+
+
 # Version 2.4.0.2 (2021-07-14)
 * Add `suppress_warnings()`.
 * Fix small problem with `makePercentage()` documentation.
