@@ -1,3 +1,11 @@
+# Version 2.4.0.3.9000 (2021-11-24)
+* `rescale()` now checks to ensure that `x` contains some non-missing data
+&nbsp;  
+&nbsp;  
+&nbsp;  
+
+
+
 # Version 2.4.0.3 (2021-11-20)
 * Significant improvements to output of `reliability()`.
 &nbsp;  
@@ -20,6 +28,7 @@
 &nbsp;  
 &nbsp;  
 &nbsp;  
+
 
 
 # Version 2.4.0 (2021-02-21)

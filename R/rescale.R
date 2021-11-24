@@ -18,7 +18,12 @@
 #' @export 
 rescale <- function(x, newRange = c(0, 1)) {
 
-  # if newrange has max first, reverse it
+  if (all(is.na(x))) { 
+    stop("Can't rescale x; it has only missing values.")
+  }
+  
+  
+  # if newRange has max first, reverse it
   if(newRange[1] > newRange[2]) {
     newMin      <- newRange[2]
     newRange[2] <- newRange[1]
