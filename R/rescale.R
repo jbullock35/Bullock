@@ -19,12 +19,13 @@
 rescale <- function(x, newRange = c(0, 1)) {
 
   if (all(is.na(x))) { 
-    stop("Can't rescale x; it has only missing values.")
+    warning("Can't rescale x; it has only missing values.")
+    x
   }
   
   
   # if newRange has max first, reverse it
-  if(newRange[1] > newRange[2]) {
+  else if (newRange[1] > newRange[2]) {
     newMin      <- newRange[2]
     newRange[2] <- newRange[1]
     newRange[1] <- newMin
