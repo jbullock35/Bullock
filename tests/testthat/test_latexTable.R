@@ -17,10 +17,10 @@ mat_char[is.na(mat_char)]
 # Create objects in parent environment that have the same names as objects 
 # in the function environment. Do this to ensure that the function isn't 
 # drawing on the parent environment. (It has happened before.)  [2020 08 27]
-footerRow  <- data.frame(x=3)
+footerRow  <- data.frame(x = 3)
 footerRows <- rep(1:5, each = 10)
-footerList <- data.frame(x=3)
-landscape  <- data.frame(x=3)
+footerList <- data.frame(x = 3)
+landscape  <- data.frame(x = 3)
 
 
 # Create latexTables

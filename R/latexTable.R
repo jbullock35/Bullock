@@ -1,7 +1,8 @@
 #' Create a LaTeX table from a matrix.
 #' 
-#' \code{latexTable()} takes a single matrix, \code{mat}. By default, it returns 
-#' a LaTeX macro that creates a well-formatted LaTeX table. 
+#' \code{latexTable()} takes a single matrix or tibble, \code{mat}. By 
+#' default, it returns a LaTeX macro that creates a well-formatted LaTeX 
+#' table. 
 
 
 #' @return An object of classes \code{latexTable} and \code{character}. The 
@@ -89,7 +90,7 @@
 #' latexTable(rT1, footerRows = footerList)
 
 
-#' @param mat Matrix of numbers to be displayed in a LaTeX table.
+#' @param mat Matrix or tibble of numbers to be displayed in a LaTeX table.
 #' @param SE_table Logical variable that indicates whether \code{mat} contains
 #'   pairs (or "tiers") of columns, with the first column in each pair 
 #'   containing estimates, and the second column containing standard errors. 
@@ -366,8 +367,8 @@ latexTable <- function(
   # CHECK THAT mat IS A MATRIX
   # This must be done before we try to access colNames in the code 
   # immediately below.
-  if (! inherits(mat, "matrix")) {
-    stop('"mat" must be of class "matrix"')
+  if (! inherits(mat, c("matrix", "tbl")) ) {
+    stop('"mat" must be of class "matrix" or "tbl"')
   }
 
   

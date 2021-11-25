@@ -1,4 +1,5 @@
 # Version 2.4.0.3.9000 (2021-11-24)
+* `latexTable()` now handles tibbles (#60)
 * `rescale()` now checks to ensure that `x` contains some non-missing data
 &nbsp;  
 &nbsp;  

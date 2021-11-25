@@ -38,7 +38,7 @@ latexTable(
 )
 }
 \arguments{
-\item{mat}{Matrix of numbers to be displayed in a LaTeX table.}
+\item{mat}{Matrix or tibble of numbers to be displayed in a LaTeX table.}
 
 \item{SE_table}{Logical variable that indicates whether \code{mat} contains
 pairs (or "tiers") of columns, with the first column in each pair
@@ -268,8 +268,9 @@ macro, thereby telling LaTeX to display the table. For example, if
 \code{\\mytable{p}}.
 }
 \description{
-\code{latexTable()} takes a single matrix, \code{mat}. By default, it returns
-a LaTeX macro that creates a well-formatted LaTeX table.
+\code{latexTable()} takes a single matrix or tibble, \code{mat}. By
+default, it returns a LaTeX macro that creates a well-formatted LaTeX
+table.
 }
 \note{
 \emph{Required LaTeX packages.} The LaTeX code produced by the
