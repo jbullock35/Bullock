@@ -660,6 +660,9 @@ latexTable <- function(
   	  # would see it, and spacer columns thus count as columns to span. 
   	  # colNameColsToSpan is used to generate the \cmidrule rule below the 
   	  # column name.  [2019 12 10]
+      if (colNameExpand && !('' %in% unlist(colNames))) {
+          stop("colNameExpand is TRUE but colNames contains no empty ('') entries. See the documentation for the colNameExpand argument in ?latexTable.")
+      }
       for (i in 1:length(colNames)) {              # for each element in the colNames list...
         mcRow <- colNames[[i]]                     # ...get the list element...
         if (colNameExpand && '' %in% mcRow) {      # ...if the list element - a character vector -- contains ''
@@ -673,7 +676,7 @@ latexTable <- function(
           }
           else if (!is.null(spacerColumns) && !SE_table) {
             colNameColsToSpan <- colNameColsToSpan * 2 - 1
-          }        
+          }
           colNameColsToSpan[colNameColsToSpan == 0] <- 1  
           mcRow <- mcRow[colNameStartPos]                    # eliminate empty entries from mcRow
           mcRow <- paste0(                                   # print a \multicolumn command for each entry in mcRow
