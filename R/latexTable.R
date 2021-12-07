@@ -289,8 +289,8 @@
 #'   formatted when \code{SE_table} is \code{TRUE}. Defaults to 
 #'   \code{\\\\fontsize{10.3bp}{10.3bp}\\\\selectfont}, which renders standard
 #'   errors in slightly smaller type than the corresponding estimates.  
-#' @param NA_text A string. \code{NA} entries in \code{mat} will be replaced 
-#'   by the string.\cr\cr\cr\cr
+#' @param NA_text A string. \code{NA} and \code{NaN} entries in \code{mat}  
+#'   will be replaced by the string.\cr\cr\cr\cr
 #' 
 #' 
 #' @param clipboard Logical variable. Copy entire output to clipboard. 
@@ -491,6 +491,7 @@ latexTable <- function(
     # mat <- mutate_all(mat, as.character)                         # dplyr solution                 
     # mat <- mat %>% mutate(across(everything(), as.character()))  # R 4.0+ only
   mat[is.na(mat)] <- paste0(' ', NA_text)
+  mat[which(mat=="NaN")] <- paste0(' ', NA_text)
 
   
   # WORK ON THE MATRIX ROW BY ROW

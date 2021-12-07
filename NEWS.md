@@ -1,5 +1,7 @@
-# Version 2.4.0.3.9000 (2021-11-24)
+# Version 2.4.0.3.9000 (2021-12-07)
 * `latexTable()` now handles tibbles (#60)
+* `latexTable()` recognizes `NaN` as missing data when replacing missing 
+  data with `NA_text`.
 * `latexTable()` gives an informative error message when `colNames` and 
   `colNameExpand` are used inappropriately.
 * `rescale()` now checks to ensure that `x` contains some non-missing data
