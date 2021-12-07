@@ -474,8 +474,6 @@ latexTable <- function(
    
 
   
- 
-  
   # ADJUST DIGIT SETTINGS  [2014]
   oldDigitsOption <- as.integer(options("digits"))
   options(digits = decimalPlaces + 1)
@@ -649,10 +647,15 @@ latexTable <- function(
     outputStrings <- c(outputStrings, '      }')  # ends "\begin{tabular}{"    
     if (! is.null(colNames)) {      
       
+      # ESCAPE % SIGNS IN colNames  [2021 12 07]
+      # Unescaped % signs will prevent LaTeX from compiling the .tex 
+      # document.  [2021 12 07]
+      colNames <- lapply(colNames, function (x) { x <- gsub("(?<!\\\\)%", "\\\\%", x, perl = TRUE) } )
       
-      ########################################################################
+      
+      ######################################################################
       # ADD \MULTICOLUMN COMMANDS FOR colNames  [2012 07 23] 
-      ########################################################################
+      ######################################################################
       # Recall that colNames is a list with multiple entries, to allow for 
       # column headings that span multiple lines.  So mcRow is a "row" in the
       # column headings.  [2014 04 27]

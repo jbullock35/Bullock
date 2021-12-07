@@ -249,8 +249,8 @@ formatted when \code{SE_table} is \code{TRUE}. Defaults to
 \code{\\\\fontsize{10.3bp}{10.3bp}\\\\selectfont}, which renders standard
 errors in slightly smaller type than the corresponding estimates.}
 
-\item{NA_text}{A string. \code{NA} entries in \code{mat} will be replaced
-by the string.\cr\cr\cr\cr}
+\item{NA_text}{A string. \code{NA} and \code{NaN} entries in \code{mat}
+will be replaced by the string.\cr\cr\cr\cr}
 
 \item{clipboard}{Logical variable. Copy entire output to clipboard.
 Useful if you want to paste the output directly into a \code{.tex} file.
