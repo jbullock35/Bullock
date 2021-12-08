@@ -435,7 +435,7 @@ latexTable <- function(
     stop("SE_table is TRUE but length of colNames[[1]], ", length(colNames), ", is not half of ncol(mat).")
   }
   if ( any(grepl("\\\\n", colNames)) ) {
-    stop("colNames contains a newline character. It shouldn't: to have multiple rows in the column headings, you need to make colNames a list that has multiple elements. See the documentation for the colNames and colNameExpand arguments in ?latexTable")
+    stop(stringr::str_wrap("colNames contains a newline character. It shouldn't: to have multiple rows in the column headings, you need to make colNames a list that has multiple elements. See the documentation for the colNames and colNameExpand arguments in ?latexTable.", 72, exdent = 2))
   }    
   if (grepl('&', columnTierSeparator)) {
     warning(stringr::str_wrap("columnTierSeparator includes an ampersand. This is likely to screw up the layout of your table.", 72, exdent = 2))
