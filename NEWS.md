@@ -7,6 +7,8 @@
   data with `NA_text`.
 * `latexTable()` gives an informative error message when `colNames` and 
   `colNameExpand` are used inappropriately.
+* `latexTable()` now throws an error when any element in `colNames` contains
+  a newline character.  
 * `rescale()` now checks to ensure that `x` contains some non-missing data
 &nbsp;  
 &nbsp;  
