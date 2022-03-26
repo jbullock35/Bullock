@@ -84,9 +84,6 @@ cutYears <- function (x, breaks, levelsBoundedByData = TRUE, shortLabels = TRUE)
   if (! inherits(x, qw("character integer numeric"))) {
     stop('"x" must be of class "character", "integer", or "numeric".')
   }
-  if (! inherits(x, qw("character integer numeric"))) {
-    stop('"x" must be of class "character", "integer", or "numeric".')
-  }
   
   x <- as.integer(x)
   
