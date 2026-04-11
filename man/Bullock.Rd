@@ -18,3 +18,28 @@ an overview.
 Of the convenience functions, I most often use \linkInt{qw}, 
 \linkInt{reliability}, \linkInt{meanNA}, and \linkInt{sumNA}.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/jbullock35/Bullock}
+  \item Report bugs at \url{https://github.com/jbullock35/Bullock/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: John Bullock \email{john@johnbullock.org}
+
+Other contributors:
+\itemize{
+  \item Florent Delmotte [contributor]
+  \item Dirk Edelbuettel [contributor]
+  \item Peter Ellis [contributor]
+  \item Antoine Fabri [contributor]
+  \item Simon Jackman [contributor]
+  \item JD Long [contributor]
+  \item Joseph Lucke [contributor]
+  \item Matt Pettis [contributor]
+  \item Ken Williams [contributor]
+}
+
+}

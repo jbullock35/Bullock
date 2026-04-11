@@ -70,7 +70,7 @@ knitr::opts_chunk$set(
 
 
 It is easy to use `latexTable()` in R Markdown documents, provided that 
-you are generating LaTeX or PDF files from those R Markdown documents. To do
+you are generating LaTeX or PDF files from those documents. To do
 so, you need to take only two steps: load a file via the `in_header` option 
 for R Markdown documents, and wrap your `latexTable()` output in the 
 `raw_latex()` command that is provided by the `knitr` package.
